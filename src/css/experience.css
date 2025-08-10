@@ -1,0 +1,356 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #222;
+    --link-color: #39c5bb;
+    --icon-size: 2.5rem;
+    --body-text-color: rgba(0, 0, 0, 0.8);
+    --muted-text-color: #666;
+    --award-header-color: #111;
+    --award-text-color: #333;
+    --award-bg-light: #fafafa;
+    --award-bg-dark: #222222;
+  }
+  [data-theme="dark"] {
+    --bg-color: #111111;
+    --text-color: #eee;
+    --link-color: #39c5bb;
+    --body-text-color: rgba(255, 255, 255, 0.8);
+    --muted-text-color: #aaa;
+    --award-header-color: #eee;
+    --award-text-color: #ccc;
+    --award-bg-light: #222222;
+  }
+  body {
+    margin: 0;
+    font-family: "Inter var", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    line-height: 1.6;
+  }
+  p,
+  li {
+    color: var(--body-text-color);
+  }
+  p {
+    margin-bottom: 1.2rem;
+  }
+  li {
+    margin-bottom: 0.8rem;
+  }
+
+  /* Navbar */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1000;
+    font-family: "Lato", sans-serif;
+    background-color: var(--bg-color);
+  }
+
+  /* Left-aligned navigation links */
+  nav .nav-left {
+    display: flex;
+    align-items: center;
+  }
+
+  nav .links {
+    display: flex;
+    gap: 1.5rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+  }
+
+  /* Right-aligned actions */
+  nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: row-reverse; /* Changed to reverse the order */
+  }
+
+  nav .links a {
+    text-decoration: none;
+    color: var(--text-color);
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+  }
+  nav .links a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: -3px;
+    background-color: var(--link-color);
+    transition: width 0.3s ease;
+  }
+  nav .links a:hover {
+    color: var(--link-color);
+  }
+  nav .links a:hover::after {
+    width: 100%;
+  }
+
+  nav button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    font-family: "Lato", sans-serif;
+    transition: transform 0.3s ease;
+    padding: 0.5rem;
+  }
+  nav button:hover {
+    transform: scale(1.1);
+  }
+  .menu-toggle {
+    display: none;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    position: relative;
+    z-index: 1100;
+  }
+
+  /* Mobile menu styling */
+  @media (max-width: 768px) {
+    nav {
+      padding: 1rem;
+    }
+    nav .links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      right: 1rem;
+      background: var(--bg-color);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      width: max-content;
+      min-width: 150px;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1050;
+    }
+    nav .links.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .menu-toggle {
+      display: block;
+    }
+  }
+
+  /* Rest of your CSS remains the same */
+  /* Main wrapper */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* Headings */
+  h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #ccc;
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+  }
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+  /* Icon */
+  .timeline-icon {
+    position: absolute;
+    left: -2px;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(57, 197, 187, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    font-size: 1.2rem;
+    color: var(--link-color);
+  }
+  .job-title {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 3rem;
+    color: var(--text-color);
+  }
+  /* Fix date text color */
+  .date {
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+    margin-left: 3rem;
+  }
+
+  /* Paragraph and list in timeline */
+  .timeline p,
+  .timeline ul {
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+    color: var(--body-text-color);
+  }
+  .timeline ul li {
+    margin-bottom: 0.6rem;
+  }
+
+  /* Skills */
+  .skills-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .skills,
+  .hobbies {
+    flex: 1 1 250px;
+  }
+  .progress-bar {
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 6px;
+    margin: 0.3rem 0 1rem 0;
+  }
+  .progress {
+    height: 100%;
+    background-color: var(--link-color);
+  }
+
+  /* Awards */
+  .award-card {
+    background-color: var(--award-bg-light);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid #eee;
+    color: var(--award-text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  [data-theme="dark"] .award-card {
+    background-color: var(--award-bg-dark);
+    color: var(--award-text-color);
+  }
+  .award-card h4 {
+    margin: 0 0 0.4rem;
+    color: var(--award-header-color);
+  }
+  .award-card .date {
+    margin-left: 0;
+    font-size: 0.9rem;
+    color: var(--muted-text-color);
+  }
+  .award-card p {
+    color: var(--award-text-color);
+  }
+  footer {
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 2rem;
+    color: var(--text-color);
+    font-family: "Poppins", sans-serif;
+  }
+  /* Responsive */
+  @media (max-width: 650px) {
+    main {
+      padding: 1rem 1.5rem;
+    }
+    .timeline {
+      padding-left: 2rem;
+    }
+    .timeline-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      left: -2px;
+    }
+    .job-title {
+      margin-left: 2.5rem;
+      font-size: 1rem;
+    }
+    .date {
+      margin-left: 2.5rem;
+      font-size: 0.85rem;
+    }
+    h2 {
+      font-size: 2rem;
+    }
+    h3 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+    .award-card {
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+    }
+    .languages {
+      gap: 1rem;
+    }
+    .language {
+      flex: 1 1 100%;
+    }
+    .circle {
+      width: 70px;
+      height: 70px;
+    }
+    .circle svg {
+      width: 70px;
+      height: 70px;
+    }
+    .circle-text {
+      font-size: 1rem;
+    }
+    h2.skills-header,
+    h2.certifications-header {
+      text-align: center;
+    }
+  }

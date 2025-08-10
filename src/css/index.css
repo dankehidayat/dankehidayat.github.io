@@ -1,0 +1,217 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #39c5bb;
+    --icon-size: 2.5rem;
+    --body-text-color: #52525b; /* light gray text in light mode */
+  }
+  [data-theme="dark"] {
+    --bg-color: #111111;
+    --text-color: #ffffff;
+    --link-color: #39c5bb;
+    --body-text-color: rgba(255, 255, 255, 0.8);
+  }
+  body {
+    margin: 0;
+    font-family: "Lato", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  p,
+  li {
+    color: var(--body-text-color);
+    font-family: "Lato", sans-serif;
+  }
+  /* Add space between list items */
+  ul li {
+    margin-bottom: 1.5rem;
+  }
+  /* Add margin above example paragraph */
+  .example-paragraph {
+    margin-top: 2rem;
+  }
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1000;
+    font-family: "Lato", sans-serif;
+  }
+  /* Fix order of flex children on desktop */
+  nav .links {
+    display: flex;
+    gap: 1.5rem;
+    order: 0; /* force to left */
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+  }
+  nav .links a {
+    text-decoration: none;
+    color: var(--text-color);
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+  }
+  nav .links a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    left: 0;
+    bottom: -3px;
+    background-color: var(--link-color);
+    transition: width 0.3s ease;
+  }
+  nav .links a:hover {
+    color: var(--link-color);
+  }
+  nav .links a:hover::after {
+    width: 100%;
+  }
+  nav .actions {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    position: relative;
+    order: 1; /* force to right */
+    font-family: "Lato", sans-serif;
+  }
+  nav button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    font-family: "Lato", sans-serif;
+  }
+  .menu-toggle {
+    display: none;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    position: relative;
+    z-index: 1100; /* keep it above the menu */
+  }
+  main {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 2rem;
+    font-family: "Lato", sans-serif;
+  }
+  /* Text on the left */
+  .text {
+    flex: 1 1 300px;
+    text-align: left;
+    order: 0;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  h2 {
+    font-weight: 500;
+    color: var(--link-color);
+    margin-top: 0;
+  }
+  /* Image on the right */
+  .image {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: 1;
+  }
+  .image img {
+    width: 100%;
+    border-radius: 1rem;
+    transform: rotate(3deg);
+    clip-path: inset(0 round 15%);
+    margin-bottom: 1rem;
+  }
+  .social-icons {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    width: 100%;
+  }
+  .social-icons a {
+    font-size: var(--icon-size);
+    color: var(--text-color);
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  .social-icons a:hover {
+    color: var(--link-color);
+    transform: scale(1.15);
+  }
+  footer {
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 2rem;
+    color: var(--text-color);
+    font-family: "Poppins", sans-serif;
+  }
+  /* Mobile menu styling */
+  @media (max-width: 768px) {
+    nav .links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%; /* right below the navbar */
+      right: 0;
+      background: var(--bg-color);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      width: max-content;
+      min-width: 150px;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1050;
+    }
+    nav .links.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .menu-toggle {
+      display: block;
+    }
+    main {
+      flex-direction: column;
+      align-items: center;
+    }
+    /* On mobile, put image on top again */
+    .image {
+      order: -1;
+      flex: none;
+      max-width: 200px;
+    }
+
+    p,
+    ul {
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 35px;
+    }
+    h2 {
+      font-size: 25px;
+    }
+  }
