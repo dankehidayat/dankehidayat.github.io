@@ -3,7 +3,7 @@
     --text-color: #000000;
     --link-color: #39c5bb;
     --icon-size: 2.5rem;
-    --body-text-color: #52525b; /* light gray text in light mode */
+    --body-text-color: #52525b;
   }
   [data-theme="dark"] {
     --bg-color: #111111;
@@ -23,11 +23,9 @@
     color: var(--body-text-color);
     font-family: "Lato", sans-serif;
   }
-  /* Add space between list items */
   ul li {
     margin-bottom: 1.5rem;
   }
-
   .description {
     margin-top: 2rem;
   }
@@ -41,11 +39,10 @@
     z-index: 1000;
     font-family: "Lato", sans-serif;
   }
-  /* Fix order of flex children on desktop */
   nav .links {
     display: flex;
     gap: 1.5rem;
-    order: 0; /* force to left */
+    order: 0;
     font-family: "Poppins", sans-serif;
     font-weight: 700;
   }
@@ -79,7 +76,7 @@
     gap: 0.8rem;
     align-items: center;
     position: relative;
-    order: 1; /* force to right */
+    order: 1;
     font-family: "Lato", sans-serif;
   }
   nav button {
@@ -98,7 +95,7 @@
     color: var(--text-color);
     cursor: pointer;
     position: relative;
-    z-index: 1100; /* keep it above the menu */
+    z-index: 1100;
   }
   main {
     max-width: 900px;
@@ -110,7 +107,6 @@
     padding: 2rem;
     font-family: "Lato", sans-serif;
   }
-  /* Text on the left */
   .text {
     flex: 1 1 300px;
     text-align: left;
@@ -126,7 +122,6 @@
     color: var(--link-color);
     margin-top: 0;
   }
-  /* Image on the right */
   .image {
     flex: 0 0 250px;
     display: flex;
@@ -146,6 +141,7 @@
     gap: 1.2rem;
     justify-content: center;
     width: 100%;
+    margin-bottom: 1.5rem;
   }
   .social-icons a {
     font-size: var(--icon-size);
@@ -156,6 +152,24 @@
     color: var(--link-color);
     transform: scale(1.15);
   }
+  .resume-btn {
+    display: inline-block;
+    background-color: var(--link-color);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .resume-btn:hover {
+    background-color: #2da89e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
   footer {
     text-align: center;
     font-size: 0.8rem;
@@ -163,13 +177,12 @@
     color: var(--text-color);
     font-family: "Poppins", sans-serif;
   }
-  /* Mobile menu styling */
   @media (max-width: 768px) {
     nav .links {
       display: none;
       flex-direction: column;
       position: absolute;
-      top: 100%; /* right below the navbar */
+      top: 100%;
       right: 0;
       background: var(--bg-color);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -197,21 +210,23 @@
       flex-direction: column;
       align-items: center;
     }
-    /* On mobile, put image on top again */
     .image {
       order: -1;
       flex: none;
       max-width: 200px;
     }
-
     p,
     ul {
-      font-size: 20px;
+      font-size: 18px;
     }
     h1 {
-      font-size: 35px;
+      font-size: 34px;
     }
     h2 {
-      font-size: 25px;
+      font-size: 24px;
+    }
+    .resume-btn {
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
     }
   }
