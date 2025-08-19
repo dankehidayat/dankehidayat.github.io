@@ -156,10 +156,9 @@
     .menu-toggle {
       display: block;
     }
+    
   }
 
-  /* Rest of your CSS remains the same */
-  /* Main wrapper */
   main {
     max-width: 900px;
     margin: 0 auto;
@@ -325,7 +324,7 @@
     h3 {
       font-size: 1.2rem;
     p {
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
     .award-card {
       padding: 0.8rem 1rem;
