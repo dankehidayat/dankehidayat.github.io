@@ -320,34 +320,16 @@
       font-size: 0.85rem;
     }
     h2 {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     h3 {
-      font-size: 1.3rem;
-    }
+      font-size: 1.2rem;
     p {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
     .award-card {
       padding: 0.8rem 1rem;
       border-radius: 6px;
-    }
-    .languages {
-      gap: 1rem;
-    }
-    .language {
-      flex: 1 1 100%;
-    }
-    .circle {
-      width: 70px;
-      height: 70px;
-    }
-    .circle svg {
-      width: 70px;
-      height: 70px;
-    }
-    .circle-text {
-      font-size: 1rem;
     }
     h2.skills-header,
     h2.certifications-header {
