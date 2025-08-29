@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danke Hidayat | Projects</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+var:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/css/project.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="logo">
+        <b style="font-family: Poppins; color: #39c5bb">Danke Hidayat</b>
+      </div>
+      <div class="nav-left">
+        <div class="links">
+          <a href="./index.html">Bio</a>
+          <a href="#">Blog</a>
+          <a href="./experience.html">Experience</a>
+          <a href="./project.html">Projects</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="menu-toggle" id="menu-toggle">
+          <i class="bx bx-menu"></i>
+        </button>
+        <button id="theme-toggle"><i class="bx bx-moon"></i></button>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Featured (Carousel Hero) -->
+      <section class="featured">
+        <div class="hero">
+          <div class="hero-media" id="hero-slides" data-slideshow>
+            <img
+              src="./src/img/project/hydrolevi.jpg"
+              alt="HydroleVI Water Leveling monitor Project"
+              class="active"
+            />
+            <img src="./src/img/project/hydrolevi2.jpeg" alt="HydroleVI 2" />
+          </div>
+          <div class="hero-content">
+            <h2 class="hero-title">Featured Project — HydroleVI</h2>
+            <p class="hero-desc">A water leveling monitor.</p>
+            <div class="hero-actions">
+              <a class="btn" href="./project-website.html"
+                ><i class="bx bx-right-top-arrow-circle"></i> View build
+                notes</a
+              >
+              <a
+                class="btn"
+                href="https://github.com/dankehidayat"
+                target="_blank"
+                rel="noopener"
+                ><i class="bx bxl-github"></i> Source</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Showcase -->
+      <section class="projects-section">
+        <h2>Project Showcases</h2>
+        <div class="projects-grid">
+          <a href="./project-website.html" class="project-card">
+            <div class="slideshow" data-slideshow>
+              <img
+                src="./src/img/project/trashbin.jpeg"
+                alt="Website shot 1"
+                class="active"
+              />
+              <img
+                src="./src/img/project/trashbin1.jpeg"
+                alt="Website shot 2"
+              />
+              <img
+                src="./src/img/project/trashbin2.jpeg"
+                alt="Website shot 2"
+              />
+              <img
+                src="./src/img/project/trashbin3.jpeg"
+                alt="Website shot 2"
+              />
+            </div>
+            <div class="project-content">
+              <h3>IoT-based Automatic Trash Bin Sorter</h3>
+              <p>
+                The SmartSort Bin automates waste separation using intelligent
+                sensors to categorize wet, dry, and metal materials. Its IoT
+                connectivity offers real-time fill-level data, streamlining
+                collection and significantly improving recycling efficiency for
+                a cleaner environment.
+              </p>
+            </div>
+          </a>
+
+          <a href="./project-iot.html" class="project-card">
+            <div class="slideshow" data-slideshow>
+              <img
+                src="./src/img/project/iotenergy.jpeg"
+                alt="IoT 1"
+                class="active"
+              />
+              <img src="./src/img/project/iotenergy1.jpeg" alt="IoT 2" />
+              <img src="./src/img/project/iotenergy2.jpeg" alt="IoT 3" />
+            </div>
+            <div class="project-content">
+              <h3>IoT Energy &amp; Temperature Monitoring</h3>
+              <p>
+                ESP32 + PZEM-004T + DHT11 + Blynk for real‑time energy and
+                temperature tracking with chart graphic.
+              </p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Journal / Thesis Writing Showcase -->
+      <section class="journal-section">
+        <h2>Journal & Thesis Writing Showcase</h2>
+        <div class="journal-list">
+          <div class="journal-item">
+            <div>
+              <h3 class="journal-title">
+                Implementation of User Centered Design Method on CarbonArea
+                Website User Experience
+                <span class="journal-year">2025</span>
+              </h3>
+              <div class="journal-meta">
+                Journal • Vocational School of IPB University
+              </div>
+              <p class="journal-desc">
+                This study applies a User-Centered Design (UCD) approach to
+                design the UI/UX for CarbonArea, a website monitoring CO2's
+                impact on food security. The process, informed by user
+                interviews, successfully delivered an engaging interface with
+                interactive, real-time data features.
+              </p>
+            </div>
+            <div class="journal-view">
+              <a
+                class="btn"
+                href="https://batrisyaedu.com/journal/index.php/batrisya/article/view/104"
+                target="_blank"
+                rel="noopener"
+                >View</a
+              >
+            </div>
+          </div>
+
+          <div class="journal-item">
+            <div>
+              <h3 class="journal-title">
+                Designing User Interface on “HewanKu” Application Using User
+                Centered Design Method
+                <span class="journal-year">2025</span>
+              </h3>
+              <div class="journal-meta">
+                Journal • Vocational School of IPB University
+              </div>
+              <p class="journal-desc">
+                This research designs the HewanKu livestock trading app's
+                interface using User Centered Design (UCD) to enhance user
+                experience. Combined with Black Box Testing, the method produced
+                an intuitive, reliable, and user-trusted application for
+                transactions.
+              </p>
+            </div>
+            <div class="journal-view">
+              <a
+                class="btn"
+                href="https://batrisyaedu.com/journal/index.php/batrisya/article/view/104"
+                target="_blank"
+                rel="noopener"
+                >View</a
+              >
+            </div>
+          </div>
+
+          <div class="journal-item">
+            <div>
+              <h3 class="journal-title">
+                Designing a Website-Based Inventory Information System
+                at'NeoSkin'Cosmetics Store Using User-Centered Design
+                <span class="journal-year">2025</span>
+              </h3>
+              <div class="journal-meta">
+                Journal • Vocational School of IPB University
+              </div>
+              <p class="journal-desc">
+                This research designs a web-based inventory system for NeoSkin
+                cosmetics using a User Centered Design (UCD) approach. The
+                system streamlines warehouse management and reporting, with
+                functionality verified through Black Box Testing.
+              </p>
+            </div>
+            <div class="journal-view">
+              <a
+                class="btn"
+                href="https://batrisyaedu.com/journal/index.php/batrisya/article/view/104"
+                target="_blank"
+                rel="noopener"
+                >View</a
+              >
+            </div>
+          </div>
+
+          <div class="journal-item">
+            <div>
+              <h3 class="journal-title">
+                Implementing Fuzzy Logic to Forecast Electricity Usage Costs
+                <span class="journal-year">2025</span>
+              </h3>
+              <div class="journal-meta">
+                Journal • Vocational School of IPB University
+              </div>
+              <p class="journal-desc">
+                This research develops a Mamdani fuzzy logic model using Matlab
+                to predict household electricity costs. Analyzing variables like
+                house size, appliance usage, and income, it accurately forecasts
+                expenses, demonstrating an effective tool for managing energy
+                consumption.
+              </p>
+            </div>
+            <div class="journal-view">
+              <a
+                class="btn"
+                href="https://batrisyaedu.com/journal/index.php/batrisya/article/view/49"
+                target="_blank"
+                rel="noopener"
+                >View</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>&copy; 2025 Danke Hidayat. All rights reserved.</footer>
+
+    <script>
+      // Theme toggle
+      const themeToggle = document.getElementById("theme-toggle");
+      themeToggle.addEventListener("click", () => {
+        if (document.documentElement.getAttribute("data-theme") === "dark") {
+          document.documentElement.setAttribute("data-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      });
+
+      // Mobile menu toggle
+      const menuToggle = document.getElementById("menu-toggle");
+      const links = document.querySelector("nav .links");
+      menuToggle.addEventListener("click", () => {
+        links.classList.toggle("show");
+      });
+
+      // Slideshow logic
+      const slideshows = document.querySelectorAll("[data-slideshow]");
+      slideshows.forEach((slideshow) => {
+        const images = slideshow.querySelectorAll("img");
+        let current = 0;
+        setInterval(() => {
+          images[current].classList.remove("active");
+          current = (current + 1) % images.length;
+          images[current].classList.add("active");
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
