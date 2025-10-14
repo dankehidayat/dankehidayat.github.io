@@ -11,8 +11,6 @@ import {
   Globe,
   FileText,
   Recycle,
-  Cctv,
-  Gauge,
 } from "lucide-react";
 
 // Define TypeScript interfaces for better type safety
@@ -412,7 +410,6 @@ const EcoBinSections = ({
     {/* Sorting Logic */}
     <div className="bg-muted rounded-lg p-4 mb-6">
       <h4 className="font-domine font-semibold mb-3 flex items-center gap-2">
-        <Cctv className="h-4 w-4" />
         Sorting Classification Logic
       </h4>
       <div className="grid md:grid-cols-3 gap-4 text-sm">
@@ -434,7 +431,6 @@ const EcoBinSections = ({
     {/* Specifications */}
     <div className="bg-muted rounded-lg p-4 mb-6">
       <h4 className="font-domine font-semibold mb-3 flex items-center gap-2">
-        <Gauge className="h-4 w-4" />
         System Specifications
       </h4>
       <div className="grid md:grid-cols-2 gap-4 text-sm">
