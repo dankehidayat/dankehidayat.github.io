@@ -1,29 +1,12 @@
 // src/app/rss.xml/route.ts
 import { NextResponse } from "next/server";
-import { getBlogPosts } from "@/lib/blog-data";
-import { readFileSync } from "fs";
-import matter from "gray-matter";
-import { remark } from "remark";
-import html from "remark-html";
-
-// Function to get full post content
-function getFullPostContent(slug: string) {
-  try {
-    const fileContent = readFileSync(`./src/content/blog/${slug}.mdx`, "utf8");
-    const { content } = matter(fileContent);
-
-    // Convert markdown to HTML
-    const processedContent = remark().use(html).processSync(content);
-    return processedContent.toString();
-  } catch {
-    return "";
-  }
-}
+import { getBlogPostsWithContent } from "@/lib/blog-data";
 
 export async function GET() {
-  const posts = getBlogPosts();
+  try {
+    const posts = getBlogPostsWithContent();
 
-  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+    const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Danke Hidayat - Blog</title>
@@ -34,7 +17,14 @@ export async function GET() {
     <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
     ${posts
       .map((post) => {
-        const fullContent = getFullPostContent(post.slug);
+        const fullContent =
+          post.contentHtml ||
+          `<p>${escapeXml(
+            post.excerpt
+          )}</p><p><a href="https://dankehidayat.my.id/blog/${
+            post.slug
+          }">Read the full post on my website</a></p>`;
+
         return `
     <item>
       <title>${escapeXml(post.title)}</title>
@@ -165,28 +155,35 @@ export async function GET() {
                 </div>
                 
                 ${
-                  post.categories.length > 0 ||
-                  post.tags.length > 0 ||
-                  post.labels.length > 0
+                  post.categories?.length > 0 ||
+                  post.tags?.length > 0 ||
+                  post.labels?.length > 0
                     ? `
                 <div class="taxonomy">
-                  ${post.categories
-                    .map(
-                      (cat) =>
-                        `<span class="badge badge-category">📁 ${cat}</span>`
-                    )
-                    .join("")}
-                  ${post.tags
-                    .map(
-                      (tag) => `<span class="badge badge-tag">🏷️ ${tag}</span>`
-                    )
-                    .join("")}
-                  ${post.labels
-                    .map(
-                      (label) =>
-                        `<span class="badge badge-label">📌 ${label}</span>`
-                    )
-                    .join("")}
+                  ${
+                    post.categories
+                      ?.map(
+                        (cat) =>
+                          `<span class="badge badge-category">📁 ${cat}</span>`
+                      )
+                      .join("") || ""
+                  }
+                  ${
+                    post.tags
+                      ?.map(
+                        (tag) =>
+                          `<span class="badge badge-tag">🏷️ ${tag}</span>`
+                      )
+                      .join("") || ""
+                  }
+                  ${
+                    post.labels
+                      ?.map(
+                        (label) =>
+                          `<span class="badge badge-label">📌 ${label}</span>`
+                      )
+                      .join("") || ""
+                  }
                 </div>
                 `
                     : ""
@@ -209,12 +206,16 @@ export async function GET() {
       <guid>https://dankehidayat.my.id/blog/${post.slug}</guid>
       <pubDate>${new Date(post.date).toUTCString()}</pubDate>
       <author>${post.author}</author>
-      ${post.categories
-        .map((category) => `<category>${escapeXml(category)}</category>`)
-        .join("")}
-      ${post.tags
-        .map((tag) => `<category>${escapeXml(tag)}</category>`)
-        .join("")}
+      ${
+        post.categories
+          ?.map((category) => `<category>${escapeXml(category)}</category>`)
+          .join("") || ""
+      }
+      ${
+        post.tags
+          ?.map((tag) => `<category>${escapeXml(tag)}</category>`)
+          .join("") || ""
+      }
     </item>
     `;
       })
@@ -222,16 +223,26 @@ export async function GET() {
   </channel>
 </rss>`;
 
-  return new NextResponse(rss, {
-    headers: {
-      "Content-Type": "application/xml",
-      "Cache-Control": "public, s-maxage=1200, stale-while-revalidate=600",
-    },
-  });
+    return new NextResponse(rss, {
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, s-maxage=1200, stale-while-revalidate=600",
+      },
+    });
+  } catch (error) {
+    console.error("RSS generation error:", error);
+    return new NextResponse("Internal Server Error", {
+      status: 500,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+      },
+    });
+  }
 }
 
 // Helper function to escape XML special characters
-function escapeXml(unsafe: string) {
+function escapeXml(unsafe: string): string {
+  if (!unsafe) return "";
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
       case "<":

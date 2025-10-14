@@ -1,6 +1,8 @@
 // lib/blog-data.ts
 import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
+import { remark } from "remark";
+import html from "remark-html";
 
 export interface BlogPost {
   slug: string;
@@ -11,6 +13,8 @@ export interface BlogPost {
   tags: string[];
   categories: string[];
   labels: string[];
+  content?: string; // Added for RSS support
+  contentHtml?: string; // Added for RSS support
 }
 
 export interface BlogFilters {
@@ -19,12 +23,20 @@ export interface BlogFilters {
   labels: string[];
 }
 
+// Cache for blog posts to avoid repeated file system operations
+let blogPostsCache: BlogPost[] | null = null;
+
 export function getBlogPosts(): BlogPost[] {
+  // Return cached posts if available
+  if (blogPostsCache) {
+    return blogPostsCache;
+  }
+
   const files = readdirSync("./src/content/blog");
 
   const posts = files.map((file) => {
     const fileContent = readFileSync(`./src/content/blog/${file}`, "utf8");
-    const { data } = matter(fileContent);
+    const { data, content } = matter(fileContent);
 
     return {
       slug: file.replace(".mdx", ""),
@@ -35,12 +47,41 @@ export function getBlogPosts(): BlogPost[] {
       tags: data.tags || [],
       categories: data.categories || [],
       labels: data.labels || [],
+      content: content, // Store raw markdown content
+      contentHtml: "", // Will be populated when needed
     };
   });
 
-  return posts.sort(
+  const sortedPosts = posts.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+
+  // Cache the results
+  blogPostsCache = sortedPosts;
+  return sortedPosts;
+}
+
+export function getBlogPostsWithContent(): BlogPost[] {
+  const posts = getBlogPosts();
+
+  // Convert markdown to HTML for each post
+  return posts.map((post) => {
+    if (post.content && !post.contentHtml) {
+      try {
+        const processedContent = remark().use(html).processSync(post.content);
+        post.contentHtml = processedContent.toString();
+      } catch (error) {
+        console.error(`Error processing content for ${post.slug}:`, error);
+        post.contentHtml = `<p>${post.excerpt}</p>`;
+      }
+    }
+    return post;
+  });
+}
+
+export function getBlogPostBySlug(slug: string): BlogPost | null {
+  const posts = getBlogPostsWithContent();
+  return posts.find((post) => post.slug === slug) || null;
 }
 
 export function getAllFilters(posts: BlogPost[]): BlogFilters {
@@ -79,4 +120,9 @@ export function getFilterCounts(posts: BlogPost[]) {
   });
 
   return { tagCounts, categoryCounts, labelCounts };
+}
+
+// Utility function to clear cache (useful during development)
+export function clearBlogPostsCache() {
+  blogPostsCache = null;
 }
