@@ -7,7 +7,7 @@
     "build": "npm run generate-rss && next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-rss": "node src/scripts/generate-static-rss.js"
+    "generate-rss": "node src/scripts/generate-rss-data.js"
   },
   "dependencies": {
     "@next/mdx": "^15.5.4",
