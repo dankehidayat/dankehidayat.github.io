@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "npm run generate-rss && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "generate-rss": "node scripts/generate-static-rss.js",
+    "prebuild": "npm run generate-rss"
   },
   "dependencies": {
     "@next/mdx": "^15.5.4",
