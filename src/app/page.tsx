@@ -1,10 +1,26 @@
-// app/page.tsx
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, PenTool, Code, Cpu } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  PenTool,
+  Code,
+  Cpu,
+  Calendar,
+} from "lucide-react";
+import { getLatestPosts, BlogPost } from "@/lib/rss";
 
-export default function Home() {
+export default async function Home() {
+  // Fix TypeScript error by specifying the type
+  let latestPosts: BlogPost[];
+  try {
+    latestPosts = await getLatestPosts(2);
+  } catch (error) {
+    console.error("Error in page component:", error);
+    latestPosts = [];
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -18,7 +34,7 @@ export default function Home() {
           <h1 className="mb-8 leading-tight">
             <span className="initial-cap">Welcome,</span>
             <br />
-            I&apos;m <span className="text-primary">[Danke Hidayat]</span>
+            I&apos;m <span className="text-primary">Danke Hidayat</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed text-justify">
@@ -154,43 +170,96 @@ export default function Home() {
           </p>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="card-classic group">
-              <CardContent className="p-8">
-                <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
-                  The Art of Modern Web Development
-                </h3>
-                <p className="text-muted-foreground text-justify mb-6">
-                  Exploring how classical design principles inform contemporary
-                  web development practices and user experience design.
-                </p>
-                <Button
-                  variant="link"
-                  className="p-0 gap-2 group-hover:gap-3 transition-all tracking-wide font-domine"
-                >
-                  Continue Reading
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
+            {latestPosts.length > 0 ? (
+              latestPosts.map((post, index) => (
+                <Card key={index} className="card-classic group">
+                  <CardContent className="p-8">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <Calendar className="h-3 w-3" />
+                      <span>{post.formattedDate}</span>
+                    </div>
 
-            <Card className="card-classic group">
-              <CardContent className="p-8">
-                <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
-                  Typography in Digital Interfaces
-                </h3>
-                <p className="text-muted-foreground text-justify mb-6">
-                  How centuries of typographic wisdom can guide our choices in
-                  creating readable, accessible digital experiences.
-                </p>
-                <Button
-                  variant="link"
-                  className="p-0 gap-2 group-hover:gap-3 transition-all tracking-wide font-domine"
-                >
-                  Continue Reading
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
+                    <h3 className="font-heading mb-4 group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+
+                    <p className="text-muted-foreground text-justify mb-6 line-clamp-3">
+                      {post.description}
+                    </p>
+
+                    <Button
+                      asChild
+                      variant="link"
+                      className="p-0 gap-2 group-hover:gap-3 transition-all tracking-wide font-domine"
+                    >
+                      <Link
+                        href={post.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Continue Reading
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              // Fallback content when no posts are available
+              <>
+                <Card className="card-classic group">
+                  <CardContent className="p-8">
+                    <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
+                      Energy Monitoring System Calibration
+                    </h3>
+                    <p className="text-muted-foreground text-justify mb-6">
+                      Improving DHT11 sensor accuracy through linear regression
+                      calibration against HTC-1 reference measurements.
+                    </p>
+                    <Button
+                      asChild
+                      variant="link"
+                      className="p-0 gap-2 group-hover:gap-3 transition-all tracking-wide font-domine"
+                    >
+                      <Link
+                        href="https://dankehidayat.my.id/blog/energy-monitoring-calibration-linear-regression"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Continue Reading
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="card-classic group">
+                  <CardContent className="p-8">
+                    <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
+                      Statistical Mechanics and Probability
+                    </h3>
+                    <p className="text-muted-foreground text-justify mb-6">
+                      Connecting microscopic physics to macroscopic observations
+                      through statistics and mathematical modeling.
+                    </p>
+                    <Button
+                      asChild
+                      variant="link"
+                      className="p-0 gap-2 group-hover:gap-3 transition-all tracking-wide font-domine"
+                    >
+                      <Link
+                        href="https://dankehidayat.my.id/blog/statistical-mechanics"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Continue Reading
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </div>
 
           <div className="text-center mt-12">
@@ -199,7 +268,13 @@ export default function Home() {
               variant="outline"
               className="btn-classic font-domine"
             >
-              <Link href="/blog">View All Writings</Link>
+              <Link
+                href="https://dankehidayat.my.id/blog"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View All Writings
+              </Link>
             </Button>
           </div>
         </div>

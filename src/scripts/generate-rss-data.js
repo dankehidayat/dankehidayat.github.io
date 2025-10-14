@@ -26,40 +26,47 @@ function generateRSSData() {
     const files = fs.readdirSync(blogDir);
     console.log(`📁 Found ${files.length} blog files`);
 
-    const posts = files
-      .map((file) => {
-        if (!file.endsWith(".mdx")) return null;
+    const posts = [];
+    let errorCount = 0;
 
-        try {
-          const filePath = path.join(blogDir, file);
-          const fileContent = fs.readFileSync(filePath, "utf8");
-          const { data, content } = matter(fileContent);
+    files.forEach((file) => {
+      if (!file.endsWith(".mdx")) return;
 
-          // For MDX files, we'll use a simpler approach since we can't easily process JSX
-          // Remove MDX components and JSX syntax, keep only markdown content
-          let cleanedContent = cleanMDXContent(content);
+      try {
+        const filePath = path.join(blogDir, file);
+        const fileContent = fs.readFileSync(filePath, "utf8");
+        const { data, content } = matter(fileContent);
 
-          // Convert basic markdown to HTML (simple approach)
-          let contentHtml = convertMarkdownToHTML(cleanedContent);
+        // For MDX files, we'll use a simpler approach since we can't easily process JSX
+        // Remove MDX components and JSX syntax, keep only markdown content
+        let cleanedContent = cleanMDXContent(content);
 
-          return {
-            slug: file.replace(".mdx", ""),
-            title: data.title || "Untitled",
-            date: data.date || new Date().toISOString().split("T")[0],
-            excerpt: data.excerpt || "",
-            author: data.author || "Danke Hidayat",
-            tags: data.tags || [],
-            categories: data.categories || [],
-            labels: data.labels || [],
-            content: content,
-            contentHtml: contentHtml,
-          };
-        } catch (error) {
-          console.error(`❌ Error processing ${file}:`, error);
-          return null;
-        }
-      })
-      .filter(Boolean);
+        // Convert basic markdown to HTML (simple approach)
+        let contentHtml = convertMarkdownToHTML(cleanedContent);
+
+        posts.push({
+          slug: file.replace(".mdx", ""),
+          title: data.title || "Untitled",
+          date: data.date || new Date().toISOString().split("T")[0],
+          excerpt: data.excerpt || "",
+          author: data.author || "Danke Hidayat",
+          tags: data.tags || [],
+          categories: data.categories || [],
+          labels: data.labels || [],
+          content: content,
+          contentHtml: contentHtml,
+        });
+
+        console.log(`✅ Processed: ${file}`);
+      } catch (error) {
+        console.error(`❌ Error processing ${file}:`, error.message);
+        errorCount++;
+      }
+    });
+
+    if (errorCount > 0) {
+      console.log(`⚠️  ${errorCount} files had errors and were skipped`);
+    }
 
     const sortedPosts = posts.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -68,9 +75,12 @@ function generateRSSData() {
     // Generate blog data JSON file with full content
     generateBlogDataFile(sortedPosts, outputDir);
 
-    console.log("✅ Blog data with full content generated successfully!");
+    console.log(
+      `✅ Blog data generated successfully! ${sortedPosts.length} posts processed.`
+    );
   } catch (error) {
     console.error("❌ Error generating data:", error);
+    process.exit(1); // Exit with error code
   }
 }
 

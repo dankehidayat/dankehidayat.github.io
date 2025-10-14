@@ -30,29 +30,7 @@ These errors were unacceptable for energy optimization algorithms that rely on p
 
 ## Data Collection Methodology
 
-Data was collected simultaneously from both sensors over a 9-hour period, capturing various environmental conditions:
-
-| Timestamp | DHT11 Temp | DHT11 Humidity | HTC-1 Temp | HTC-1 Humidity |
-| :-------- | :--------: | :------------: | :--------: | :------------: |
-| 13:40:29  |   26.7°C   |     46.8%      |   27.5°C   |      48%       |
-| 13:45:31  |   26.7°C   |     51.8%      |   27.7°C   |      54%       |
-| 16:00:32  |   25.2°C   |     64.8%      |   26.6°C   |      64%       |
-| 16:02:41  |   25.2°C   |     64.8%      |   26.5°C   |      64%       |
-| 16:05:33  |   25.2°C   |     64.8%      |   26.5°C   |      64%       |
-| 16:35:29  |   25.2°C   |     63.8%      |   26.3°C   |      63%       |
-| 16:50:28  |   24.8°C   |     63.8%      |   26.2°C   |      63%       |
-| 18:05:29  |   24.4°C   |     68.8%      |   25.6°C   |      67%       |
-| 18:10:31  |   24.4°C   |     68.8%      |   25.6°C   |      67%       |
-| 18:15:30  |   24.4°C   |     68.8%      |   25.6°C   |      67%       |
-| 18:20:30  |   24.4°C   |     68.8%      |   25.5°C   |      67%       |
-| 18:35:30  |   24.4°C   |     69.8%      |   25.3°C   |      68%       |
-| 20:05:35  |   24.4°C   |     70.8%      |   24.2°C   |      72%       |
-| 20:55:31  |   23.9°C   |     72.8%      |   23.7°C   |      73%       |
-| 21:00:32  |   23.5°C   |     73.8%      |   23.8°C   |      73%       |
-| 21:05:32  |   23.5°C   |     73.8%      |   23.8°C   |      73%       |
-| 21:10:32  |   23.5°C   |     73.8%      |   23.6°C   |      73%       |
-| 21:15:31  |   23.5°C   |     73.8%      |   23.6°C   |      73%       |
-| 21:35:33  |   23.5°C   |     73.8%      |   23.4°C   |      73%       |
+Data was collected simultaneously from both sensors over a 9-hour period, capturing various environmental conditions. The dataset included 19 measurement points across different times of day, with temperature readings ranging from 23.4°C to 27.7°C and humidity readings from 46.8% to 73.8%. This comprehensive sampling ensured the calibration model would be robust across typical operating conditions.
 
 ## Linear Regression Model
 
@@ -209,7 +187,3 @@ Linear regression provides an effective method for calibrating low-cost environm
 This calibration enables cost-effective deployment of environmental monitoring systems while maintaining measurement accuracy suitable for energy optimization applications.
 
 **Future Work**: Exploring non-linear calibration models and automated recalibration procedures to account for sensor aging and environmental changes.
-
----
-
-_Data collected: October 4, 2025 | Analysis completed: October 14, 2025_
