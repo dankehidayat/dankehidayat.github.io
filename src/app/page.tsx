@@ -42,9 +42,13 @@ export default async function Home() {
             <span className="text-foreground font-semibold">
               Software Developer
             </span>{" "}
-            and <span className="text-foreground font-semibold">Writer</span>{" "}
-            crafting digital experiences with the precision of fine typography.
-            Currently pursuing Computer Engineering at IPB University.
+            and{" "}
+            <span className="text-foreground font-semibold">
+              IoT Enthusiast
+            </span>{" "}
+            building connected devices and embedded systems that bridge the
+            digital and physical worlds. Currently studying Computer Engineering
+            at IPB University and working as a Junior Software Developer.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
