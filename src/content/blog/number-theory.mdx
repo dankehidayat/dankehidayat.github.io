@@ -1,0 +1,29 @@
+---
+title: "Number Theory in Cryptography"
+date: 2024-03-08
+author: "Danke Hidayat"
+excerpt: "How prime numbers and modular arithmetic secure our digital communications."
+categories: ["Mathematics", "Cryptography"]
+tags: ["Number Theory", "Prime Numbers", "RSA", "Modular Arithmetic"]
+labels: ["Security", "Mathematical Foundation"]
+---
+
+# Number Theory in Cryptography
+
+## RSA Encryption
+
+Public key: $(n, e)$ where $n = pq$
+
+Private key: $d$ where $ed \equiv 1 \pmod{\phi(n)}$
+
+Encryption: $c = m^e \mod n$
+
+Decryption: $m = c^d \mod n$
+
+## Euler's Theorem
+
+If $\gcd(a,n) = 1$, then:
+
+$$
+a^{\phi(n)} \equiv 1 \pmod{n}
+$$

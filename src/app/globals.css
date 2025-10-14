@@ -1,0 +1,1004 @@
+/* app/globals.css */
+@import "tailwindcss";
+
+:root {
+  --background: #fefdf8;
+  --foreground: #2a2118;
+  --muted: #f5f3ee;
+  --muted-foreground: #7d7265;
+  --border: #e5e2d9;
+  --primary: #330099; /* This is indigo/purple */
+  --primary-foreground: #ffffff;
+  --accent: #5e35b1;
+  --accent-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #2a2118;
+  --sidebar: #f8f6f4;
+  --radius: 0.5rem;
+}
+
+[data-theme="dark"] {
+  --background: #1a1a1a;
+  --foreground: #e8e6e3;
+  --muted: #2a2a2a;
+  --muted-foreground: #a8a29e;
+  --border: #404040;
+  --primary: #7c4dff; /* Purple in dark mode */
+  --primary-foreground: #ffffff;
+  --accent: #5e35b1;
+  --accent-foreground: #ffffff;
+  --card: #2a2a2a;
+  --card-foreground: #e8e6e3;
+  --sidebar: #333333;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --font-sans: var(--font-domine), ui-serif, Georgia, serif;
+  --font-serif: var(--font-domine), ui-serif, Georgia, serif;
+  --font-heading: var(--font-bodoni-moda), ui-serif, Georgia, serif;
+}
+
+/* ========================================================================== */
+/* SHADCN NAVIGATION MENU STYLES - Customized to match original design */
+/* ========================================================================== */
+
+.navigation-menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+.navigation-menu-list {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+.navigation-menu-item {
+  position: relative;
+}
+
+.navigation-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-domine);
+  color: var(--foreground);
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+}
+
+.navigation-menu-trigger:hover {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.navigation-menu-trigger[data-active] {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.navigation-menu-trigger:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.navigation-menu-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: auto;
+  animation-duration: 250ms;
+  animation-timing-function: ease;
+}
+
+.navigation-menu-content[data-motion="from-start"] {
+  animation-name: enterFromLeft;
+}
+
+.navigation-menu-content[data-motion="from-end"] {
+  animation-name: enterFromRight;
+}
+
+.navigation-menu-content[data-motion="to-start"] {
+  animation-name: exitToLeft;
+}
+
+.navigation-menu-content[data-motion="to-end"] {
+  animation-name: exitToRight;
+}
+
+@keyframes enterFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes enterFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes exitToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+}
+
+@keyframes exitToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+}
+
+/* ========================================================================== */
+/* SHADCN SHEET STYLES - Customized for mobile menu */
+/* ========================================================================== */
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.8);
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sheet-content {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-right: 1px solid var(--border);
+}
+
+.sheet-content[data-state="open"] {
+  animation: slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sheet-content[data-state="closed"] {
+  animation: slideOut 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sheet-content-left {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.sheet-header {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.sheet-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--foreground);
+  font-size: 1.25rem;
+}
+
+/* ========================================================================== */
+/* PROJECT-SPECIFIC BUTTON STYLES - Only affects project page buttons */
+/* ========================================================================== */
+
+/* Solid button style for projects */
+.projects-page .project-btn-solid {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+.projects-page .project-btn-solid:hover {
+  background-color: var(--primary) !important;
+  opacity: 0.9 !important;
+}
+
+/* Outline button style for projects */
+.projects-page .project-btn-outline {
+  background-color: transparent !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+.projects-page .project-btn-outline:hover {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+/* Ensure proper border visibility */
+.projects-page .project-btn-outline,
+.projects-page .project-btn-solid {
+  border-style: solid !important;
+  border-width: 1px !important;
+}
+
+/* Light theme paper texture */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.7;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "onum" 1, "pnum" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23330099' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E"),
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(51, 0, 153, 0.02) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(94, 53, 177, 0.02) 0%,
+      transparent 50%
+    );
+}
+
+/* Dark theme paper texture */
+[data-theme="dark"] body {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%237c4dff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E"),
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(124, 77, 255, 0.02) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(94, 53, 177, 0.02) 0%,
+      transparent 50%
+    );
+}
+
+/* Classic typography scale */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  letter-spacing: -0.03em;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+h3 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-style: italic;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+p,
+li,
+blockquote,
+figcaption {
+  font-family: var(--font-serif);
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.5em;
+}
+
+/* Classic prose styling */
+.prose {
+  max-width: 65ch;
+  font-size: 1.125rem;
+}
+
+.prose p {
+  text-align: justify;
+  margin-bottom: 1.75em;
+}
+
+.prose h2 {
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+}
+
+.prose h3 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  font-style: italic;
+}
+
+/* Classic blockquote */
+blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 2rem;
+  margin: 2rem 0;
+  font-style: italic;
+  background: var(--muted);
+  padding: 2rem;
+  border-radius: 2px;
+}
+
+/* Classic link styling */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  border-bottom-color: var(--primary);
+}
+
+/* Classic scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Focus states */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* Classic card styling */
+.card-classic {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-classic:hover {
+  box-shadow: 0 4px 12px rgba(51, 0, 153, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Decorative elements */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 4rem 0;
+}
+
+.initial-cap::first-letter {
+  initial-letter: 2;
+  font-family: var(--font-heading);
+  color: var(--primary);
+  font-weight: 400;
+  margin-right: 0.5rem;
+  padding: 0.25rem;
+}
+
+/* Classic button styling */
+.btn-classic {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 0;
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+.btn-classic:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.btn-classic-primary {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 0;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  transition: all 0.3s ease;
+}
+
+.btn-classic-primary:hover {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* ========================================================================== */
+/* TIMELINE DOT STYLING - CORRECTED ORDER */
+/* ========================================================================== */
+
+/* Base timeline dot style - transparent by default */
+.timeline-dot {
+  background: rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0);
+}
+
+/* MOBILE: Show purple dots on all mobile devices */
+/* Extra Small Devices & Old Phones (Nokia 5.3, small Android phones) */
+/* 320px - 359px */
+@media (max-width: 359px) {
+  .timeline-line {
+    left: 0.75rem !important;
+  }
+
+  .timeline-dot {
+    left: 0.75rem !important;
+    background: var(--primary) !important;
+    border-color: var(--background) !important;
+  }
+
+  .timeline-item .bg-card {
+    padding: 0.75rem;
+    margin-left: 1.25rem;
+  }
+
+  .timeline-date {
+    font-size: 0.65rem;
+    line-height: 1.1;
+  }
+
+  .timeline-item h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* Small Phones (iPhone 5/SE, Google Pixel small variants) */
+/* 360px - 413px */
+@media (min-width: 360px) and (max-width: 413px) {
+  .timeline-line {
+    left: 1rem !important;
+  }
+
+  .timeline-dot {
+    left: 1rem !important;
+    background: var(--primary) !important;
+    border-color: var(--background) !important;
+  }
+
+  .timeline-item .bg-card {
+    padding: 0.875rem;
+    margin-left: 1.5rem;
+  }
+
+  .timeline-date {
+    font-size: 0.7rem;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.125rem;
+  }
+}
+
+/* Medium Phones (Most modern phones - iPhone 12/13/14, Google Pixel 4-7, Samsung Galaxy S series) */
+/* 414px - 767px */
+@media (min-width: 414px) and (max-width: 767px) {
+  .timeline-line {
+    left: 0.25rem !important;
+  }
+
+  .timeline-dot {
+    left: 0.01rem !important;
+    background: var(--primary) !important;
+    border-color: var(--background) !important;
+  }
+
+  .timeline-item .bg-card {
+    padding: 1rem;
+    margin-left: 2rem;
+  }
+
+  .timeline-date {
+    font-size: 0.75rem;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.25rem;
+  }
+
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Small Tablets & Large Phones (iPad Mini, Nokia 5.3 landscape) */
+/* 768px - 834px */
+@media (min-width: 768px) and (max-width: 834px) {
+  .timeline-line {
+    left: 1.5rem !important;
+  }
+
+  .timeline-dot {
+    left: 1.5rem !important;
+    background: var(--primary) !important;
+    border-color: var(--background) !important;
+  }
+
+  .timeline-item .bg-card {
+    padding: 1.25rem;
+    margin-left: 2.5rem;
+  }
+
+  .timeline-date {
+    font-size: 0.8rem;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.375rem;
+  }
+}
+
+/* Standard Tablets (iPad Air, iPad Pro 10.5") */
+/* 835px - 1023px */
+@media (min-width: 835px) and (max-width: 1023px) {
+  .timeline-line {
+    left: 2rem !important;
+  }
+
+  .timeline-dot {
+    left: 2rem !important;
+    background: var(--primary) !important;
+    border-color: var(--background) !important;
+  }
+
+  .timeline-item .bg-card {
+    padding: 1.5rem;
+    margin-left: 3rem;
+  }
+
+  .timeline-date {
+    font-size: 0.85rem;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* DESKTOP: Hide timeline dots (transparent) */
+@media (min-width: 1024px) {
+  .timeline-dot {
+    background: rgba(0, 0, 0, 0) !important;
+    border-color: rgba(0, 0, 0, 0) !important;
+  }
+}
+
+/* ========================================================================== */
+/* REST OF THE TIMELINE STYLES */
+/* ========================================================================== */
+
+/* Smooth animations for timeline items */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-item {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.timeline-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.timeline-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.timeline-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.timeline-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.timeline-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.timeline-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Remove italics from organization/position in timeline */
+.timeline-organization,
+h3 {
+  font-style: normal !important;
+}
+
+/* Ensure consistent date formatting */
+.timeline-date {
+  font-family: var(--font-domine);
+  font-weight: 500;
+  font-style: normal;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+/* Enhanced typography for timeline position titles */
+.timeline-item h3 {
+  font-size: clamp(1.125rem, 4vw, 1.5rem);
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* Larger screens get even bigger font sizes */
+@media (min-width: 768px) {
+  .timeline-item h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+  }
+}
+
+@media (min-width: 1024px) {
+  .timeline-item h3 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+  }
+}
+
+/* Better responsive text for timeline */
+.timeline-item .font-domine {
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+}
+
+/* Prevent text overflow in timeline cards */
+.timeline-item .break-words {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Enhanced hover effects for timeline cards */
+.timeline-item .bg-card {
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+
+.timeline-item .bg-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(51, 0, 153, 0.1);
+}
+
+/* Dark theme adjustments for timeline */
+[data-theme="dark"] .timeline-item .bg-card:hover {
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.15);
+}
+
+/* Print styles for timeline */
+@media print {
+  .timeline-dot {
+    display: none;
+  }
+
+  .timeline-line {
+    display: none;
+  }
+
+  .timeline-item .bg-card {
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+
+  .timeline-item .bg-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item {
+    animation: none;
+  }
+
+  .timeline-item .bg-card {
+    transition: none;
+  }
+
+  .btn-classic,
+  .btn-classic-primary {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #000000;
+    --muted-foreground: #000000;
+  }
+
+  .timeline-item .bg-card {
+    border: 2px solid var(--border);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    scroll-behavior: auto;
+  }
+
+  .timeline-item {
+    animation: none;
+  }
+}
+
+.contact-page .project-btn-solid {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+.contact-page .project-btn-solid:hover {
+  background-color: var(--primary) !important;
+  opacity: 0.9 !important;
+}
+
+.contact-page .project-btn-outline {
+  background-color: transparent !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+.contact-page .project-btn-outline:hover {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+/* ========================================================================== */
+/* BLOG POST TYPOGRAPHY & SPACING IMPROVEMENTS */
+/* ========================================================================== */
+
+/* Improved prose styles for better heading spacing */
+.prose {
+  /* Base spacing improvements */
+  h1 {
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  h2 {
+    margin-top: 1.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  h3 {
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  h4,
+  h5,
+  h6 {
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  p {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  ul,
+  ol {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  li {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* Better code block styling */
+  pre {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  blockquote {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Ensure consistent line heights */
+  line-height: 1.7 !important;
+}
+
+/* MathJax and LaTeX styling */
+.math {
+  margin: 1rem 0;
+}
+
+.math-display {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.math-inline {
+  margin: 0 0.25rem;
+}
+
+/* Blog-specific heading improvements */
+.blog-prose {
+  /* Even tighter heading spacing for blog posts */
+  h1 {
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: clamp(2.25rem, 4vw, 3rem) !important;
+  }
+
+  h2 {
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: clamp(1.75rem, 3vw, 2.25rem) !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  h3 {
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: clamp(1.5rem, 2.5vw, 1.875rem) !important;
+    border-left: 2px solid var(--primary) !important;
+    padding-left: 1rem !important;
+  }
+
+  h4 {
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+  }
+
+  /* Better paragraph spacing */
+  p {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Tighter list spacing */
+  ul,
+  ol {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+}
