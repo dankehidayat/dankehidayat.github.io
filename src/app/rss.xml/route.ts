@@ -1,10 +1,21 @@
 // src/app/rss.xml/route.ts
 import { NextResponse } from "next/server";
-import { getBlogPostsWithContent } from "@/lib/blog-data";
+import { getBlogPosts } from "@/lib/blog-data";
+
+interface BlogPost {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  author: string;
+  tags: string[];
+  categories: string[];
+  labels: string[];
+}
 
 export async function GET() {
   try {
-    const posts = getBlogPostsWithContent();
+    const posts = getBlogPosts();
 
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -16,14 +27,12 @@ export async function GET() {
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
     ${posts
-      .map((post) => {
-        const fullContent =
-          post.contentHtml ||
-          `<p>${escapeXml(
-            post.excerpt
-          )}</p><p><a href="https://dankehidayat.my.id/blog/${
-            post.slug
-          }">Read the full post on my website</a></p>`;
+      .map((post: BlogPost) => {
+        const fullContent = `<p>${escapeXml(
+          post.excerpt
+        )}</p><p><a href="https://dankehidayat.my.id/blog/${
+          post.slug
+        }">Read the full post on my website</a></p>`;
 
         return `
     <item>

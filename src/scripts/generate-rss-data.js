@@ -1,34 +1,25 @@
 // src/scripts/generate-rss-data.js
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import matter from "gray-matter";
-
-// ES modules equivalent of __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+/* eslint-disable @typescript-eslint/no-require-imports */
+const fs = require("fs");
+const path = require("path");
+const matter = require("gray-matter");
 
 function generateRSSData() {
-  console.log("🔧 Generating RSS data...");
+  console.log("🔧 Generating RSS and blog data...");
 
   const blogDir = path.join(process.cwd(), "src/content/blog");
-  const outputFile = path.join(process.cwd(), "public/rss.xml");
+  const outputDir = path.join(process.cwd(), "src/lib/generated");
 
   try {
+    // Create output directory if it doesn't exist
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
     // Check if blog directory exists
     if (!fs.existsSync(blogDir)) {
-      console.log("📝 No blog directory found, creating empty RSS...");
-      const emptyRss = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-  <channel>
-    <title>Danke Hidayat - Blog</title>
-    <link>https://dankehidayat.my.id/blog</link>
-    <description>Blog posts coming soon</description>
-    <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-  </channel>
-</rss>`;
-      fs.writeFileSync(outputFile, emptyRss);
+      console.log("📝 No blog directory found, creating empty data...");
+      createEmptyData(outputDir);
       return;
     }
 
@@ -52,19 +43,35 @@ function generateRSSData() {
             author: data.author || "Danke Hidayat",
             tags: data.tags || [],
             categories: data.categories || [],
+            labels: data.labels || [],
           };
         } catch (error) {
           console.error(`❌ Error processing ${file}:`, error);
           return null;
         }
       })
-      .filter(Boolean); // Remove null entries
+      .filter(Boolean);
 
     const sortedPosts = posts.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+    // Generate RSS file
+    generateRSSFile(sortedPosts);
+
+    // Generate blog data JSON file
+    generateBlogDataFile(sortedPosts, outputDir);
+
+    console.log("✅ RSS and blog data generated successfully!");
+  } catch (error) {
+    console.error("❌ Error generating data:", error);
+  }
+}
+
+function generateRSSFile(posts) {
+  const outputFile = path.join(process.cwd(), "public/rss.xml");
+
+  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Danke Hidayat - Blog</title>
@@ -73,7 +80,7 @@ function generateRSSData() {
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
-    ${sortedPosts
+    ${posts
       .map(
         (post) => `
     <item>
@@ -96,14 +103,34 @@ function generateRSSData() {
   </channel>
 </rss>`;
 
-    fs.writeFileSync(outputFile, rss);
-    console.log("✅ RSS data generated successfully!");
-    console.log(`📄 Location: ${outputFile}`);
-    console.log(`📊 Posts included: ${sortedPosts.length}`);
-  } catch (error) {
-    console.error("❌ Error generating RSS data:", error);
-    // Don't exit with error - let build continue
-  }
+  fs.writeFileSync(outputFile, rss);
+  console.log(`📄 RSS file generated: ${outputFile}`);
+}
+
+function generateBlogDataFile(posts, outputDir) {
+  const blogDataFile = path.join(outputDir, "blog-data.json");
+  fs.writeFileSync(blogDataFile, JSON.stringify(posts, null, 2));
+  console.log(`📊 Blog data generated: ${blogDataFile}`);
+  console.log(`📝 Posts included: ${posts.length}`);
+}
+
+function createEmptyData(outputDir) {
+  const emptyRss = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Danke Hidayat - Blog</title>
+    <link>https://dankehidayat.my.id/blog</link>
+    <description>Blog posts coming soon</description>
+    <language>en-us</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+  </channel>
+</rss>`;
+
+  const outputFile = path.join(process.cwd(), "public/rss.xml");
+  fs.writeFileSync(outputFile, emptyRss);
+
+  const blogDataFile = path.join(outputDir, "blog-data.json");
+  fs.writeFileSync(blogDataFile, JSON.stringify([], null, 2));
 }
 
 function escapeXml(unsafe) {
@@ -126,9 +153,8 @@ function escapeXml(unsafe) {
   });
 }
 
-// ES modules way to run if this is the main module
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   generateRSSData();
 }
 
-export default generateRSSData;
+module.exports = generateRSSData;

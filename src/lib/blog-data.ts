@@ -8,8 +8,6 @@ export interface BlogPost {
   tags: string[];
   categories: string[];
   labels: string[];
-  content?: string;
-  contentHtml?: string;
 }
 
 export interface BlogFilters {
@@ -18,28 +16,26 @@ export interface BlogFilters {
   labels: string[];
 }
 
-// This will be populated during build time
+// Try to load generated data, fallback to empty array
 let blogPosts: BlogPost[] = [];
 
-// Function to set blog posts (called during build)
-export function setBlogPosts(posts: BlogPost[]) {
-  blogPosts = posts;
+// Load data on module initialization
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const generatedData = require("./generated/blog-data.json");
+  blogPosts = generatedData;
+} catch (error) {
+  // Fallback for development or if file doesn't exist
+  console.warn("Could not load generated blog data, using development data");
+  blogPosts = getDevelopmentPosts();
 }
 
 export function getBlogPosts(): BlogPost[] {
-  if (blogPosts.length === 0 && process.env.NODE_ENV === "development") {
-    // Only use file system in development
-    return getBlogPostsFromFS();
-  }
   return blogPosts;
 }
 
-export function getBlogPostsWithContent(): BlogPost[] {
-  return getBlogPosts().filter((post) => post.contentHtml);
-}
-
 export function getBlogPostBySlug(slug: string): BlogPost | null {
-  return getBlogPostsWithContent().find((post) => post.slug === slug) || null;
+  return blogPosts.find((post) => post.slug === slug) || null;
 }
 
 export function getAllFilters(posts: BlogPost[]): BlogFilters {
@@ -80,46 +76,40 @@ export function getFilterCounts(posts: BlogPost[]) {
   return { tagCounts, categoryCounts, labelCounts };
 }
 
-// Development-only file system functions
+// Development-only function
 import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
-import { remark } from "remark";
-import html from "remark-html";
+import path from "path";
 
-function getBlogPostsFromFS(): BlogPost[] {
+function getDevelopmentPosts(): BlogPost[] {
   if (process.env.NODE_ENV !== "development") {
     return [];
   }
 
   try {
-    const files = readdirSync("./src/content/blog");
-    const posts = files.map((file) => {
-      const fileContent = readFileSync(`./src/content/blog/${file}`, "utf8");
-      const { data, content } = matter(fileContent);
+    const blogDir = path.join(process.cwd(), "src/content/blog");
+    const files = readdirSync(blogDir);
 
-      let contentHtml = "";
-      if (content) {
-        try {
-          const processedContent = remark().use(html).processSync(content);
-          contentHtml = processedContent.toString();
-        } catch (error) {
-          console.error(`Error processing content for ${file}:`, error);
-        }
-      }
+    const posts = files
+      .map((file) => {
+        if (!file.endsWith(".mdx")) return null;
 
-      return {
-        slug: file.replace(".mdx", ""),
-        title: data.title || "Untitled",
-        date: data.date || new Date().toISOString().split("T")[0],
-        excerpt: data.excerpt || "",
-        author: data.author || "Danke Hidayat",
-        tags: data.tags || [],
-        categories: data.categories || [],
-        labels: data.labels || [],
-        content: content,
-        contentHtml: contentHtml,
-      };
-    });
+        const filePath = path.join(blogDir, file);
+        const fileContent = readFileSync(filePath, "utf8");
+        const { data } = matter(fileContent);
+
+        return {
+          slug: file.replace(".mdx", ""),
+          title: data.title || "Untitled",
+          date: data.date || new Date().toISOString().split("T")[0],
+          excerpt: data.excerpt || "",
+          author: data.author || "Danke Hidayat",
+          tags: data.tags || [],
+          categories: data.categories || [],
+          labels: data.labels || [],
+        };
+      })
+      .filter(Boolean) as BlogPost[];
 
     return posts.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()

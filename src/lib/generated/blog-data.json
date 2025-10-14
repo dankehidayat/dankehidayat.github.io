@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "category-label",
+    "title": "Test page",
+    "date": "2025-07-15T00:00:00.000Z",
+    "excerpt": "A brief description of the blog post",
+    "author": "Danke Hidayat",
+    "tags": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS"
+    ],
+    "categories": [
+      "Web Development",
+      "Tutorial"
+    ],
+    "labels": []
+  },
+  {
+    "slug": "statistical-mechanics",
+    "title": "Statistical Mechanics and Probability",
+    "date": "2024-03-15T00:00:00.000Z",
+    "excerpt": "Connecting microscopic physics to macroscopic observations through statistics.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Statistical Mechanics",
+      "Thermodynamics",
+      "Probability"
+    ],
+    "categories": [
+      "Physics",
+      "Mathematics"
+    ],
+    "labels": [
+      "Advanced Physics",
+      "Mathematical Modeling"
+    ]
+  },
+  {
+    "slug": "number-theory",
+    "title": "Number Theory in Cryptography",
+    "date": "2024-03-08T00:00:00.000Z",
+    "excerpt": "How prime numbers and modular arithmetic secure our digital communications.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Number Theory",
+      "Prime Numbers",
+      "RSA",
+      "Modular Arithmetic"
+    ],
+    "categories": [
+      "Mathematics",
+      "Cryptography"
+    ],
+    "labels": [
+      "Security",
+      "Mathematical Foundation"
+    ]
+  },
+  {
+    "slug": "information-theory",
+    "title": "Information Theory and Entropy",
+    "date": "2024-03-01T00:00:00.000Z",
+    "excerpt": "Quantifying information and uncertainty in communication systems.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Information Theory",
+      "Entropy",
+      "Data Compression"
+    ],
+    "categories": [
+      "Mathematics",
+      "Computer Science"
+    ],
+    "labels": [
+      "Theoretical Foundation",
+      "Practical Applications"
+    ]
+  },
+  {
+    "slug": "differential-equations",
+    "title": "Solving Differential Equations",
+    "date": "2024-02-22T00:00:00.000Z",
+    "excerpt": "Mathematical techniques for modeling continuous change in physical systems.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Differential Equations",
+      "Calculus",
+      "Modeling"
+    ],
+    "categories": [
+      "Mathematics",
+      "Physics"
+    ],
+    "labels": [
+      "Advanced Mathematics",
+      "Physics Applications"
+    ]
+  },
+  {
+    "slug": "fourier-analysis",
+    "title": "Fourier Analysis and Signal Processing",
+    "date": "2024-02-08T00:00:00.000Z",
+    "excerpt": "Decomposing signals into frequency components using Fourier transforms.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Fourier Transform",
+      "Frequency Analysis",
+      "Digital Signal Processing"
+    ],
+    "categories": [
+      "Mathematics",
+      "Signal Processing"
+    ],
+    "labels": [
+      "Advanced Mathematics",
+      "Practical Applications"
+    ]
+  },
+  {
+    "slug": "probability-theory",
+    "title": "Probability Theory Fundamentals",
+    "date": "2024-02-01T00:00:00.000Z",
+    "excerpt": "Understanding randomness and uncertainty through mathematical principles.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Probability",
+      "Random Variables",
+      "Distributions"
+    ],
+    "categories": [
+      "Mathematics",
+      "Statistics"
+    ],
+    "labels": [
+      "Fundamental Concepts",
+      "Mathematical Foundation"
+    ]
+  },
+  {
+    "slug": "calculus-optimization",
+    "title": "Optimization with Calculus",
+    "date": "2024-01-25T00:00:00.000Z",
+    "excerpt": "How derivatives and gradients help us find optimal solutions.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Calculus",
+      "Gradient Descent",
+      "Derivatives"
+    ],
+    "categories": [
+      "Mathematics",
+      "Optimization"
+    ],
+    "labels": [
+      "Mathematical Foundation",
+      "Practical Applications"
+    ]
+  },
+  {
+    "slug": "machine-learning",
+    "title": "The Mathematics Behind Neural Networks",
+    "date": "2024-01-20T00:00:00.000Z",
+    "excerpt": "Exploring the calculus and linear algebra that make deep learning possible.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Neural Networks",
+      "Backpropagation",
+      "Calculus"
+    ],
+    "categories": [
+      "Machine Learning",
+      "Mathematics"
+    ],
+    "labels": [
+      "Beginner Friendly",
+      "Mathematical Foundation"
+    ]
+  },
+  {
+    "slug": "quatum-computing",
+    "title": "Understanding Quantum Computing with Linear Algebra",
+    "date": "2024-01-15T00:00:00.000Z",
+    "excerpt": "A deep dive into how linear algebra powers quantum computing, exploring qubits, superposition, and quantum gates.",
+    "author": "Danke Hidayat",
+    "tags": [
+      "Linear Algebra",
+      "Qubits",
+      "Quantum Gates"
+    ],
+    "categories": [
+      "Quantum Computing",
+      "Mathematics"
+    ],
+    "labels": [
+      "Technical Deep Dive",
+      "Mathematical Foundation"
+    ]
+  },
+  {
+    "slug": "test-latex",
+    "title": "Testing LaTeX Support",
+    "date": "2024-01-01",
+    "excerpt": "Testing mathematical notation in MDX",
+    "author": "Your Name",
+    "tags": [
+      "test",
+      "math"
+    ],
+    "categories": [
+      "testing"
+    ],
+    "labels": [
+      "demo"
+    ]
+  }
+]
