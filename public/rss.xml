@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Danke Hidayat - Blog</title>
+    <link>https://dankehidayat.my.id/blog</link>
+    <description>Thoughts on technology, development, and more. Sharing insights from my journey in software development and research.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 Oct 2025 03:26:57 GMT</lastBuildDate>
+    <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Test page</title>
+      <link>https://dankehidayat.my.id/blog/category-label</link>
+      <description>A brief description of the blog post</description>
+      <guid>https://dankehidayat.my.id/blog/category-label</guid>
+      <pubDate>Tue, 15 Jul 2025 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>React</category><category>Next.js</category><category>TypeScript</category><category>Tailwind CSS</category>
+      <category>Web Development</category><category>Tutorial</category>
+    </item>
+    
+    <item>
+      <title>Statistical Mechanics and Probability</title>
+      <link>https://dankehidayat.my.id/blog/statistical-mechanics</link>
+      <description>Connecting microscopic physics to macroscopic observations through statistics.</description>
+      <guid>https://dankehidayat.my.id/blog/statistical-mechanics</guid>
+      <pubDate>Fri, 15 Mar 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Statistical Mechanics</category><category>Thermodynamics</category><category>Probability</category>
+      <category>Physics</category><category>Mathematics</category>
+    </item>
+    
+    <item>
+      <title>Number Theory in Cryptography</title>
+      <link>https://dankehidayat.my.id/blog/number-theory</link>
+      <description>How prime numbers and modular arithmetic secure our digital communications.</description>
+      <guid>https://dankehidayat.my.id/blog/number-theory</guid>
+      <pubDate>Fri, 08 Mar 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Number Theory</category><category>Prime Numbers</category><category>RSA</category><category>Modular Arithmetic</category>
+      <category>Mathematics</category><category>Cryptography</category>
+    </item>
+    
+    <item>
+      <title>Information Theory and Entropy</title>
+      <link>https://dankehidayat.my.id/blog/information-theory</link>
+      <description>Quantifying information and uncertainty in communication systems.</description>
+      <guid>https://dankehidayat.my.id/blog/information-theory</guid>
+      <pubDate>Fri, 01 Mar 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Information Theory</category><category>Entropy</category><category>Data Compression</category>
+      <category>Mathematics</category><category>Computer Science</category>
+    </item>
+    
+    <item>
+      <title>Solving Differential Equations</title>
+      <link>https://dankehidayat.my.id/blog/differential-equations</link>
+      <description>Mathematical techniques for modeling continuous change in physical systems.</description>
+      <guid>https://dankehidayat.my.id/blog/differential-equations</guid>
+      <pubDate>Thu, 22 Feb 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Differential Equations</category><category>Calculus</category><category>Modeling</category>
+      <category>Mathematics</category><category>Physics</category>
+    </item>
+    
+    <item>
+      <title>Fourier Analysis and Signal Processing</title>
+      <link>https://dankehidayat.my.id/blog/fourier-analysis</link>
+      <description>Decomposing signals into frequency components using Fourier transforms.</description>
+      <guid>https://dankehidayat.my.id/blog/fourier-analysis</guid>
+      <pubDate>Thu, 08 Feb 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Fourier Transform</category><category>Frequency Analysis</category><category>Digital Signal Processing</category>
+      <category>Mathematics</category><category>Signal Processing</category>
+    </item>
+    
+    <item>
+      <title>Probability Theory Fundamentals</title>
+      <link>https://dankehidayat.my.id/blog/probability-theory</link>
+      <description>Understanding randomness and uncertainty through mathematical principles.</description>
+      <guid>https://dankehidayat.my.id/blog/probability-theory</guid>
+      <pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Probability</category><category>Random Variables</category><category>Distributions</category>
+      <category>Mathematics</category><category>Statistics</category>
+    </item>
+    
+    <item>
+      <title>Optimization with Calculus</title>
+      <link>https://dankehidayat.my.id/blog/calculus-optimization</link>
+      <description>How derivatives and gradients help us find optimal solutions.</description>
+      <guid>https://dankehidayat.my.id/blog/calculus-optimization</guid>
+      <pubDate>Thu, 25 Jan 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Calculus</category><category>Gradient Descent</category><category>Derivatives</category>
+      <category>Mathematics</category><category>Optimization</category>
+    </item>
+    
+    <item>
+      <title>The Mathematics Behind Neural Networks</title>
+      <link>https://dankehidayat.my.id/blog/machine-learning</link>
+      <description>Exploring the calculus and linear algebra that make deep learning possible.</description>
+      <guid>https://dankehidayat.my.id/blog/machine-learning</guid>
+      <pubDate>Sat, 20 Jan 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Neural Networks</category><category>Backpropagation</category><category>Calculus</category>
+      <category>Machine Learning</category><category>Mathematics</category>
+    </item>
+    
+    <item>
+      <title>Understanding Quantum Computing with Linear Algebra</title>
+      <link>https://dankehidayat.my.id/blog/quatum-computing</link>
+      <description>A deep dive into how linear algebra powers quantum computing, exploring qubits, superposition, and quantum gates.</description>
+      <guid>https://dankehidayat.my.id/blog/quatum-computing</guid>
+      <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
+      <author>Danke Hidayat</author>
+      <category>Linear Algebra</category><category>Qubits</category><category>Quantum Gates</category>
+      <category>Quantum Computing</category><category>Mathematics</category>
+    </item>
+    
+    <item>
+      <title>Testing LaTeX Support</title>
+      <link>https://dankehidayat.my.id/blog/test-latex</link>
+      <description>Testing mathematical notation in MDX</description>
+      <guid>https://dankehidayat.my.id/blog/test-latex</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <author>Your Name</author>
+      <category>test</category><category>math</category>
+      <category>testing</category>
+    </item>
+    
+  </channel>
+</rss>
