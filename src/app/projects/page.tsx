@@ -68,7 +68,6 @@ const projects = {
         state: "Provider",
       },
       githubUrl: "https://github.com/dankehidayat/FlowPoint",
-      liveUrl: "https://github.com/dankehidayat/FlowPoint",
       platform: "Mobile (Android)",
       status: "Completed",
       features: [
@@ -268,36 +267,6 @@ const projects = {
         "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
       scholarUrl:
         "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
-    },
-    {
-      title: "Sensor Calibration & Linear Regression Analysis",
-      description:
-        "Comprehensive research on sensor accuracy improvement using linear regression analysis. Based on 34 data points comparing DHT11 readings with HTC-1 reference values, achieving 90% improvement in temperature accuracy and 79% in humidity accuracy.",
-      type: "Research Paper",
-      institution: "Independent Research",
-      year: "2024",
-      technologies: [
-        "Linear Regression",
-        "Statistical Analysis",
-        "Sensor Calibration",
-        "Data Science",
-        "IoT",
-      ],
-      methodologies: [
-        "34 simultaneous measurement points",
-        "Linear regression analysis",
-        "Mean Absolute Error (MAE) calculation",
-        "Real-time calibration implementation",
-      ],
-      contributions: [
-        "Temperature MAE: 0.42°C (from ±4.1°C raw error)",
-        "Humidity MAE: 2.87% (from ±13.8% raw error)",
-        "Strong linear correlation (R² = 0.897 for temperature)",
-        "Implemented simple offset correction for real-time stability",
-      ],
-      category: "data-science",
-      documentUrl: "#",
-      scholarUrl: "#",
     },
   ],
 };

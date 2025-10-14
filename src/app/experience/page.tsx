@@ -148,9 +148,9 @@ export default function Experience() {
       <div className="container max-w-4xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="mb-6">Professional Timeline</h1>
+          <h1 className="mb-6">Career & Education</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            My journey through education and professional experiences in reverse
+            My journey through education and professional experiences in
             chronological order.
           </p>
         </div>
