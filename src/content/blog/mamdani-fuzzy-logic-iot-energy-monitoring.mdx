@@ -1,0 +1,261 @@
+---
+title: "Implementing Mamdani Fuzzy Logic for Real-Time IoT-Based Electrical Energy and Room Temperature Monitoring"
+date: "2025-10-14"
+excerpt: "A comprehensive implementation of Mamdani fuzzy logic for intelligent energy monitoring, achieving 99.88% sensor accuracy and real-time classification with mathematical rigor."
+author: "Danke Hidayat"
+tags:
+  [
+    "fuzzy-logic",
+    "iot",
+    "energy-monitoring",
+    "sensor-calibration",
+    "mathematical-modeling",
+    "embedded-systems",
+  ]
+categories: ["research", "embedded-systems", "data-analysis"]
+labels: ["project", "technical-deep-dive", "research-paper"]
+---
+
+# Implementing Mamdani Fuzzy Logic for Real-Time IoT-Based Electrical Energy and Room Temperature Monitoring
+
+## Introduction: The Critical Need for Energy Monitoring in Modern Indonesia
+
+Electricity has evolved from early experiments in the 17th century to become the backbone of modern civilization. From William Gilbert's pioneering work to Michael Faraday's electromagnetic discoveries and Nikola Tesla's alternating current systems, electricity has powered industrial revolutions and transformed human existence. Today, it supports everything from household appliances to industrial operations and emerging technologies like renewable energy and smart grids.
+
+Indonesia faces a particularly pressing energy challenge. As the largest electricity consumer in ASEAN, the country accounts for 36% of regional energy demand and consumes 66% more energy than Thailand. This high consumption is driven by rapid economic growth, urbanization, and industrialization. With projections indicating Indonesia's population could reach 381 million by 2045, the strain on energy resources is becoming increasingly severe.
+
+The situation is exacerbated by significant energy waste in public sectors such as healthcare facilities, educational institutions, and office buildings. While Indonesia has made strides in renewable energy—exemplified by the 145 MW Cirata Floating Solar Power Plant, a collaboration between PT. PLN and Masdar—household electricity consumption remains high due to extensive use of electronic devices.
+
+## Mathematical Foundation of Sensor Calibration and Accuracy Assessment
+
+### Sensor Error Calculation Methodology
+
+The accuracy of sensor measurements was rigorously evaluated using mathematical error analysis. The percentage error for each sensor reading was calculated using the formula:
+
+$$
+\text{Error} (\%) = \frac{\text{Nilai Sensor} - \text{Nilai Kalibrator}}{\text{Nilai Kalibrator}} \times 100
+$$
+
+The average error across multiple trials was determined by:
+
+$$
+\text{Rata-rata Error} (\%) = \frac{\sum \text{Error}}{\sum \text{Uji Coba}}
+$$
+
+According to research by Sinaga and Irawati (2018), the accuracy of a measurement technique is inversely proportional to the Mean Absolute Percentage Error (MAPE) and directly proportional to Mean Absolute Error (MAE). Lower MAPE values and smaller MAE indicate higher accuracy levels.
+
+### DHT-11 Sensor Performance Analysis
+
+The DHT-11 temperature sensor demonstrated exceptional performance with an average error of only 0.11% for temperature measurements and 0.15% for relative humidity. This translates to accuracy levels of 99.88% for temperature and 99.84% for humidity.
+
+The mathematical relationship between error and accuracy can be expressed as:
+
+$$
+\text{Akurasi} (\%) = 100\% - \text{Error} (\%)
+$$
+
+For temperature measurements:
+
+$$
+\text{Akurasi Suhu} = 100\% - 0.11\% = 99.89\%
+$$
+
+For humidity measurements:
+
+$$
+\text{Akurasi Kelembaban} = 100\% - 0.15\% = 99.85\%
+$$
+
+### Electrical Parameter Analysis and Power Factor Calculations
+
+The comprehensive electrical monitoring revealed critical insights into system efficiency. The power factor, a crucial indicator of electrical system efficiency, was calculated using the relationship between active power (P), apparent power (S), and reactive power (Q):
+
+$$
+\text{Faktor Daya} = \cos \phi = \frac{P}{S}
+$$
+
+Where:
+
+- Active Power (P) = 30.83 W
+- Apparent Power (S) = 56.87 VA
+- Reactive Power (Q) = 47.13 VAR
+
+The power factor calculation:
+
+$$
+\text{Faktor Daya} = \frac{30.83}{56.87} = 0.542
+$$
+
+This low power factor indicates significant inefficiency, with only 54.2% of the apparent power being converted to useful work. The relationship between these power components follows the power triangle:
+
+$$
+S = \sqrt{P^2 + Q^2} = \sqrt{30.83^2 + 47.13^2} = 56.87 \text{ VA}
+$$
+
+## Mamdani Fuzzy Logic System: Mathematical Implementation
+
+### Membership Function Formulation
+
+The electrical monitoring system implements a sophisticated four-input, one-output Mamdani fuzzy logic system. Each input variable uses trapezoidal membership functions defined mathematically as:
+
+For a trapezoidal membership function with parameters [a, b, c, d]:
+
+$$
+\mu(x) = \max\left(\min\left(\frac{x-a}{b-a}, 1, \frac{d-x}{d-c}\right), 0\right)
+$$
+
+**AC Current Membership Functions:**
+
+- Low: [0, 0, 2, 5]
+- Medium: [4, 8, 12, 15]
+- High: [14.5, 20.5, 101, 101]
+
+**AC Power Membership Functions:**
+
+- Low: [0, 60, 300, 600]
+- Medium: [805.4, 925.4, 1825, 2425]
+- High: [1920, 2880, 3120, 4080]
+
+**Reactive Power Membership Functions:**
+
+- Low: [0, 0, 240, 600]
+- Medium: [480, 960, 1800, 2400]
+- High: [1800, 2500, 3000, 3000]
+
+**Power Factor Membership Functions:**
+
+- Poor: [0, 0, 0.5, 0.7]
+- Adequate: [0.65, 0.75, 0.8, 0.85]
+- Good: [0.83, 0.9, 1, 1]
+
+### Output Variable and Defuzzification
+
+The output variable Load_Status uses three trapezoidal membership functions:
+
+- Normal: [-0.1, 0, 0, 0.1]
+- Warning: [0.9, 1, 1, 1.1]
+- Overload: [1.9, 2, 2, 2.1]
+
+The defuzzification process uses the centroid method to convert fuzzy sets to crisp outputs:
+
+$$
+\text{Crisp Output} = \frac{\int \mu(x) \cdot x  dx}{\int \mu(x)  dx}
+$$
+
+### Temperature Classification System
+
+The temperature monitoring system uses a single-input Mamdani fuzzy system with three membership functions:
+
+**Temperature Input Membership Functions:**
+
+- Cold: [0, 0, 20, 20] (0-20°C)
+- Normal: [20, 20, 30, 30] (20-30°C)
+- Hot: [30, 30, 40, 40] (30-40°C)
+
+**Output Categories:**
+
+- Cold: 0
+- Normal: 1
+- Hot: 2
+
+### Fuzzy Rule Base Mathematical Representation
+
+The system implements eleven fuzzy rules combining the four input variables. Each rule follows the structure:
+
+**Rule i:** IF AC_Current IS A_i AND AC_Power IS B_i AND Reactive_Power IS C_i AND Cos_Phi IS D_i THEN Load_Status IS E_i
+
+Where A_i, B_i, C_i, D_i are fuzzy sets for the respective inputs, and E_i is the fuzzy set for the output.
+
+Example rules include:
+
+- Rule 1: IF Current IS Low AND Power IS Low AND Reactive_Power IS Low AND Cos_Phi IS Good THEN Status IS Normal
+- Rule 8: IF Current IS Medium AND Power IS High AND Reactive_Power IS High AND Cos_Phi IS Poor THEN Status IS Warning
+- Rule 11: IF Current IS High AND Power IS High AND Reactive_Power IS High AND Cos_Phi IS Poor THEN Status IS Overload
+
+### Fuzzy Inference Process
+
+The Mamdani inference method involves four key steps:
+
+1. **Fuzzification**: Convert crisp inputs to fuzzy sets using membership functions
+
+   $$
+   \mu_{\text{Low}}^{\text{Current}}(x) = \max\left(\min\left(\frac{x-0}{2-0}, 1, \frac{5-x}{5-2}\right), 0\right)
+   $$
+
+2. **Rule Evaluation**: Apply fuzzy operators (AND typically uses minimum)
+
+   $$
+   \alpha_i = \min(\mu_{A_i}(x_1), \mu_{B_i}(x_2), \mu_{C_i}(x_3), \mu_{D_i}(x_4))
+   $$
+
+3. **Aggregation**: Combine output fuzzy sets using maximum operator
+
+   $$
+   \mu_{\text{aggregated}}(y) = \max_i (\min(\alpha_i, \mu_{E_i}(y)))
+   $$
+
+4. **Defuzzification**: Convert fuzzy output to crisp value using centroid method
+
+## System Performance and Latency Analysis
+
+### Real-Time Processing Efficiency
+
+The system demonstrated exceptional real-time performance with end-to-end latency measurements consistently below 2 seconds. This includes:
+
+- Sensor data acquisition and preprocessing
+- Fuzzy logic inference computation
+- Data transmission via HTTP protocol
+- Mobile application display updates
+
+The latency can be mathematically expressed as:
+
+$$
+T_{\text{total}} = T_{\text{sensor}} + T_{\text{processing}} + T_{\text{transmission}} + T_{\text{display}} < 2\text{s}
+$$
+
+Where:
+
+- $T_{\text{sensor}}$: Sensor reading and local processing time
+- $T_{\text{processing}}$: Fuzzy logic computation time
+- $T_{\text{transmission}}$: Network transmission latency
+- $T_{\text{display}}$: Mobile application rendering time
+
+### Energy Efficiency Calculations
+
+The system identified significant energy inefficiency through power factor analysis. The poor power factor of 0.53 indicates substantial reactive power consumption. The required capacitor bank for power factor correction can be calculated using:
+
+$$
+Q_c = P \times (\tan \phi_1 - \tan \phi_2)
+$$
+
+Where:
+
+- $Q_c$: Required capacitor reactive power (VAR)
+- $P$: Active power (30.83 W)
+- $\phi_1$: Current phase angle ($\cos^{-1}(0.53) = 58°$)
+- $\phi_2$: Desired phase angle (targeting $\cos^{-1}(0.95) = 18°$)
+
+Calculation:
+
+$$
+Q_c = 30.83 \times (\tan 58° - \tan 18°) = 30.83 \times (1.600 - 0.325) = 39.3 \text{ VAR}
+$$
+
+## Conclusions and Mathematical Insights
+
+The research successfully demonstrates an IoT-based prototype for real-time monitoring of electrical energy and room temperature using Mamdani fuzzy logic. Key mathematical achievements include:
+
+- **Sensor Accuracy**: DHT-11 sensor with 99.88% temperature accuracy and 99.84% humidity accuracy, mathematically verified through error analysis
+- **Electrical Efficiency**: Identified 46.8% power factor inefficiency through comprehensive power triangle analysis
+- **Fuzzy Logic Performance**: Implemented 11-rule fuzzy inference system with precise mathematical membership functions
+- **Real-Time Processing**: Achieved sub-2-second latency across the complete data pipeline
+
+The mathematical framework provides a solid foundation for future enhancements, including:
+
+- Adaptive fuzzy systems with self-tuning membership functions
+- Machine learning integration for predictive maintenance
+- Multi-objective optimization for energy efficiency
+
+This research establishes that mathematical rigor combined with fuzzy logic principles can create intelligent energy management systems capable of adapting to dynamic environmental conditions while maintaining computational efficiency suitable for embedded IoT applications.
+
+_Research conducted September 2024 - July 2025 at PT. Global Kreatif Inovasi, Jakarta_
