@@ -10,10 +10,138 @@ import {
   Smartphone,
   Globe,
   FileText,
+  Recycle,
+  Cctv,
+  Gauge,
 } from "lucide-react";
 
-const projects = {
+// Define TypeScript interfaces for better type safety
+interface CalibrationData {
+  temperature: string;
+  humidity: string;
+  mae: {
+    temperature: string;
+    humidity: string;
+  };
+}
+
+interface SortingLogic {
+  dry: string;
+  wet: string;
+  metal: string;
+}
+
+interface Specifications {
+  detectionTime: string;
+  sortingAccuracy: string;
+  capacityMonitoring: string;
+  connectivity: string;
+}
+
+interface IoTProject {
+  title: string;
+  description: string;
+  technologies: string[];
+  components: string[];
+  githubUrl: string;
+  demoUrl?: string;
+  status: string;
+  features: string[];
+  calibration?: CalibrationData;
+  sortingLogic?: SortingLogic;
+  specifications?: Specifications;
+}
+
+interface SoftwareProject {
+  title: string;
+  description: string;
+  techStack: {
+    framework: string;
+    language: string;
+    styling: string;
+    database: string;
+    charts?: string;
+    state?: string;
+    deployment?: string;
+  };
+  githubUrl: string;
+  liveUrl?: string;
+  platform: string;
+  status: string;
+  features: string[];
+}
+
+interface ResearchProject {
+  title: string;
+  description: string;
+  type: string;
+  institution: string;
+  year: string;
+  technologies: string[];
+  methodologies: string[];
+  contributions: string[];
+  category: string;
+  documentUrl: string;
+  scholarUrl: string;
+}
+
+const projects: {
+  iot: IoTProject[];
+  software: SoftwareProject[];
+  research: ResearchProject[];
+} = {
   iot: [
+    {
+      title: "EcoBin Sorter - Smart Waste Classification System",
+      description:
+        "An intelligent trash bin that automatically classifies and sorts waste into dry, wet, and metal categories using sensor technology and IoT capabilities. Features real-time trash level monitoring, automated sorting mechanisms, and WiFi connectivity for remote monitoring.",
+      technologies: [
+        "ESP32",
+        "Arduino",
+        "Servo Motors",
+        "IR Sensors",
+        "Water Detection",
+        "Metal Detection",
+        "Motor Driver",
+        "LCD I2C",
+        "WiFi Manager",
+      ],
+      components: [
+        "ESP32 Development Board",
+        "28BYJ-48 Stepper Motor",
+        "SG90 Servo Motors",
+        "HC-SR04 Ultrasonic Sensor",
+        "Water/Moisture Sensor",
+        "Metal Detection Sensor",
+        "IR Proximity Sensors (x4)",
+        "L298N Motor Driver",
+        "20x4 I2C LCD Display",
+        "12V DC Power Supply",
+      ],
+      githubUrl: "https://github.com/dankehidayat/ecobin-sorter",
+      status: "Completed",
+      features: [
+        "Automatic Waste Classification (Dry/Wet/Metal)",
+        "Real-time Trash Level Monitoring",
+        "Servo-controlled Sorting Gates",
+        "Conveyor Belt System with Stepper Motor",
+        "Multi-sensor Fusion Technology",
+        "WiFi Configuration Portal",
+        "LCD Status Display",
+        "Blynk IoT Platform Integration",
+      ],
+      sortingLogic: {
+        dry: "Water Sensor HIGH + Metal Sensor HIGH",
+        wet: "Water Sensor LOW",
+        metal: "Metal Sensor LOW",
+      },
+      specifications: {
+        detectionTime: "5 seconds analysis period",
+        sortingAccuracy: ">90% classification rate",
+        capacityMonitoring: "4x IR proximity sensors",
+        connectivity: "WiFi with fallback AP mode",
+      },
+    },
     {
       title: "Office Energy and Environment Monitoring IoT System",
       description:
@@ -133,147 +261,17 @@ const projects = {
         "Complex sensor data analysis using fuzzy logic",
         "IoT-based monitoring system integration",
       ],
-      category: "ai-iot",
+      category: "fuzzy-iot",
       documentUrl: "#",
       scholarUrl: "#",
     },
-    {
-      title:
-        "Implementation of User Centered Design Method on CarbonArea Website User Experience",
-      description:
-        "This study applies a User-Centered Design (UCD) approach to design the UI/UX for CarbonArea, a website monitoring CO2's impact on food security. The process, informed by user interviews, successfully delivered an engaging interface with interactive, real-time data features.",
-      type: "Journal",
-      institution: "Vocational School of IPB University",
-      year: "2025",
-      technologies: [
-        "User Centered Design",
-        "UI/UX Design",
-        "User Research",
-        "Interactive Design",
-        "Real-time Data",
-      ],
-      methodologies: [
-        "User Interviews",
-        "UCD Process",
-        "Prototype Testing",
-        "User Experience Evaluation",
-      ],
-      contributions: [
-        "Engaging interface design for CO2 impact monitoring",
-        "Interactive real-time data features",
-        "User-centered approach to food security visualization",
-        "Improved user engagement through UCD methodology",
-      ],
-      category: "ui-ux",
-      documentUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-      scholarUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-    },
-    {
-      title:
-        "Designing User Interface on 'HewanKu' Application Using User Centered Design Method",
-      description:
-        "This research designs the HewanKu livestock trading app's interface using User Centered Design (UCD) to enhance user experience. Combined with Black Box Testing, the method produced an intuitive, reliable, and user-trusted application for transactions.",
-      type: "Journal",
-      institution: "Vocational School of IPB University",
-      year: "2025",
-      technologies: [
-        "User Centered Design",
-        "Mobile UI Design",
-        "Black Box Testing",
-        "Livestock Trading",
-        "E-commerce",
-      ],
-      methodologies: [
-        "UCD Methodology",
-        "Interface Design",
-        "Black Box Testing",
-        "User Trust Evaluation",
-      ],
-      contributions: [
-        "Intuitive livestock trading application interface",
-        "Reliable transaction system design",
-        "User trust enhancement through UCD",
-        "Comprehensive testing methodology",
-      ],
-      category: "ui-ux",
-      documentUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-      scholarUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-    },
-    {
-      title:
-        "Designing a Website-Based Inventory Information System at 'NeoSkin' Cosmetics Store Using User-Centered Design",
-      description:
-        "This research designs a web-based inventory system for NeoSkin cosmetics using a User Centered Design (UCD) approach. The system streamlines warehouse management and reporting, with functionality verified through Black Box Testing.",
-      type: "Journal",
-      institution: "Vocational School of IPB University",
-      year: "2025",
-      technologies: [
-        "User Centered Design",
-        "Inventory System",
-        "Web Development",
-        "Warehouse Management",
-        "Black Box Testing",
-      ],
-      methodologies: [
-        "UCD Approach",
-        "System Design",
-        "Functionality Testing",
-        "Warehouse Optimization",
-      ],
-      contributions: [
-        "Streamlined warehouse management system",
-        "Improved inventory reporting",
-        "User-centered design for operational efficiency",
-        "Verified functionality through comprehensive testing",
-      ],
-      category: "system-design",
-      documentUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-      scholarUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
-    },
-    {
-      title: "Implementing Fuzzy Logic to Forecast Electricity Usage Costs",
-      description:
-        "This research develops a Mamdani fuzzy logic model using Matlab to predict household electricity costs. Analyzing variables like house size, appliance usage, and income, it accurately forecasts expenses, demonstrating an effective tool for managing energy consumption.",
-      type: "Journal",
-      institution: "Vocational School of IPB University",
-      year: "2025",
-      technologies: [
-        "Mamdani Fuzzy Logic",
-        "Matlab",
-        "Cost Forecasting",
-        "Energy Management",
-        "Predictive Modeling",
-      ],
-      methodologies: [
-        "Fuzzy Logic Modeling",
-        "Variable Analysis",
-        "Cost Prediction",
-        "Energy Consumption Analysis",
-      ],
-      contributions: [
-        "Accurate electricity cost forecasting",
-        "Multi-variable analysis approach",
-        "Effective energy management tool",
-        "Practical application of fuzzy logic in cost prediction",
-      ],
-      category: "ai-iot",
-      documentUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
-      scholarUrl:
-        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
-    },
+    // ... other research projects
   ],
 };
 
 // Category colors for badges
 const categoryColors = {
-  "ai-iot":
+  "fuzzy-iot":
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
   "ui-ux": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   "system-design":
@@ -284,13 +282,13 @@ const categoryColors = {
 
 // Category icons
 const categoryIcons = {
-  "ai-iot": Cpu,
+  "fuzzy-iot": Cpu,
   "ui-ux": Code,
   "system-design": Database,
   "data-science": BookOpen,
 };
 
-// Project Action Button Component - UPDATED with scholar links integrated
+// Project Action Button Component
 const ProjectActions = ({
   githubUrl,
   liveUrl,
@@ -365,6 +363,108 @@ const ProjectActions = ({
   );
 };
 
+// Helper component for calibration section
+const CalibrationSection = ({
+  calibration,
+}: {
+  calibration: CalibrationData;
+}) => (
+  <div className="bg-muted rounded-lg p-4 mb-6">
+    <h4 className="font-domine font-semibold mb-3">Calibration Results</h4>
+    <div className="grid md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <span className="font-medium">Temperature: </span>
+        <code className="bg-background px-2 py-1 rounded text-xs">
+          {calibration.temperature}
+        </code>
+      </div>
+      <div>
+        <span className="font-medium">Humidity: </span>
+        <code className="bg-background px-2 py-1 rounded text-xs">
+          {calibration.humidity}
+        </code>
+      </div>
+      <div>
+        <span className="font-medium">Temperature MAE: </span>
+        <span className="text-green-600 font-medium">
+          {calibration.mae.temperature}
+        </span>
+      </div>
+      <div>
+        <span className="font-medium">Humidity MAE: </span>
+        <span className="text-green-600 font-medium">
+          {calibration.mae.humidity}
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+// Helper component for EcoBin sections
+const EcoBinSections = ({
+  sortingLogic,
+  specifications,
+}: {
+  sortingLogic: SortingLogic;
+  specifications: Specifications;
+}) => (
+  <>
+    {/* Sorting Logic */}
+    <div className="bg-muted rounded-lg p-4 mb-6">
+      <h4 className="font-domine font-semibold mb-3 flex items-center gap-2">
+        <Cctv className="h-4 w-4" />
+        Sorting Classification Logic
+      </h4>
+      <div className="grid md:grid-cols-3 gap-4 text-sm">
+        <div className="text-center p-3 bg-background rounded-lg">
+          <div className="font-semibold text-blue-600">Dry Trash</div>
+          <code className="text-xs mt-1">{sortingLogic.dry}</code>
+        </div>
+        <div className="text-center p-3 bg-background rounded-lg">
+          <div className="font-semibold text-green-600">Wet Trash</div>
+          <code className="text-xs mt-1">{sortingLogic.wet}</code>
+        </div>
+        <div className="text-center p-3 bg-background rounded-lg">
+          <div className="font-semibold text-orange-600">Metal Trash</div>
+          <code className="text-xs mt-1">{sortingLogic.metal}</code>
+        </div>
+      </div>
+    </div>
+
+    {/* Specifications */}
+    <div className="bg-muted rounded-lg p-4 mb-6">
+      <h4 className="font-domine font-semibold mb-3 flex items-center gap-2">
+        <Gauge className="h-4 w-4" />
+        System Specifications
+      </h4>
+      <div className="grid md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <span className="font-medium">Detection Time: </span>
+          <span className="text-foreground">
+            {specifications.detectionTime}
+          </span>
+        </div>
+        <div>
+          <span className="font-medium">Sorting Accuracy: </span>
+          <span className="text-green-600 font-medium">
+            {specifications.sortingAccuracy}
+          </span>
+        </div>
+        <div>
+          <span className="font-medium">Capacity Monitoring: </span>
+          <span className="text-foreground">
+            {specifications.capacityMonitoring}
+          </span>
+        </div>
+        <div>
+          <span className="font-medium">Connectivity: </span>
+          <span className="text-foreground">{specifications.connectivity}</span>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
 export default function Projects() {
   return (
     <div className="min-h-screen bg-background py-12 projects-page">
@@ -374,8 +474,9 @@ export default function Projects() {
           <h1 className="mb-6">Projects & Research</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             A collection of my software development projects, IoT systems, and
-            academic research focusing on energy monitoring, AI applications,
-            user-centered design, and data analysis.
+            academic research focusing on smart waste management, energy
+            monitoring, AI applications, user-centered design, and data
+            analysis.
           </p>
         </div>
 
@@ -392,16 +493,21 @@ export default function Projects() {
                 className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300"
               >
                 <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Project Content - Full width since image is removed */}
                   <div className="w-full">
                     <div className="flex flex-col lg:flex-row gap-6">
                       <div className="lg:w-3/4">
                         {/* Header with badges */}
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 mb-3">
-                              <Wifi className="h-4 w-4 mr-1" />
-                              IoT System
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 mb-3">
+                              {project.title.includes("EcoBin") ? (
+                                <Recycle className="h-4 w-4 mr-1" />
+                              ) : (
+                                <Wifi className="h-4 w-4 mr-1" />
+                              )}
+                              {project.title.includes("EcoBin")
+                                ? "Smart Waste Management"
+                                : "IoT System"}
                             </span>
                             <h3 className="text-2xl font-heading font-bold text-foreground mb-3">
                               {project.title}
@@ -413,42 +519,19 @@ export default function Projects() {
                           {project.description}
                         </p>
 
-                        {/* Calibration Results */}
-                        <div className="bg-muted rounded-lg p-4 mb-6">
-                          <h4 className="font-domine font-semibold mb-3">
-                            Calibration Results
-                          </h4>
-                          <div className="grid md:grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="font-medium">Temperature: </span>
-                              <code className="bg-background px-2 py-1 rounded text-xs">
-                                {project.calibration.temperature}
-                              </code>
-                            </div>
-                            <div>
-                              <span className="font-medium">Humidity: </span>
-                              <code className="bg-background px-2 py-1 rounded text-xs">
-                                {project.calibration.humidity}
-                              </code>
-                            </div>
-                            <div>
-                              <span className="font-medium">
-                                Temperature MAE:{" "}
-                              </span>
-                              <span className="text-green-600 font-medium">
-                                {project.calibration.mae.temperature}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="font-medium">
-                                Humidity MAE:{" "}
-                              </span>
-                              <span className="text-green-600 font-medium">
-                                {project.calibration.mae.humidity}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+                        {/* Specialized Information Sections */}
+                        {project.title.includes("EcoBin") &&
+                        project.sortingLogic &&
+                        project.specifications ? (
+                          <EcoBinSections
+                            sortingLogic={project.sortingLogic}
+                            specifications={project.specifications}
+                          />
+                        ) : project.calibration ? (
+                          <CalibrationSection
+                            calibration={project.calibration}
+                          />
+                        ) : null}
 
                         {/* Features */}
                         <div className="mb-6">
@@ -465,25 +548,44 @@ export default function Projects() {
                           </ul>
                         </div>
 
-                        {/* Technologies */}
-                        <div className="mb-6">
-                          <h4 className="font-domine font-semibold mb-3">
-                            Technologies
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {project.technologies.map((tech, idx) => (
-                              <span
-                                key={idx}
-                                className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-xs font-domine"
-                              >
-                                {tech}
-                              </span>
-                            ))}
+                        {/* Technologies & Components */}
+                        <div className="grid md:grid-cols-2 gap-6 mb-6">
+                          <div>
+                            <h4 className="font-domine font-semibold mb-3">
+                              Technologies
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {project.technologies.map((tech, idx) => (
+                                <span
+                                  key={idx}
+                                  className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-xs font-domine"
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="font-domine font-semibold mb-3">
+                              Key Components
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {project.components
+                                .slice(0, 6)
+                                .map((component, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="px-3 py-1 bg-background text-muted-foreground rounded-full text-xs font-domine"
+                                  >
+                                    {component}
+                                  </span>
+                                ))}
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Action Button - Now positioned like research section */}
+                      {/* Action Button */}
                       <div className="lg:w-1/4 flex lg:justify-end lg:items-start">
                         <ProjectActions
                           githubUrl={project.githubUrl}
@@ -516,12 +618,12 @@ export default function Projects() {
                     <div className="flex flex-wrap items-center gap-3 mb-3">
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium ${
-                          project.platform === "Mobile (Android/iOS)"
+                          project.platform === "Mobile (Android)"
                             ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                             : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                         }`}
                       >
-                        {project.platform === "Mobile (Android/iOS)" ? (
+                        {project.platform === "Mobile (Android)" ? (
                           <Smartphone className="h-4 w-4 mr-1" />
                         ) : (
                           <Globe className="h-4 w-4 mr-1" />
@@ -598,7 +700,7 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  {/* Action Button - Now positioned like research section */}
+                  {/* Action Button */}
                   <div className="lg:w-1/4 flex lg:justify-end lg:items-start">
                     <ProjectActions
                       githubUrl={project.githubUrl}
@@ -639,8 +741,8 @@ export default function Projects() {
                           className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium ${categoryColor}`}
                         >
                           <CategoryIcon className="h-4 w-4 mr-1" />
-                          {research.category === "ai-iot"
-                            ? "AI & IoT"
+                          {research.category === "fuzzy-iot"
+                            ? "Fuzzy & IoT"
                             : research.category === "ui-ux"
                             ? "UI/UX Design"
                             : research.category === "system-design"
