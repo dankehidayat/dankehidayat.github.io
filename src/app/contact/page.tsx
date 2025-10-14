@@ -181,21 +181,21 @@ export default function Contact() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
-                href="/projects"
+                href="https://dankehidayat.my.id/projects"
                 className="text-primary hover:text-primary/80 transition-colors font-domine"
               >
                 View Projects
               </a>
               <span className="text-muted-foreground">•</span>
               <a
-                href="/experience"
+                href="https://dankehidayat.my.id/experience"
                 className="text-primary hover:text-primary/80 transition-colors font-domine"
               >
                 Work Experience
               </a>
               <span className="text-muted-foreground">•</span>
               <a
-                href="https://blog.dankehidayat.my.id"
+                href="https://dankehidayat.my.id/blog"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-primary/80 transition-colors font-domine"

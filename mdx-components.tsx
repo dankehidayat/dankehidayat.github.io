@@ -33,7 +33,7 @@ const components = {
       {children}
     </a>
   ),
-  // Table components for GFM support
+  // In your mdx-components.tsx - ensure you have these:
   table: ({ children }) => (
     <div className="table-container my-6">
       <table className="w-full">{children}</table>
