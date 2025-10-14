@@ -146,7 +146,7 @@ export default async function Home() {
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
                   <Cpu className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="font-heading mb-4">IoT/Electronic Building</h3>
+                <h3 className="font-heading mb-4">Building Electronic</h3>
                 <p className="text-muted-foreground text-justify">
                   Designing and building connected devices and electronic
                   systems, bridging the gap between software and physical
