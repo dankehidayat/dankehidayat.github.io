@@ -1,6 +1,6 @@
 // src/app/rss.xml/route.ts
 import { NextResponse } from "next/server";
-import { getBlogPosts } from "@/lib/blog-data";
+import { getBlogPostsWithContent } from "@/lib/blog-data";
 
 interface BlogPost {
   slug: string;
@@ -11,11 +11,12 @@ interface BlogPost {
   tags: string[];
   categories: string[];
   labels: string[];
+  contentHtml?: string;
 }
 
 export async function GET() {
   try {
-    const posts = getBlogPosts();
+    const posts = getBlogPostsWithContent();
 
     const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -28,11 +29,8 @@ export async function GET() {
     <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
     ${posts
       .map((post: BlogPost) => {
-        const fullContent = `<p>${escapeXml(
-          post.excerpt
-        )}</p><p><a href="https://dankehidayat.my.id/blog/${
-          post.slug
-        }">Read the full post on my website</a></p>`;
+        const fullContent =
+          post.contentHtml || `<p>${escapeXml(post.excerpt)}</p>`;
 
         return `
     <item>
@@ -204,9 +202,9 @@ export async function GET() {
               </div>
               
               <footer class="read-more">
-                <p><em>Read the full post online: <a href="https://dankehidayat.my.id/blog/${
+                <p><em>Originally published at <a href="https://dankehidayat.my.id/blog/${
                   post.slug
-                }">https://dankehidayat.my.id/blog/${post.slug}</a></em></p>
+                }">dankehidayat.my.id</a></em></p>
               </footer>
             </article>
           </body>

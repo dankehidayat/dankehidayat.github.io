@@ -8,6 +8,8 @@ export interface BlogPost {
   tags: string[];
   categories: string[];
   labels: string[];
+  content?: string; // Add this
+  contentHtml?: string; // Add this
 }
 
 export interface BlogFilters {
@@ -32,6 +34,10 @@ try {
 
 export function getBlogPosts(): BlogPost[] {
   return blogPosts;
+}
+
+export function getBlogPostsWithContent(): BlogPost[] {
+  return blogPosts.filter((post) => post.contentHtml);
 }
 
 export function getBlogPostBySlug(slug: string): BlogPost | null {
@@ -80,6 +86,8 @@ export function getFilterCounts(posts: BlogPost[]) {
 import { readdirSync, readFileSync } from "fs";
 import matter from "gray-matter";
 import path from "path";
+import { remark } from "remark";
+import html from "remark-html";
 
 function getDevelopmentPosts(): BlogPost[] {
   if (process.env.NODE_ENV !== "development") {
@@ -96,7 +104,17 @@ function getDevelopmentPosts(): BlogPost[] {
 
         const filePath = path.join(blogDir, file);
         const fileContent = readFileSync(filePath, "utf8");
-        const { data } = matter(fileContent);
+        const { data, content } = matter(fileContent);
+
+        let contentHtml = "";
+        if (content) {
+          try {
+            const processedContent = remark().use(html).processSync(content);
+            contentHtml = processedContent.toString();
+          } catch (error) {
+            console.error(`Error processing content for ${file}:`, error);
+          }
+        }
 
         return {
           slug: file.replace(".mdx", ""),
@@ -107,6 +125,8 @@ function getDevelopmentPosts(): BlogPost[] {
           tags: data.tags || [],
           categories: data.categories || [],
           labels: data.labels || [],
+          content: content,
+          contentHtml: contentHtml,
         };
       })
       .filter(Boolean) as BlogPost[];

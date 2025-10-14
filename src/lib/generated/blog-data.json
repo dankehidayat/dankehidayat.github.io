@@ -15,7 +15,9 @@
       "Web Development",
       "Tutorial"
     ],
-    "labels": []
+    "labels": [],
+    "content": "\n# We are testing categories and label system\n\nlorem ipsum\n",
+    "contentHtml": "<h1>We are testing categories and label system</h1>\n<p>\nlorem ipsum</p>"
   },
   {
     "slug": "statistical-mechanics",
@@ -35,7 +37,9 @@
     "labels": [
       "Advanced Physics",
       "Mathematical Modeling"
-    ]
+    ],
+    "content": "\n# Statistical Mechanics and Probability\n\n## Boltzmann Distribution\n\n$$\nP_i = \\frac{e^{-E_i/kT}}{Z}\n$$\n\nWhere partition function:\n\n$$\nZ = \\sum_i e^{-E_i/kT}\n$$\n\n## Entropy\n\n$$\nS = -k \\sum_i P_i \\ln P_i\n$$\n\n## Ideal Gas Law\n\nFrom microscopic perspective:\n\n$$\nPV = NkT\n$$\n",
+    "contentHtml": "<h1>Statistical Mechanics and Probability</h1><br/>\n<h2>Boltzmann Distribution</h2>\n<p>\n$$</p>\n<p>P_i = \\frac{e^{-E_i/kT}}{Z}</p>\n<p>$$</p>\n<p>\nWhere partition function:</p>\n<p>\n$$</p>\n<p>Z = \\sum_i e^{-E_i/kT}</p>\n<p>$$</p><br/>\n<h2>Entropy</h2>\n<p>\n$$</p>\n<p>S = -k \\sum_i P_i \\ln P_i</p>\n<p>$$</p><br/>\n<h2>Ideal Gas Law</h2>\n<p>\nFrom microscopic perspective:</p>\n<p>\n$$</p>\n<p>PV = NkT</p>\n<p>$$</p>"
   },
   {
     "slug": "number-theory",
@@ -56,7 +60,9 @@
     "labels": [
       "Security",
       "Mathematical Foundation"
-    ]
+    ],
+    "content": "\n# Number Theory in Cryptography\n\n## RSA Encryption\n\nPublic key: $(n, e)$ where $n = pq$\n\nPrivate key: $d$ where $ed \\equiv 1 \\pmod{\\phi(n)}$\n\nEncryption: $c = m^e \\mod n$\n\nDecryption: $m = c^d \\mod n$\n\n## Euler's Theorem\n\nIf $\\gcd(a,n) = 1$, then:\n\n$$\na^{\\phi(n)} \\equiv 1 \\pmod{n}\n$$\n",
+    "contentHtml": "<h1>Number Theory in Cryptography</h1><br/>\n<h2>RSA Encryption</h2>\n<p>\nPublic key: $(n, e)$ where $n = pq$</p>\n<p>\nPrivate key: $d$ where $ed \\equiv 1 \\pmod{\\phi(n)}$</p>\n<p>\nEncryption: $c = m^e \\mod n$</p>\n<p>\nDecryption: $m = c^d \\mod n$</p><br/>\n<h2>Euler's Theorem</h2>\n<p>\nIf $\\gcd(a,n) = 1$, then:</p>\n<p>\n$$</p>\n<p>a^{\\phi(n)} \\equiv 1 \\pmod{n}</p>\n<p>$$</p>"
   },
   {
     "slug": "information-theory",
@@ -76,7 +82,9 @@
     "labels": [
       "Theoretical Foundation",
       "Practical Applications"
-    ]
+    ],
+    "content": "\n# Information Theory and Entropy\n\n## Shannon Entropy\n\n$$\nH(X) = -\\sum_{i=1}^{n} P(x_i) \\log_2 P(x_i)\n$$\n\n## Mutual Information\n\n$$\nI(X;Y) = \\sum_{x,y} P(x,y) \\log \\frac{P(x,y)}{P(x)P(y)}\n$$\n",
+    "contentHtml": "<h1>Information Theory and Entropy</h1><br/>\n<h2>Shannon Entropy</h2>\n<p>\n$$</p>\n<p>H(X) = -\\sum_{i=1}^{n} P(x_i) \\log_2 P(x_i)</p>\n<p>$$</p><br/>\n<h2>Mutual Information</h2>\n<p>\n$$</p>\n<p>I(X;Y) = \\sum_{x,y} P(x,y) \\log \\frac{P(x,y)}{P(x)P(y)}</p>\n<p>$$</p>"
   },
   {
     "slug": "differential-equations",
@@ -96,7 +104,9 @@
     "labels": [
       "Advanced Mathematics",
       "Physics Applications"
-    ]
+    ],
+    "content": "\n# Solving Differential Equations\n\n## Simple Harmonic Motion\n\n$$\n\\frac{d^2x}{dt^2} + \\omega^2 x = 0\n$$\n\nSolution:\n\n$$\nx(t) = A\\cos(\\omega t) + B\\sin(\\omega t)\n$$\n\n## Heat Equation\n\n$$\n\\frac{\\partial u}{\\partial t} = \\alpha \\frac{\\partial^2 u}{\\partial x^2}\n$$\n",
+    "contentHtml": "<h1>Solving Differential Equations</h1><br/>\n<h2>Simple Harmonic Motion</h2>\n<p>\n$$</p>\n<p>\\frac{d^2x}{dt^2} + \\omega^2 x = 0</p>\n<p>$$</p>\n<p>\nSolution:</p>\n<p>\n$$</p>\n<p>x(t) = A\\cos(\\omega t) + B\\sin(\\omega t)</p>\n<p>$$</p><br/>\n<h2>Heat Equation</h2>\n<p>\n$$</p>\n<p>\\frac{\\partial u}{\\partial t} = \\alpha \\frac{\\partial^2 u}{\\partial x^2}</p>\n<p>$$</p>"
   },
   {
     "slug": "fourier-analysis",
@@ -116,7 +126,9 @@
     "labels": [
       "Advanced Mathematics",
       "Practical Applications"
-    ]
+    ],
+    "content": "\n# Fourier Analysis and Signal Processing\n\n## Fourier Transform\n\n$$\nF(\\omega) = \\int_{-\\infty}^{\\infty} f(t) e^{-i\\omega t} dt\n$$\n\n## Inverse Fourier Transform\n\n$$\nf(t) = \\frac{1}{2\\pi} \\int_{-\\infty}^{\\infty} F(\\omega) e^{i\\omega t} d\\omega\n$$\n",
+    "contentHtml": "<h1>Fourier Analysis and Signal Processing</h1><br/>\n<h2>Fourier Transform</h2>\n<p>\n$$</p>\n<p>F(\\omega) = \\int_{-\\infty}^{\\infty} f(t) e^{-i\\omega t} dt</p>\n<p>$$</p><br/>\n<h2>Inverse Fourier Transform</h2>\n<p>\n$$</p>\n<p>f(t) = \\frac{1}{2\\pi} \\int_{-\\infty}^{\\infty} F(\\omega) e^{i\\omega t} d\\omega</p>\n<p>$$</p>"
   },
   {
     "slug": "probability-theory",
@@ -136,7 +148,9 @@
     "labels": [
       "Fundamental Concepts",
       "Mathematical Foundation"
-    ]
+    ],
+    "content": "\n# Probability Theory Fundamentals\n\n## Bayes' Theorem\n\n$$\nP(A|B) = \\frac{P(B|A)P(A)}{P(B)}\n$$\n\n## Normal Distribution\n\n$$\nf(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}\n$$\n",
+    "contentHtml": "<h1>Probability Theory Fundamentals</h1><br/>\n<h2>Bayes' Theorem</h2>\n<p>\n$$</p>\n<p>P(A|B) = \\frac{P(B|A)P(A)}{P(B)}</p>\n<p>$$</p><br/>\n<h2>Normal Distribution</h2>\n<p>\n$$</p>\n<p>f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}</p>\n<p>$$</p>"
   },
   {
     "slug": "calculus-optimization",
@@ -156,7 +170,9 @@
     "labels": [
       "Mathematical Foundation",
       "Practical Applications"
-    ]
+    ],
+    "content": "\n# Optimization with Calculus\n\n## Gradient Descent\n\nThe update rule:\n\n$$\n\\theta_{t+1} = \\theta_t - \\eta \\nabla J(\\theta_t)\n$$\n\nWhere $\\eta$ is the learning rate.\n\n## Partial Derivatives\n\nFor a function $f(x,y)$:\n\n$$\n\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h,y) - f(x,y)}{h}\n$$\n",
+    "contentHtml": "<h1>Optimization with Calculus</h1><br/>\n<h2>Gradient Descent</h2>\n<p>\nThe update rule:</p>\n<p>\n$$</p>\n<p>\\theta_{t+1} = \\theta_t - \\eta \\nabla J(\\theta_t)</p>\n<p>$$</p>\n<p>\nWhere $\\eta$ is the learning rate.</p><br/>\n<h2>Partial Derivatives</h2>\n<p>\nFor a function $f(x,y)$:</p>\n<p>\n$$</p>\n<p>\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h,y) - f(x,y)}{h}</p>\n<p>$$</p>"
   },
   {
     "slug": "machine-learning",
@@ -176,7 +192,9 @@
     "labels": [
       "Beginner Friendly",
       "Mathematical Foundation"
-    ]
+    ],
+    "content": "\n# The Mathematics Behind Neural Networks\n\n## Forward Propagation\n\nA simple neural network layer:\n\n$$\nz = Wx + b\n$$\n\nWhere $W$ is the weight matrix and $b$ is the bias vector.\n\n## Activation Functions\n\nSigmoid function:\n\n$$\n\\sigma(x) = \\frac{1}{1 + e^{-x}}\n$$\n\nReLU function:\n\n$$\n\\text{ReLU}(x) = \\max(0, x)\n$$\n",
+    "contentHtml": "<h1>The Mathematics Behind Neural Networks</h1><br/>\n<h2>Forward Propagation</h2>\n<p>\nA simple neural network layer:</p>\n<p>\n$$</p>\n<p>z = Wx + b</p>\n<p>$$</p>\n<p>\nWhere $W$ is the weight matrix and $b$ is the bias vector.</p><br/>\n<h2>Activation Functions</h2>\n<p>\nSigmoid function:</p>\n<p>\n$$</p>\n<p>\\sigma(x) = \\frac{1}{1 + e^{-x}}</p>\n<p>$$</p>\n<p>\nReLU function:</p>\n<p>\n$$</p>\n<p>\\text{ReLU}(x) = \\max(0, x)</p>\n<p>$$</p>"
   },
   {
     "slug": "quatum-computing",
@@ -196,7 +214,9 @@
     "labels": [
       "Technical Deep Dive",
       "Mathematical Foundation"
-    ]
+    ],
+    "content": "\n# Understanding Quantum Computing with Linear Algebra\n\nQuantum computing represents one of the most exciting frontiers in modern technology.\n\n## The Mathematics of Qubits\n\n### What is a Qubit?\n\nA qubit exists in a superposition of states:\n\n$$\n|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle\n$$\n\nWhere $\\alpha$ and $\\beta$ satisfy:\n\n$$\n|\\alpha|^2 + |\\beta|^2 = 1\n$$\n\n### Quantum Gates\n\nThe Pauli-X gate:\n\n$$\nX = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}\n$$\n",
+    "contentHtml": "<h1>Understanding Quantum Computing with Linear Algebra</h1>\n<p>\nQuantum computing represents one of the most exciting frontiers in modern technology.</p><br/>\n<h2>The Mathematics of Qubits</h2><br/>\n<h3>What is a Qubit?</h3>\n<p>\nA qubit exists in a superposition of states:</p>\n<p>\n$$</p>\n<p>|\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle</p>\n<p>$$</p>\n<p>\nWhere $\\alpha$ and $\\beta$ satisfy:</p>\n<p>\n$$</p>\n<p>|\\alpha|^2 + |\\beta|^2 = 1</p>\n<p>$$</p><br/>\n<h3>Quantum Gates</h3>\n<p>\nThe Pauli-X gate:</p>\n<p>\n$$</p>\n<p>X = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}</p>\n<p>$$</p>"
   },
   {
     "slug": "test-latex",
@@ -213,6 +233,8 @@
     ],
     "labels": [
       "demo"
-    ]
+    ],
+    "content": "\n# Testing LaTeX in Blog Posts\n\nHere's some **inline math**: $E = mc^2$ and $\\frac{\\pi}{2}$.\n\n## Block Math Examples\n\nThe Gaussian integral:\n\n$$\n\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}\n$$\n\nQuadratic formula:\n\n$$\nx = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\n$$\n\n## Physics Equations\n\nSchrödinger equation:\n\n$$\ni\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi\n$$\n\nMaxwell's equations:\n\n$$\n\\begin{aligned}\n\\nabla \\cdot \\mathbf{E} &= \\frac{\\rho}{\\varepsilon_0} \\\\\n\\nabla \\cdot \\mathbf{B} &= 0 \\\\\n\\nabla \\times \\mathbf{E} &= -\\frac{\\partial \\mathbf{B}}{\\partial t} \\\\\n\\nabla \\times \\mathbf{B} &= \\mu_0\\mathbf{J} + \\mu_0\\varepsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}\n\\end{aligned}\n$$\n\nThis should render beautifully with KaTeX!\n",
+    "contentHtml": "<h1>Testing LaTeX in Blog Posts</h1>\n<p>\nHere's some <strong>inline math</strong>: $E = mc^2$ and $\\frac{\\pi}{2}$.</p><br/>\n<h2>Block Math Examples</h2>\n<p>\nThe Gaussian integral:</p>\n<p>\n$$</p>\n<p>\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}</p>\n<p>$$</p>\n<p>\nQuadratic formula:</p>\n<p>\n$$</p>\n<p>x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}</p>\n<p>$$</p><br/>\n<h2>Physics Equations</h2>\n<p>\nSchrödinger equation:</p>\n<p>\n$$</p>\n<p>i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi</p>\n<p>$$</p>\n<p>\nMaxwell's equations:</p>\n<p>\n$$</p>\n<p>\\begin{aligned}</p>\n<p>\\nabla \\cdot \\mathbf{E} &= \\frac{\\rho}{\\varepsilon_0} \\\\</p>\n<p>\\nabla \\cdot \\mathbf{B} &= 0 \\\\</p>\n<p>\\nabla \\times \\mathbf{E} &= -\\frac{\\partial \\mathbf{B}}{\\partial t} \\\\</p>\n<p>\\nabla \\times \\mathbf{B} &= \\mu_0\\mathbf{J} + \\mu_0\\varepsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}</p>\n<p>\\end{aligned}</p>\n<p>$$</p>\n<p>\nThis should render beautifully with KaTeX!</p>"
   }
 ]

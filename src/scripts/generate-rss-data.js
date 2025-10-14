@@ -5,7 +5,7 @@ const path = require("path");
 const matter = require("gray-matter");
 
 function generateRSSData() {
-  console.log("🔧 Generating RSS and blog data...");
+  console.log("🔧 Generating blog data with full content...");
 
   const blogDir = path.join(process.cwd(), "src/content/blog");
   const outputDir = path.join(process.cwd(), "src/lib/generated");
@@ -33,7 +33,14 @@ function generateRSSData() {
         try {
           const filePath = path.join(blogDir, file);
           const fileContent = fs.readFileSync(filePath, "utf8");
-          const { data } = matter(fileContent);
+          const { data, content } = matter(fileContent);
+
+          // For MDX files, we'll use a simpler approach since we can't easily process JSX
+          // Remove MDX components and JSX syntax, keep only markdown content
+          let cleanedContent = cleanMDXContent(content);
+
+          // Convert basic markdown to HTML (simple approach)
+          let contentHtml = convertMarkdownToHTML(cleanedContent);
 
           return {
             slug: file.replace(".mdx", ""),
@@ -44,6 +51,8 @@ function generateRSSData() {
             tags: data.tags || [],
             categories: data.categories || [],
             labels: data.labels || [],
+            content: content,
+            contentHtml: contentHtml,
           };
         } catch (error) {
           console.error(`❌ Error processing ${file}:`, error);
@@ -56,55 +65,71 @@ function generateRSSData() {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    // Generate RSS file
-    generateRSSFile(sortedPosts);
-
-    // Generate blog data JSON file
+    // Generate blog data JSON file with full content
     generateBlogDataFile(sortedPosts, outputDir);
 
-    console.log("✅ RSS and blog data generated successfully!");
+    console.log("✅ Blog data with full content generated successfully!");
   } catch (error) {
     console.error("❌ Error generating data:", error);
   }
 }
 
-function generateRSSFile(posts) {
-  const outputFile = path.join(process.cwd(), "public/rss.xml");
+// Simple function to clean MDX content by removing JSX components
+function cleanMDXContent(content) {
+  if (!content) return "";
 
-  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Danke Hidayat - Blog</title>
-    <link>https://dankehidayat.my.id/blog</link>
-    <description>Thoughts on technology, development, and more. Sharing insights from my journey in software development and research.</description>
-    <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-    <atom:link href="https://dankehidayat.my.id/rss.xml" rel="self" type="application/rss+xml" />
-    ${posts
-      .map(
-        (post) => `
-    <item>
-      <title>${escapeXml(post.title)}</title>
-      <link>https://dankehidayat.my.id/blog/${post.slug}</link>
-      <description>${escapeXml(post.excerpt)}</description>
-      <guid>https://dankehidayat.my.id/blog/${post.slug}</guid>
-      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-      <author>${post.author}</author>
-      ${post.tags
-        .map((tag) => `<category>${escapeXml(tag)}</category>`)
-        .join("")}
-      ${post.categories
-        .map((cat) => `<category>${escapeXml(cat)}</category>`)
-        .join("")}
-    </item>
-    `
-      )
-      .join("")}
-  </channel>
-</rss>`;
+  // Remove JSX components (basic pattern matching)
+  let cleaned = content
+    // Remove import statements
+    .replace(/^import\s+.*?from\s+['"][^'"]+['"];?\s*$/gm, "")
+    // Remove export statements
+    .replace(/^export\s+.*$/gm, "")
+    // Remove JSX components (simple pattern)
+    .replace(/<[A-Z][^>]*\/>/g, "") // Self-closing components
+    .replace(/<[A-Z][^>]*>.*?<\/[A-Z][^>]*>/gs, "") // Opening and closing components
+    // Remove any remaining JSX tags
+    .replace(/<[^>]*>/g, "")
+    // Clean up extra whitespace
+    .replace(/\n\s*\n\s*\n/g, "\n\n")
+    .trim();
 
-  fs.writeFileSync(outputFile, rss);
-  console.log(`📄 RSS file generated: ${outputFile}`);
+  return cleaned;
+}
+
+// Simple markdown to HTML converter (basic implementation)
+function convertMarkdownToHTML(markdown) {
+  if (!markdown) return "";
+
+  return (
+    markdown
+      // Headers
+      .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+      .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+      .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+      // Bold
+      .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
+      // Italic
+      .replace(/\*(.*?)\*/gim, "<em>$1</em>")
+      // Links
+      .replace(/\[([^\[]+)\]\(([^\)]+)\)/gim, '<a href="$2">$1</a>')
+      // Paragraphs
+      .replace(/^\s*(\n)?(.+)/gim, function (m) {
+        return /\<(\/)?(h\d|ul|ol|li|blockquote|pre|img)/.test(m)
+          ? m
+          : "<p>" + m + "</p>";
+      })
+      // Line breaks
+      .replace(/\n$/gim, "<br/>")
+      // Lists (basic)
+      .replace(/^\s*[\-\*]\s+(.*$)/gim, "<li>$1</li>")
+      .replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>")
+      // Code blocks (simple)
+      .replace(/```([^`]+)```/gim, "<pre><code>$1</code></pre>")
+      // Inline code
+      .replace(/`([^`]+)`/gim, "<code>$1</code>")
+      // Blockquotes
+      .replace(/^\> (.*$)/gim, "<blockquote>$1</blockquote>")
+  );
 }
 
 function generateBlogDataFile(posts, outputDir) {
@@ -115,42 +140,8 @@ function generateBlogDataFile(posts, outputDir) {
 }
 
 function createEmptyData(outputDir) {
-  const emptyRss = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-  <channel>
-    <title>Danke Hidayat - Blog</title>
-    <link>https://dankehidayat.my.id/blog</link>
-    <description>Blog posts coming soon</description>
-    <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-  </channel>
-</rss>`;
-
-  const outputFile = path.join(process.cwd(), "public/rss.xml");
-  fs.writeFileSync(outputFile, emptyRss);
-
   const blogDataFile = path.join(outputDir, "blog-data.json");
   fs.writeFileSync(blogDataFile, JSON.stringify([], null, 2));
-}
-
-function escapeXml(unsafe) {
-  if (!unsafe) return "";
-  return unsafe.replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case "<":
-        return "&lt;";
-      case ">":
-        return "&gt;";
-      case "&":
-        return "&amp;";
-      case "'":
-        return "&apos;";
-      case '"':
-        return "&quot;";
-      default:
-        return c;
-    }
-  });
 }
 
 if (require.main === module) {
