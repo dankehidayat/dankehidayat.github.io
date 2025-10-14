@@ -16,65 +16,37 @@ categories: ["research", "embedded-systems", "data-analysis"]
 labels: ["project", "technical-deep-dive", "research-paper"]
 ---
 
-# Implementing Mamdani Fuzzy Logic for Real-Time IoT-Based Electrical Energy and Room Temperature Monitoring
-
 ## Introduction: The Critical Need for Energy Monitoring in Modern Indonesia
 
-Electricity has evolved from early experiments in the 17th century to become the backbone of modern civilization. From William Gilbert's pioneering work to Michael Faraday's electromagnetic discoveries and Nikola Tesla's alternating current systems, electricity has powered industrial revolutions and transformed human existence. Today, it supports everything from household appliances to industrial operations and emerging technologies like renewable energy and smart grids.
+Electricity has evolved from early experiments in the 17th century to become the backbone of modern civilization. From William Gilbert's pioneering work to Michael Faraday's electromagnetic discoveries and Nikola Tesla's alternating current systems, electricity has powered industrial revolutions and transformed human existence. Now, electricity supports everything from household appliances to industrial operations and emerging technologies like renewable energy and smart grids (Baldwin 2020; Heilbron 2020).
 
-Indonesia faces a particularly pressing energy challenge. As the largest electricity consumer in ASEAN, the country accounts for 36% of regional energy demand and consumes 66% more energy than Thailand. This high consumption is driven by rapid economic growth, urbanization, and industrialization. With projections indicating Indonesia's population could reach 381 million by 2045, the strain on energy resources is becoming increasingly severe.
+Indonesia faces a particularly pressing energy challenge. As the largest electricity consumer in ASEAN, the country accounts for 36% of regional energy demand and consumes 66% more energy than Thailand (Energy Agency 2016). This high consumption is driven by rapid economic growth, urbanization, and industrialization. With projections indicating Indonesia's population could reach 381 million by 2045, the strain on energy resources is becoming increasingly severe, exacerbated by significant energy waste in public sectors such as healthcare facilities, educational institutions, and office buildings (McNeil et al. 2019).
 
-The situation is exacerbated by significant energy waste in public sectors such as healthcare facilities, educational institutions, and office buildings. While Indonesia has made strides in renewable energy—exemplified by the 145 MW Cirata Floating Solar Power Plant, a collaboration between PT. PLN and Masdar—household electricity consumption remains high due to extensive use of electronic devices.
+While Indonesia has made strides in renewable energy—exemplified by the 145 MW Cirata Floating Solar Power Plant, a collaboration between PT. PLN and Masdar that can power 50,000 homes and reduce carbon emissions by 214,000 tons annually—household electricity consumption remains high due to extensive use of electronic devices (Asmarini 2023). The industrial sector actively adopts energy conservation through audits to identify waste and cost efficiency, with IoT-based automated systems proving more effective than manual methods by enabling real-time monitoring and consumption pattern analysis (Chen et al. 2018; Henao-Hernández et al. 2019).
+
+However, the lack of real-time monitoring systems in office environments leads to systematic energy waste. IoT-based solutions become crucial for providing data and designing optimization strategies. Implementing this technology not only supports efficiency but also drives energy sustainability for the future (Alavi et al. 2018).
 
 ## Mathematical Foundation of Sensor Calibration and Accuracy Assessment
 
 ### Sensor Error Calculation Methodology
 
-The accuracy of sensor measurements was rigorously evaluated using mathematical error analysis. The percentage error for each sensor reading was calculated using the formula:
-
-$$
-\text{Error} (\%) = \frac{\text{Nilai Sensor} - \text{Nilai Kalibrator}}{\text{Nilai Kalibrator}} \times 100
-$$
-
-The average error across multiple trials was determined by:
-
-$$
-\text{Rata-rata Error} (\%) = \frac{\sum \text{Error}}{\sum \text{Uji Coba}}
-$$
+The accuracy of sensor measurements was rigorously evaluated using mathematical error analysis. The percentage error for each sensor reading was calculated by comparing sensor values against reference measurements from calibrated instruments.
 
 According to research by Sinaga and Irawati (2018), the accuracy of a measurement technique is inversely proportional to the Mean Absolute Percentage Error (MAPE) and directly proportional to Mean Absolute Error (MAE). Lower MAPE values and smaller MAE indicate higher accuracy levels.
 
 ### DHT-11 Sensor Performance Analysis
 
-The DHT-11 temperature sensor demonstrated exceptional performance with an average error of only 0.11% for temperature measurements and 0.15% for relative humidity. This translates to accuracy levels of 99.88% for temperature and 99.84% for humidity.
-
-The mathematical relationship between error and accuracy can be expressed as:
-
-$$
-\text{Akurasi} (\%) = 100\% - \text{Error} (\%)
-$$
-
-For temperature measurements:
-
-$$
-\text{Akurasi Suhu} = 100\% - 0.11\% = 99.89\%
-$$
-
-For humidity measurements:
-
-$$
-\text{Akurasi Kelembaban} = 100\% - 0.15\% = 99.85\%
-$$
+The DHT-11 temperature sensor demonstrated exceptional performance with an average error of only 0.11% for temperature measurements and 0.15% for relative humidity when validated against the HTC-1 reference device. This exceptional performance translates to accuracy levels of 99.88% for temperature and 99.84% for humidity, validating the sensor's reliability for precise environmental monitoring applications. According to Components101 (2021), the DHT-11 consumes 0.3 mA during measurement operations and drops to 60 μA in standby conditions.
 
 ### Electrical Parameter Analysis and Power Factor Calculations
 
-The comprehensive electrical monitoring revealed critical insights into system efficiency. The power factor, a crucial indicator of electrical system efficiency, was calculated using the relationship between active power (P), apparent power (S), and reactive power (Q):
+The comprehensive electrical monitoring using the PZEM-004T sensor revealed critical insights into system efficiency. The power factor, a crucial indicator of electrical system efficiency, was calculated using the relationship between active power (P), apparent power (S), and reactive power (Q):
 
 $$
-\text{Faktor Daya} = \cos \phi = \frac{P}{S}
+\text{Power Factor} = \cos \phi = \frac{P}{S}
 $$
 
-Where:
+Where measurement data showed:
 
 - Active Power (P) = 30.83 W
 - Apparent Power (S) = 56.87 VA
@@ -83,7 +55,7 @@ Where:
 The power factor calculation:
 
 $$
-\text{Faktor Daya} = \frac{30.83}{56.87} = 0.542
+\text{Power Factor} = \frac{30.83}{56.87} = 0.542
 $$
 
 This low power factor indicates significant inefficiency, with only 54.2% of the apparent power being converted to useful work. The relationship between these power components follows the power triangle:
@@ -91,6 +63,8 @@ This low power factor indicates significant inefficiency, with only 54.2% of the
 $$
 S = \sqrt{P^2 + Q^2} = \sqrt{30.83^2 + 47.13^2} = 56.87 \text{ VA}
 $$
+
+The sensor performance was validated against manufacturer specifications from the PZEM-004T datasheet (Peacefair 2019), confirming measurement consistency for voltage, current, power, and energy parameters.
 
 ## Mamdani Fuzzy Logic System: Mathematical Implementation
 
@@ -139,7 +113,7 @@ The output variable Load_Status uses three trapezoidal membership functions:
 The defuzzification process uses the centroid method to convert fuzzy sets to crisp outputs:
 
 $$
-\text{Crisp Output} = \frac{\int \mu(x) \cdot x  dx}{\int \mu(x)  dx}
+\text{Crisp Output} = \frac{\int \mu(x) \cdot x \, dx}{\int \mu(x) \, dx}
 $$
 
 ### Temperature Classification System
@@ -157,20 +131,6 @@ The temperature monitoring system uses a single-input Mamdani fuzzy system with 
 - Cold: 0
 - Normal: 1
 - Hot: 2
-
-### Fuzzy Rule Base Mathematical Representation
-
-The system implements eleven fuzzy rules combining the four input variables. Each rule follows the structure:
-
-**Rule i:** IF AC_Current IS A_i AND AC_Power IS B_i AND Reactive_Power IS C_i AND Cos_Phi IS D_i THEN Load_Status IS E_i
-
-Where A_i, B_i, C_i, D_i are fuzzy sets for the respective inputs, and E_i is the fuzzy set for the output.
-
-Example rules include:
-
-- Rule 1: IF Current IS Low AND Power IS Low AND Reactive_Power IS Low AND Cos_Phi IS Good THEN Status IS Normal
-- Rule 8: IF Current IS Medium AND Power IS High AND Reactive_Power IS High AND Cos_Phi IS Poor THEN Status IS Warning
-- Rule 11: IF Current IS High AND Power IS High AND Reactive_Power IS High AND Cos_Phi IS Poor THEN Status IS Overload
 
 ### Fuzzy Inference Process
 
@@ -200,25 +160,20 @@ The Mamdani inference method involves four key steps:
 
 ### Real-Time Processing Efficiency
 
-The system demonstrated exceptional real-time performance with end-to-end latency measurements consistently below 2 seconds. This includes:
+The system demonstrated exceptional real-time performance with end-to-end latency measurements consistently below 2 seconds. This comprehensive testing included:
 
 - Sensor data acquisition and preprocessing
 - Fuzzy logic inference computation
-- Data transmission via HTTP protocol
+- Data transmission via HTTP protocol to Blynk servers
 - Mobile application display updates
 
 The latency can be mathematically expressed as:
 
 $$
-T_{\text{total}} = T_{\text{sensor}} + T_{\text{processing}} + T_{\text{transmission}} + T_{\text{display}} < 2\text{s}
+T_{\text{total}} = T_{\text{sensor}} + T_{\text{processing}} + T_{\text{transmission}} + T_{\text{display}} < 2\text{ seconds}
 $$
 
-Where:
-
-- $T_{\text{sensor}}$: Sensor reading and local processing time
-- $T_{\text{processing}}$: Fuzzy logic computation time
-- $T_{\text{transmission}}$: Network transmission latency
-- $T_{\text{display}}$: Mobile application rendering time
+End-to-end validation verified data display on mobile applications, including timestamp accuracy, parameter values, and update intervals across various network conditions.
 
 ### Energy Efficiency Calculations
 
@@ -232,30 +187,53 @@ Where:
 
 - $Q_c$: Required capacitor reactive power (VAR)
 - $P$: Active power (30.83 W)
-- $\phi_1$: Current phase angle ($\cos^{-1}(0.53) = 58°$)
-- $\phi_2$: Desired phase angle (targeting $\cos^{-1}(0.95) = 18°$)
+- $\phi_1$: Current phase angle ($\cos^{-1}(0.53) = 58^\circ$)
+- $\phi_2$: Desired phase angle (targeting $\cos^{-1}(0.95) = 18^\circ$)
 
 Calculation:
 
 $$
-Q_c = 30.83 \times (\tan 58° - \tan 18°) = 30.83 \times (1.600 - 0.325) = 39.3 \text{ VAR}
+Q_c = 30.83 \times (\tan 58^\circ - \tan 18^\circ) = 30.83 \times (1.600 - 0.325) = 39.3 \text{ VAR}
 $$
 
 ## Conclusions and Mathematical Insights
 
-The research successfully demonstrates an IoT-based prototype for real-time monitoring of electrical energy and room temperature using Mamdani fuzzy logic. Key mathematical achievements include:
+The research successfully demonstrates an IoT-based prototype for real-time monitoring of electrical energy and room temperature using Mamdani fuzzy logic. Conducted at PT. Global Kreatif Inovasi from September 2024 to July 2025, this study achieved several key mathematical accomplishments:
 
-- **Sensor Accuracy**: DHT-11 sensor with 99.88% temperature accuracy and 99.84% humidity accuracy, mathematically verified through error analysis
-- **Electrical Efficiency**: Identified 46.8% power factor inefficiency through comprehensive power triangle analysis
-- **Fuzzy Logic Performance**: Implemented 11-rule fuzzy inference system with precise mathematical membership functions
-- **Real-Time Processing**: Achieved sub-2-second latency across the complete data pipeline
+- **Sensor Accuracy**: DHT-11 sensor with 99.88% temperature accuracy and 99.84% humidity accuracy, mathematically verified through comprehensive error analysis against HTC-1 reference measurements
+- **Electrical Efficiency**: Identified 46.8% power factor inefficiency through rigorous power triangle analysis, with PZEM-004T providing consistent electrical parameter readings
+- **Fuzzy Logic Performance**: Implemented 11-rule fuzzy inference system with precise mathematical membership functions for both energy load classification and temperature categorization
+- **Real-Time Processing**: Achieved sub-2-second latency across the complete data pipeline with intuitive Blynk-based interface
 
 The mathematical framework provides a solid foundation for future enhancements, including:
 
 - Adaptive fuzzy systems with self-tuning membership functions
 - Machine learning integration for predictive maintenance
 - Multi-objective optimization for energy efficiency
+- Larger-scale testing to evaluate system reliability across diverse operational scenarios
 
-This research establishes that mathematical rigor combined with fuzzy logic principles can create intelligent energy management systems capable of adapting to dynamic environmental conditions while maintaining computational efficiency suitable for embedded IoT applications.
+This research establishes that mathematical rigor combined with fuzzy logic principles can create intelligent energy management systems capable of adapting to dynamic environmental conditions while maintaining computational efficiency suitable for embedded IoT applications, ultimately supporting Indonesia's energy sustainability goals through technological innovation.
 
-_Research conducted September 2024 - July 2025 at PT. Global Kreatif Inovasi, Jakarta_
+## References
+
+Alavi AH, Jiao Pengcheng, Buttlar WG, Lajnef N, Jiao P. 2018. Internet of Things-Enabled Smart Cities: State-of-the-Art and Future Trends.
+
+Asmarini W. 2023 Nov 10. PLTS Terapung Terbesar ASEAN Ada di RI, ini Dia Pemiliknya. _CNBC Indonesia._
+
+Baldwin I. 2020. Discovery of Electricity and the Electromagnetic Force: Its Importance for Environmentalists, Educators, Physicians, Politicians, and Citizens. _Adv. Soc. Sci. Res. J._ 7(12):362–383.
+
+Chen X, Li C, Tang Y, Xiao Q. 2018. An Internet of Things based energy efficiency monitoring and management system for machining workshop. _Journal of Cleaner Production._ 199:957–968.
+
+Components101. 2021. DHT11–Temperature and Humidity Sensor.
+
+Energy Agency I. 2016. Energy and Air Pollution - World Energy Outlook 2016 Special Report.
+
+Henao-Hernandez I, Solano-Charris EL, Munoz-Villamizar A, Santos J, Henriquez-Machado R. 2019. Control and monitoring for sustainable manufacturing in the Industry 4.0: A literature review. _IFAC-PapersOnLine._ 52:195–200.
+
+Heilbron JL. 2020. _Electricity in the 17th and 18th centuries : a study of early Modern physics._ University of California Press.
+
+McNeil MA, Karali N, Letschert V. 2019. Forecasting Indonesia's electricity load through 2030 and peak demand reductions from appliance and lighting efficiency. _Energy Sustain. Dev._ 49:65–77.
+
+Peacefair. 2019. PZEM-004T Datasheet.
+
+Sinaga HDE, Irawati N. 2018. Perbandingan Double Moving Average Dengan Double Exponential Smoothing Pada Peramalan. _Jurteksi._ IV(2):197–204.
