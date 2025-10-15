@@ -144,7 +144,7 @@ export default function Experience() {
   });
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12 experience-page">
       <div className="container max-w-4xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-16">
@@ -193,7 +193,7 @@ export default function Experience() {
                               ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                               : item.type === "internship"
                               ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
-                              : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : "education-label bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                           }`}
                         >
                           {item.icon}

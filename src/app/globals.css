@@ -506,25 +506,25 @@ a:focus-visible {
 }
 
 /* ========================================================================== */
-/* RSS CARD STYLES - SPECIFIC FOR STAY UPDATED BUTTON */
+/* RSS CARD STYLES - GREEN/TEAL THEME */
 /* ========================================================================== */
 
-/* RSS Feed Card specific button styling - Green/Teal theme */
+/* RSS Feed Card button styling */
 .border-border.bg-card .text-xs[data-variant="outline"] {
   border-color: rgb(16 185 129) !important; /* Emerald-500 */
-  background-color: rgb(16 185 129) !important; /* Emerald-500 */
+  background-color: rgb(16 185 129) !important;
   color: rgb(255 255 255) !important;
 }
 
 .border-border.bg-card .text-xs[data-variant="outline"]:hover {
   background-color: rgb(5 150 105) !important; /* Emerald-600 */
-  border-color: rgb(5 150 105) !important; /* Emerald-600 */
+  border-color: rgb(5 150 105) !important;
   color: rgb(255 255 255) !important;
 }
 
 [data-theme="dark"] .border-border.bg-card .text-xs[data-variant="outline"] {
   border-color: rgb(52 211 153) !important; /* Emerald-400 */
-  background-color: rgb(52 211 153) !important; /* Emerald-400 */
+  background-color: rgb(52 211 153) !important;
   color: rgb(17 24 39) !important; /* Gray-900 */
 }
 
@@ -532,11 +532,11 @@ a:focus-visible {
   .border-border.bg-card
   .text-xs[data-variant="outline"]:hover {
   background-color: rgb(16 185 129) !important; /* Emerald-500 */
-  border-color: rgb(16 185 129) !important; /* Emerald-500 */
+  border-color: rgb(16 185 129) !important;
   color: rgb(255 255 255) !important;
 }
 
-/* RSS icon styling - Green theme */
+/* RSS icon styling */
 .bg-green-100 {
   background-color: rgb(220 252 231) !important; /* Green-100 */
 }
@@ -552,44 +552,147 @@ a:focus-visible {
 }
 
 /* ========================================================================== */
-/* BLOG POST LABEL STYLES - INDIGO OUTLINE THEME */
+/* PROJECT & EXPERIENCE LABEL STYLES - BRIGHT MINT GREEN */
 /* ========================================================================== */
 
-/* Blog post labels with indigo outline and themed background */
-.blog-post-label {
-  background-color: var(--background) !important; /* Light theme background */
-  color: var(--primary) !important; /* Indigo text color */
-  border: 1px solid var(--primary) !important; /* Indigo border */
-  box-shadow: 0 0 0 1px var(--primary) !important; /* Additional border for consistency */
+/* Shared mint green styles for both pages */
+.projects-page .bg-green-100,
+.experience-page .bg-green-100 {
+  background-color: rgb(204 251 241) !important; /* Cyan-100 - Bright mint */
 }
 
-.blog-post-label:hover {
-  background-color: var(--primary) !important; /* Indigo background on hover */
-  color: var(--primary-foreground) !important; /* White text on hover */
-  transform: translateY(-1px) !important; /* Subtle lift on hover */
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important; /* Glow effect on hover */
+.projects-page .bg-green-900,
+.experience-page .bg-green-900 {
+  background-color: rgb(17 94 89) !important; /* Cyan-900 - Dark mint */
 }
 
-[data-theme="dark"] .blog-post-label {
-  background-color: var(--card) !important; /* Dark theme background */
+/* FIXED: Darker text colors for better contrast */
+.projects-page .text-green-800,
+.experience-page .text-green-800 {
   color: rgb(
-    129,
-    140,
-    248
-  ) !important; /* Indigo-400 for better dark mode contrast */
-  border: 1px solid rgb(129, 140, 248) !important; /* Indigo-400 border */
-  box-shadow: 0 0 0 1px rgb(129, 140, 248) !important; /* Additional border */
+    6 78 59
+  ) !important; /* Cyan-900 - Much darker green for light mode */
 }
 
-[data-theme="dark"] .blog-post-label:hover {
-  background-color: rgb(
-    129,
-    140,
-    248
-  ) !important; /* Indigo-400 background on hover */
-  color: rgb(17, 24, 39) !important; /* Gray-900 text on hover */
-  transform: translateY(-1px) !important; /* Subtle lift on hover */
-  box-shadow: 0 2px 12px rgba(129, 140, 248, 0.4) !important; /* Glow effect on hover */
+.projects-page .text-green-200,
+.experience-page .text-green-200 {
+  color: rgb(153 246 228) !important; /* Cyan-200 - Light mint for dark mode */
+}
+
+/* Project page specific category colors */
+.projects-page .bg-blue-100 {
+  background-color: rgb(191 219 254) !important;
+}
+.projects-page .bg-blue-900 {
+  background-color: rgb(30 58 138) !important;
+}
+.projects-page .text-blue-800 {
+  color: rgb(30 58 138) !important;
+}
+.projects-page .text-blue-200 {
+  color: rgb(191 219 254) !important;
+}
+
+.projects-page .bg-purple-100 {
+  background-color: rgb(233 213 255) !important;
+}
+.projects-page .bg-purple-900 {
+  background-color: rgb(88 28 135) !important;
+}
+.projects-page .text-purple-800 {
+  color: rgb(88 28 135) !important;
+}
+.projects-page .text-purple-200 {
+  color: rgb(233 213 255) !important;
+}
+
+.projects-page .bg-orange-100 {
+  background-color: rgb(255 237 213) !important;
+}
+.projects-page .bg-orange-900 {
+  background-color: rgb(124 45 18) !important;
+}
+.projects-page .text-orange-800 {
+  color: rgb(124 45 18) !important;
+}
+.projects-page .text-orange-200 {
+  color: rgb(253 230 138) !important;
+}
+
+/* Experience page specific category colors */
+.experience-page .bg-blue-100 {
+  background-color: rgb(191 219 254) !important;
+}
+.experience-page .bg-blue-900 {
+  background-color: rgb(30 58 138) !important;
+}
+.experience-page .text-blue-800 {
+  color: rgb(30 58 138) !important;
+}
+.experience-page .text-blue-200 {
+  color: rgb(191 219 254) !important;
+}
+
+.experience-page .bg-purple-100 {
+  background-color: rgb(233 213 255) !important;
+}
+.experience-page .bg-purple-900 {
+  background-color: rgb(88 28 135) !important;
+}
+.experience-page .text-purple-800 {
+  color: rgb(88 28 135) !important;
+}
+.experience-page .text-purple-200 {
+  color: rgb(233 213 255) !important;
+}
+
+/* Enhanced selector specificity for education labels with DARKER TEXT */
+.experience-page span.bg-green-100,
+.experience-page span.bg-green-900 {
+  background-color: rgb(204 251 241) !important;
+}
+
+[data-theme="dark"] .experience-page span.bg-green-100,
+[data-theme="dark"] .experience-page span.bg-green-900 {
+  background-color: rgb(17 94 89) !important;
+}
+
+/* FIXED: Much darker text for education labels in light mode */
+.experience-page span.text-green-800 {
+  color: rgb(6 78 59) !important; /* Cyan-900 - Very dark green */
+}
+
+.experience-page span.text-green-200 {
+  color: rgb(153 246 228) !important; /* Cyan-200 - Light mint for dark mode */
+}
+
+[data-theme="dark"] .experience-page span.text-green-800,
+[data-theme="dark"] .experience-page span.text-green-200 {
+  color: rgb(153 246 228) !important; /* Light mint text for dark mode */
+}
+
+/* Project page enhanced selectors with darker text */
+.projects-page span.bg-green-100,
+.projects-page span.bg-green-900 {
+  background-color: rgb(204 251 241) !important;
+}
+
+[data-theme="dark"] .projects-page span.bg-green-100,
+[data-theme="dark"] .projects-page span.bg-green-900 {
+  background-color: rgb(17 94 89) !important;
+}
+
+.projects-page span.text-green-800 {
+  color: rgb(6 78 59) !important; /* Cyan-900 - Very dark green */
+}
+
+.projects-page span.text-green-200 {
+  color: rgb(153 246 228) !important; /* Cyan-200 - Light mint for dark mode */
+}
+
+[data-theme="dark"] .projects-page span.text-green-800,
+[data-theme="dark"] .projects-page span.text-green-200 {
+  color: rgb(153 246 228) !important; /* Light mint text for dark mode */
 }
 
 /* ========================================================================== */
