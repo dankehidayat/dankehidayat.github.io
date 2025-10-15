@@ -462,6 +462,10 @@ const EcoBinSections = ({
 );
 
 export default function Projects() {
+  // Calculate total number of projects for animation delays
+  const totalProjects =
+    projects.iot.length + projects.software.length + projects.research.length;
+
   return (
     <div className="min-h-screen bg-background py-12 projects-page">
       <div className="container max-w-6xl mx-auto px-4 sm:px-6">
@@ -486,7 +490,10 @@ export default function Projects() {
             {projects.iot.map((project, index) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 project-item"
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                }}
               >
                 <div className="flex flex-col lg:flex-row gap-6">
                   <div className="w-full">
@@ -606,7 +613,10 @@ export default function Projects() {
             {projects.software.map((project, index) => (
               <div
                 key={index}
-                className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 project-item"
+                style={{
+                  animationDelay: `${(projects.iot.length + index) * 0.1}s`,
+                }}
               >
                 <div className="flex flex-col lg:flex-row gap-6">
                   <div className="lg:w-3/4">
@@ -723,11 +733,16 @@ export default function Projects() {
                 categoryColors[
                   research.category as keyof typeof categoryColors
                 ];
+              const animationDelay =
+                (projects.iot.length + projects.software.length + index) * 0.1;
 
               return (
                 <div
                   key={index}
-                  className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                  className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 project-item"
+                  style={{
+                    animationDelay: `${animationDelay}s`,
+                  }}
                 >
                   <div className="flex flex-col lg:flex-row gap-6">
                     <div className="lg:w-3/4">

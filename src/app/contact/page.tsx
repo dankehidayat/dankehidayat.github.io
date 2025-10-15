@@ -59,7 +59,7 @@ const resumeLink = {
 
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12 contact-page">
       <div className="container max-w-4xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-16">
@@ -73,7 +73,10 @@ export default function Contact() {
 
         {/* Resume Download Section */}
         <section className="mb-16 text-center">
-          <div className="bg-card border border-border rounded-lg p-8 shadow-sm">
+          <div
+            className="bg-card border border-border rounded-lg p-8 shadow-sm contact-item"
+            style={{ animationDelay: "0.1s" }}
+          >
             <div className="flex flex-col items-center gap-4">
               <FileText className="h-12 w-12 text-primary" />
               <h2 className="text-2xl font-heading font-bold text-foreground">
@@ -114,7 +117,10 @@ export default function Contact() {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 group"
+                  className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 group contact-item"
+                  style={{
+                    animationDelay: `${0.2 + index * 0.1}s`,
+                  }}
                 >
                   <div className="flex flex-col items-center text-center gap-4">
                     <div
@@ -142,7 +148,10 @@ export default function Contact() {
         </section>
 
         {/* Contact Information */}
-        <section className="bg-muted rounded-lg p-8">
+        <section
+          className="bg-muted rounded-lg p-8 contact-item"
+          style={{ animationDelay: "0.8s" }}
+        >
           <div className="text-center">
             <h2 className="text-2xl font-heading font-bold text-foreground mb-4">
               Preferred Contact Method
@@ -174,7 +183,10 @@ export default function Contact() {
         </section>
 
         {/* Quick Links Footer */}
-        <section className="mt-16 text-center">
+        <section
+          className="mt-16 text-center contact-item"
+          style={{ animationDelay: "0.9s" }}
+        >
           <div className="border-t border-border pt-8">
             <p className="text-muted-foreground mb-4">
               Looking for something specific?

@@ -37,10 +37,13 @@ export function BlogPostsDisplay() {
 
   return (
     <div className="space-y-6">
-      {filteredPosts.map((post) => (
+      {filteredPosts.map((post, index) => (
         <Card
           key={post.slug}
-          className="group hover:shadow-md transition-all duration-300 border-border"
+          className="group hover:shadow-md transition-all duration-300 border-border blog-post-item"
+          style={{
+            animationDelay: `${index * 0.1}s`,
+          }}
         >
           <CardContent className="p-0">
             <Link href={`/blog/${post.slug}`}>

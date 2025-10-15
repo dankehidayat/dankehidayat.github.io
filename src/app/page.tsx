@@ -26,18 +26,27 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center py-20 px-6">
         <div className="container max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center rounded-sm border border-border px-4 py-2 mb-12 text-sm text-muted-foreground bg-muted/50 tracking-wide font-domine">
+          <div
+            className="inline-flex items-center rounded-sm border border-border px-4 py-2 mb-12 text-sm text-muted-foreground bg-muted/50 tracking-wide font-domine home-item"
+            style={{ animationDelay: "0.1s" }}
+          >
             <PenTool className="h-4 w-4 mr-2" />
             Software Developer &amp; Writer
           </div>
 
-          <h1 className="mb-8 leading-tight">
+          <h1
+            className="mb-8 leading-tight home-item"
+            style={{ animationDelay: "0.2s" }}
+          >
             <span className="initial-cap">Welcome,</span>
             <br />
             I&apos;m <span className="text-primary">Danke Hidayat</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed text-justify">
+          <p
+            className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed text-justify home-item"
+            style={{ animationDelay: "0.3s" }}
+          >
             A passionate{" "}
             <span className="text-foreground font-semibold">
               Software Developer
@@ -51,7 +60,10 @@ export default async function Home() {
             at IPB University and working as a Junior Software Developer.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20 home-item"
+            style={{ animationDelay: "0.4s" }}
+          >
             <Button
               asChild
               size="lg"
@@ -76,7 +88,10 @@ export default async function Home() {
           </div>
 
           {/* Classic Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto text-center border-t border-b border-border py-8">
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto text-center border-t border-b border-border py-8 home-item"
+            style={{ animationDelay: "0.5s" }}
+          >
             <div>
               <div className="text-2xl text-foreground font-heading">2+</div>
               <div className="text-sm text-muted-foreground uppercase tracking-wider font-domine">
@@ -110,15 +125,26 @@ export default async function Home() {
       {/* Skills Section */}
       <section className="py-20 bg-muted/30">
         <div className="container max-w-4xl mx-auto px-6">
-          <h2 className="text-center mb-4">Craft &amp; Expertise</h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-2xl mx-auto text-justify">
+          <h2
+            className="text-center mb-4 home-item"
+            style={{ animationDelay: "0.6s" }}
+          >
+            Craft &amp; Expertise
+          </h2>
+          <p
+            className="text-center text-muted-foreground text-lg mb-12 max-w-2xl mx-auto text-justify home-item"
+            style={{ animationDelay: "0.7s" }}
+          >
             From mobile applications to web services, I approach each project
             with the care of a master craftsman and the precision of a
             typesetter.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="card-classic text-center">
+            <Card
+              className="card-classic text-center home-item"
+              style={{ animationDelay: "0.8s" }}
+            >
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
                   <Code className="h-8 w-8 text-primary" />
@@ -132,7 +158,10 @@ export default async function Home() {
               </CardContent>
             </Card>
 
-            <Card className="card-classic text-center">
+            <Card
+              className="card-classic text-center home-item"
+              style={{ animationDelay: "0.9s" }}
+            >
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
                   <BookOpen className="h-8 w-8 text-primary" />
@@ -145,7 +174,10 @@ export default async function Home() {
               </CardContent>
             </Card>
 
-            <Card className="card-classic text-center">
+            <Card
+              className="card-classic text-center home-item"
+              style={{ animationDelay: "1.0s" }}
+            >
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
                   <Cpu className="h-8 w-8 text-primary" />
@@ -167,8 +199,16 @@ export default async function Home() {
       {/* Featured Writings */}
       <section className="py-20 bg-background">
         <div className="container max-w-4xl mx-auto px-6">
-          <h2 className="text-center mb-4">Recent Writings</h2>
-          <p className="text-center text-muted-foreground text-lg mb-12 max-w-2xl mx-auto text-justify">
+          <h2
+            className="text-center mb-4 home-item"
+            style={{ animationDelay: "1.1s" }}
+          >
+            Recent Writings
+          </h2>
+          <p
+            className="text-center text-muted-foreground text-lg mb-12 max-w-2xl mx-auto text-justify home-item"
+            style={{ animationDelay: "1.2s" }}
+          >
             Thoughts on technology, development practices, and the intersection
             of code and craftsmanship.
           </p>
@@ -176,7 +216,11 @@ export default async function Home() {
           <div className="grid md:grid-cols-2 gap-8">
             {latestPosts.length > 0 ? (
               latestPosts.map((post, index) => (
-                <Card key={index} className="card-classic group">
+                <Card
+                  key={index}
+                  className="card-classic group home-item"
+                  style={{ animationDelay: `${1.3 + index * 0.1}s` }}
+                >
                   <CardContent className="p-8">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
                       <Calendar className="h-3 w-3" />
@@ -211,7 +255,10 @@ export default async function Home() {
             ) : (
               // Fallback content when no posts are available
               <>
-                <Card className="card-classic group">
+                <Card
+                  className="card-classic group home-item"
+                  style={{ animationDelay: "1.3s" }}
+                >
                   <CardContent className="p-8">
                     <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
                       Energy Monitoring System Calibration
@@ -237,7 +284,10 @@ export default async function Home() {
                   </CardContent>
                 </Card>
 
-                <Card className="card-classic group">
+                <Card
+                  className="card-classic group home-item"
+                  style={{ animationDelay: "1.4s" }}
+                >
                   <CardContent className="p-8">
                     <h3 className="font-heading mb-4 group-hover:text-primary transition-colors">
                       Statistical Mechanics and Probability
@@ -266,7 +316,10 @@ export default async function Home() {
             )}
           </div>
 
-          <div className="text-center mt-12">
+          <div
+            className="text-center mt-12 home-item"
+            style={{ animationDelay: "1.5s" }}
+          >
             <Button
               asChild
               variant="outline"
