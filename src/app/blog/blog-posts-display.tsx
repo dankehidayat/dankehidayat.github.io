@@ -50,7 +50,7 @@ export function BlogPostsDisplay() {
               <div className="p-8 hover:bg-card/50 transition-colors">
                 {/* Header with badges and metadata */}
                 <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <Badge variant="default" className="font-domine">
+                  <Badge variant="outline" className="font-domine">
                     Blog Post
                   </Badge>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">

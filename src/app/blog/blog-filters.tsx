@@ -312,30 +312,60 @@ export function BlogFilters({
           )}
 
           {/* RSS Feed Card */}
-          <Card className="border-border bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20">
+          <Card className="border-border bg-card">
             <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="bg-orange-100 dark:bg-orange-900/30 p-2 rounded-lg">
-                  <Rss className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+              {/* Mobile Layout - Horizontal */}
+              <div className="flex items-center gap-3 lg:hidden">
+                <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-lg flex-shrink-0">
+                  <Rss className="h-5 w-5 text-green-500 dark:text-green-400" />
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-sm text-foreground">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm text-card-foreground leading-tight">
                     Stay Updated
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-tight">
                     Subscribe to our RSS feed
                   </p>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/30"
+                  className="text-xs !border-green-300 !bg-green-50 !text-green-700 hover:!bg-green-100 hover:!text-green-900 dark:!border-green-600 dark:!bg-green-950 dark:!text-green-100 dark:hover:!bg-green-900 dark:hover:!text-white flex-shrink-0"
                   asChild
                 >
                   <a href="/rss.xml" target="_blank" rel="noopener noreferrer">
                     Subscribe
                   </a>
                 </Button>
+              </div>
+
+              {/* Desktop Layout - Vertical */}
+              <div className="hidden lg:block">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg mb-3">
+                    <Rss className="h-6 w-6 text-green-500 dark:text-green-400" />
+                  </div>
+                  <h3 className="font-semibold text-base text-card-foreground mb-1">
+                    Stay Updated
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Subscribe to our RSS feed
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full text-xs !border-green-300 !bg-green-50 !text-green-700 hover:!bg-green-100 hover:!text-green-900 dark:!border-green-600 dark:!bg-green-950 dark:!text-green-100 dark:hover:!bg-green-900 dark:hover:!text-white"
+                    asChild
+                  >
+                    <a
+                      href="/rss.xml"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Subscribe
+                    </a>
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -506,6 +506,93 @@ a:focus-visible {
 }
 
 /* ========================================================================== */
+/* RSS CARD STYLES - SPECIFIC FOR STAY UPDATED BUTTON */
+/* ========================================================================== */
+
+/* RSS Feed Card specific button styling - Green/Teal theme */
+.border-border.bg-card .text-xs[data-variant="outline"] {
+  border-color: rgb(16 185 129) !important; /* Emerald-500 */
+  background-color: rgb(16 185 129) !important; /* Emerald-500 */
+  color: rgb(255 255 255) !important;
+}
+
+.border-border.bg-card .text-xs[data-variant="outline"]:hover {
+  background-color: rgb(5 150 105) !important; /* Emerald-600 */
+  border-color: rgb(5 150 105) !important; /* Emerald-600 */
+  color: rgb(255 255 255) !important;
+}
+
+[data-theme="dark"] .border-border.bg-card .text-xs[data-variant="outline"] {
+  border-color: rgb(52 211 153) !important; /* Emerald-400 */
+  background-color: rgb(52 211 153) !important; /* Emerald-400 */
+  color: rgb(17 24 39) !important; /* Gray-900 */
+}
+
+[data-theme="dark"]
+  .border-border.bg-card
+  .text-xs[data-variant="outline"]:hover {
+  background-color: rgb(16 185 129) !important; /* Emerald-500 */
+  border-color: rgb(16 185 129) !important; /* Emerald-500 */
+  color: rgb(255 255 255) !important;
+}
+
+/* RSS icon styling - Green theme */
+.bg-green-100 {
+  background-color: rgb(220 252 231) !important; /* Green-100 */
+}
+.bg-green-900 {
+  background-color: rgb(20 83 45) !important; /* Green-900 */
+}
+
+.text-green-500 {
+  color: rgb(34 197 94) !important; /* Green-500 */
+}
+.text-green-400 {
+  color: rgb(74 222 128) !important; /* Green-400 */
+}
+
+/* ========================================================================== */
+/* BLOG POST LABEL STYLES - INDIGO OUTLINE THEME */
+/* ========================================================================== */
+
+/* Blog post labels with indigo outline and themed background */
+.blog-post-label {
+  background-color: var(--background) !important; /* Light theme background */
+  color: var(--primary) !important; /* Indigo text color */
+  border: 1px solid var(--primary) !important; /* Indigo border */
+  box-shadow: 0 0 0 1px var(--primary) !important; /* Additional border for consistency */
+}
+
+.blog-post-label:hover {
+  background-color: var(--primary) !important; /* Indigo background on hover */
+  color: var(--primary-foreground) !important; /* White text on hover */
+  transform: translateY(-1px) !important; /* Subtle lift on hover */
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important; /* Glow effect on hover */
+}
+
+[data-theme="dark"] .blog-post-label {
+  background-color: var(--card) !important; /* Dark theme background */
+  color: rgb(
+    129,
+    140,
+    248
+  ) !important; /* Indigo-400 for better dark mode contrast */
+  border: 1px solid rgb(129, 140, 248) !important; /* Indigo-400 border */
+  box-shadow: 0 0 0 1px rgb(129, 140, 248) !important; /* Additional border */
+}
+
+[data-theme="dark"] .blog-post-label:hover {
+  background-color: rgb(
+    129,
+    140,
+    248
+  ) !important; /* Indigo-400 background on hover */
+  color: rgb(17, 24, 39) !important; /* Gray-900 text on hover */
+  transform: translateY(-1px) !important; /* Subtle lift on hover */
+  box-shadow: 0 2px 12px rgba(129, 140, 248, 0.4) !important; /* Glow effect on hover */
+}
+
+/* ========================================================================== */
 /* TIMELINE STYLES */
 /* ========================================================================== */
 
