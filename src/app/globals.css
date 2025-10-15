@@ -549,6 +549,31 @@ a:focus-visible {
 }
 
 /* ========================================================================== */
+/* CALIBRATION CODE BLOCK TEXT COLOR FIX */
+/* ========================================================================== */
+
+/* Ensure code text in calibration sections is visible in both themes */
+.projects-page .bg-muted code.bg-background {
+  color: var(--foreground) !important;
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+[data-theme="dark"] .projects-page .bg-muted code.bg-background {
+  color: rgb(248 250 252) !important; /* Light text for dark mode */
+  background-color: rgb(23 23 23) !important;
+  border: 1px solid rgb(64 64 64) !important;
+}
+
+/* Specific styling for calibration result code blocks */
+.projects-page .calibration-section code {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace !important;
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+}
+
+/* ========================================================================== */
 /* RSS CARD STYLES - GREEN/TEAL THEME */
 /* ========================================================================== */
 
