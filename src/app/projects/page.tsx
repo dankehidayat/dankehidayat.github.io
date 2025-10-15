@@ -259,7 +259,7 @@ const projects: {
         "Complex sensor data analysis using fuzzy logic",
         "IoT-based monitoring system integration",
       ],
-      category: "ai-iot",
+      category: "fuzzy-iot",
       documentUrl: "#",
       scholarUrl: "#",
     },
@@ -388,7 +388,7 @@ const projects: {
         "Effective energy management tool",
         "Practical application of fuzzy logic in cost prediction",
       ],
-      category: "ai-iot",
+      category: "fuzzy-iot",
       documentUrl:
         "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
       scholarUrl:
@@ -399,7 +399,7 @@ const projects: {
 
 // Category colors for badges
 const categoryColors = {
-  "ai-iot":
+  "fuzzy-iot":
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
   "ui-ux": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   "system-design":
@@ -410,7 +410,7 @@ const categoryColors = {
 
 // Category icons
 const categoryIcons = {
-  "ai-iot": Cpu,
+  "fuzzy-iot": Cpu,
   "ui-ux": Code,
   "system-design": Database,
   "data-science": BookOpen,
@@ -882,8 +882,8 @@ export default function Projects() {
                           className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium ${categoryColor}`}
                         >
                           <CategoryIcon className="h-4 w-4 mr-1" />
-                          {research.category === "ai-iot"
-                            ? "AI & IoT"
+                          {research.category === "fuzzy-iot"
+                            ? "Fuzzy & IoT"
                             : research.category === "ui-ux"
                             ? "UI/UX Design"
                             : research.category === "system-design"
