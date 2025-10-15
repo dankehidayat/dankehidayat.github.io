@@ -450,6 +450,49 @@ a:focus-visible {
 }
 
 /* ========================================================================== */
+/* PROJECT PAGE MUTED BACKGROUND FIXES */
+/* ========================================================================== */
+
+/* Ensure muted backgrounds have proper contrast in dark mode */
+.projects-page .bg-muted {
+  background-color: var(--muted) !important;
+}
+
+[data-theme="dark"] .projects-page .bg-muted {
+  background-color: rgb(
+    38 38 38
+  ) !important; /* Darker gray for better contrast */
+  border: 1px solid rgb(64 64 64) !important; /* Subtle border for definition */
+}
+
+/* Specific styling for code blocks inside muted sections */
+.projects-page .bg-muted code.bg-background {
+  background-color: rgb(23 23 23) !important; /* Even darker for code blocks */
+  border: 1px solid rgb(64 64 64) !important;
+}
+
+[data-theme="dark"] .projects-page .bg-muted code.bg-background {
+  background-color: rgb(23 23 23) !important;
+  border: 1px solid rgb(64 64 64) !important;
+}
+
+/* Ensure text remains readable in dark mode muted sections */
+[data-theme="dark"] .projects-page .bg-muted .text-muted-foreground {
+  color: rgb(168 162 158) !important; /* Lighter text for better readability */
+}
+
+/* Specific styling for the tech stack grid in muted sections */
+[data-theme="dark"] .projects-page .bg-muted .grid.grid-cols-2 {
+  background-color: transparent !important;
+}
+
+/* Style for the sorting logic boxes inside muted sections */
+[data-theme="dark"] .projects-page .bg-muted .bg-background {
+  background-color: rgb(23 23 23) !important;
+  border: 1px solid rgb(64 64 64) !important;
+}
+
+/* ========================================================================== */
 /* PAGE-SPECIFIC BUTTON STYLES */
 /* ========================================================================== */
 
