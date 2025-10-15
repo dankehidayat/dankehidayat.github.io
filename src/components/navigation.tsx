@@ -35,10 +35,10 @@ export function Navigation() {
               <BookOpen className="h-5 w-5 text-primary-foreground" />
             </div>
             <div>
-              <div className="text-xl tracking-tight text-foreground group-hover:text-primary transition-colors font-domine">
+              <div className="text-xl tracking-tight text-foreground group-hover:text-primary transition-colors font-bodoni-moda font-semibold">
                 Danke Hidayat
               </div>
-              <div className="text-xs text-muted-foreground tracking-wider uppercase font-domine">
+              <div className="text-xs text-muted-foreground tracking-wider uppercase font-bodoni-moda font-semibold">
                 Portfolio
               </div>
             </div>
@@ -50,7 +50,7 @@ export function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-sm tracking-wide transition-colors hover:text-primary border-b-2 pb-1 font-domine transform translate-y-1.5 ${
+                className={`text-sm tracking-wide transition-colors hover:text-primary border-b-2 pb-1 font-bodoni-moda font-semibold transform translate-y-1.5 ${
                   pathname === item.href
                     ? "text-primary border-primary"
                     : "text-foreground/90 border-transparent"
@@ -88,10 +88,10 @@ export function Navigation() {
                       <BookOpen className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="text-left">
-                      <div className="text-xl tracking-tight text-foreground font-domine">
+                      <div className="text-xl tracking-tight text-foreground font-bodoni-moda font-semibold">
                         Danke Hidayat
                       </div>
-                      <div className="text-xs text-muted-foreground tracking-wider uppercase font-domine">
+                      <div className="text-xs text-muted-foreground tracking-wider uppercase font-bodoni-moda font-semibold">
                         Portfolio
                       </div>
                     </div>
@@ -103,7 +103,7 @@ export function Navigation() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`block text-lg tracking-wide transition-all duration-300 font-domine py-3 px-4 rounded-lg hover:bg-muted navbar-item ${
+                      className={`block text-lg tracking-wide transition-all duration-300 font-bodoni-moda font-semibold py-3 px-4 rounded-lg hover:bg-muted navbar-item ${
                         pathname === item.href
                           ? "text-primary font-medium bg-primary/10"
                           : "text-foreground"
@@ -119,7 +119,7 @@ export function Navigation() {
 
                 {/* Footer with subtle animation */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border bg-muted/50 navbar-footer">
-                  <p className="text-sm text-muted-foreground text-center font-domine transition-opacity duration-500">
+                  <p className="text-sm text-muted-foreground text-center font-bodoni-moda font-semibold transition-opacity duration-500">
                     Let&apos;s build something amazing together
                   </p>
                 </div>
