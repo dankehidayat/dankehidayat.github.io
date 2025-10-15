@@ -259,17 +259,147 @@ const projects: {
         "Complex sensor data analysis using fuzzy logic",
         "IoT-based monitoring system integration",
       ],
-      category: "fuzzy-iot",
+      category: "ai-iot",
       documentUrl: "#",
       scholarUrl: "#",
     },
-    // ... other research projects
+    {
+      title:
+        "Implementation of User Centered Design Method on CarbonArea Website User Experience",
+      description:
+        "This study applies a User-Centered Design (UCD) approach to design the UI/UX for CarbonArea, a website monitoring CO2's impact on food security. The process, informed by user interviews, successfully delivered an engaging interface with interactive, real-time data features.",
+      type: "Journal",
+      institution: "Vocational School of IPB University",
+      year: "2025",
+      technologies: [
+        "User Centered Design",
+        "UI/UX Design",
+        "User Research",
+        "Interactive Design",
+        "Real-time Data",
+      ],
+      methodologies: [
+        "User Interviews",
+        "UCD Process",
+        "Prototype Testing",
+        "User Experience Evaluation",
+      ],
+      contributions: [
+        "Engaging interface design for CO2 impact monitoring",
+        "Interactive real-time data features",
+        "User-centered approach to food security visualization",
+        "Improved user engagement through UCD methodology",
+      ],
+      category: "ui-ux",
+      documentUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+      scholarUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+    },
+    {
+      title:
+        "Designing User Interface on 'HewanKu' Application Using User Centered Design Method",
+      description:
+        "This research designs the HewanKu livestock trading app's interface using User Centered Design (UCD) to enhance user experience. Combined with Black Box Testing, the method produced an intuitive, reliable, and user-trusted application for transactions.",
+      type: "Journal",
+      institution: "Vocational School of IPB University",
+      year: "2025",
+      technologies: [
+        "User Centered Design",
+        "Mobile UI Design",
+        "Black Box Testing",
+        "Livestock Trading",
+        "E-commerce",
+      ],
+      methodologies: [
+        "UCD Methodology",
+        "Interface Design",
+        "Black Box Testing",
+        "User Trust Evaluation",
+      ],
+      contributions: [
+        "Intuitive livestock trading application interface",
+        "Reliable transaction system design",
+        "User trust enhancement through UCD",
+        "Comprehensive testing methodology",
+      ],
+      category: "ui-ux",
+      documentUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+      scholarUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+    },
+    {
+      title:
+        "Designing a Website-Based Inventory Information System at 'NeoSkin' Cosmetics Store Using User-Centered Design",
+      description:
+        "This research designs a web-based inventory system for NeoSkin cosmetics using a User Centered Design (UCD) approach. The system streamlines warehouse management and reporting, with functionality verified through Black Box Testing.",
+      type: "Journal",
+      institution: "Vocational School of IPB University",
+      year: "2025",
+      technologies: [
+        "User Centered Design",
+        "Inventory System",
+        "Web Development",
+        "Warehouse Management",
+        "Black Box Testing",
+      ],
+      methodologies: [
+        "UCD Approach",
+        "System Design",
+        "Functionality Testing",
+        "Warehouse Optimization",
+      ],
+      contributions: [
+        "Streamlined warehouse management system",
+        "Improved inventory reporting",
+        "User-centered design for operational efficiency",
+        "Verified functionality through comprehensive testing",
+      ],
+      category: "system-design",
+      documentUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+      scholarUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/104",
+    },
+    {
+      title: "Implementing Fuzzy Logic to Forecast Electricity Usage Costs",
+      description:
+        "This research develops a Mamdani fuzzy logic model using Matlab to predict household electricity costs. Analyzing variables like house size, appliance usage, and income, it accurately forecasts expenses, demonstrating an effective tool for managing energy consumption.",
+      type: "Journal",
+      institution: "Vocational School of IPB University",
+      year: "2025",
+      technologies: [
+        "Mamdani Fuzzy Logic",
+        "Matlab",
+        "Cost Forecasting",
+        "Energy Management",
+        "Predictive Modeling",
+      ],
+      methodologies: [
+        "Fuzzy Logic Modeling",
+        "Variable Analysis",
+        "Cost Prediction",
+        "Energy Consumption Analysis",
+      ],
+      contributions: [
+        "Accurate electricity cost forecasting",
+        "Multi-variable analysis approach",
+        "Effective energy management tool",
+        "Practical application of fuzzy logic in cost prediction",
+      ],
+      category: "ai-iot",
+      documentUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
+      scholarUrl:
+        "https://batrisyaedu.com/journal/index.php/batrisya/article/view/49",
+    },
   ],
 };
 
 // Category colors for badges
 const categoryColors = {
-  "fuzzy-iot":
+  "ai-iot":
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
   "ui-ux": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   "system-design":
@@ -280,7 +410,7 @@ const categoryColors = {
 
 // Category icons
 const categoryIcons = {
-  "fuzzy-iot": Cpu,
+  "ai-iot": Cpu,
   "ui-ux": Code,
   "system-design": Database,
   "data-science": BookOpen,
@@ -752,8 +882,8 @@ export default function Projects() {
                           className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium ${categoryColor}`}
                         >
                           <CategoryIcon className="h-4 w-4 mr-1" />
-                          {research.category === "fuzzy-iot"
-                            ? "Fuzzy & IoT"
+                          {research.category === "ai-iot"
+                            ? "AI & IoT"
                             : research.category === "ui-ux"
                             ? "UI/UX Design"
                             : research.category === "system-design"
