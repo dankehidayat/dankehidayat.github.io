@@ -978,6 +978,219 @@ a:focus-visible {
   }
 }
 
+/* ========================================================================== */
+/* MOBILE NAVBAR ANIMATIONS */
+/* ========================================================================== */
+
+/* Mobile navbar container animation */
+.mobile-navbar[data-state="open"] {
+  animation: slideInFromLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.mobile-navbar[data-state="closed"] {
+  animation: slideOutToLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Header animation */
+.navbar-header {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.mobile-navbar[data-state="open"] .navbar-header {
+  animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+/* Navigation items animation */
+.navbar-item {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.mobile-navbar[data-state="open"] .navbar-item {
+  animation: slideInFromLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Content container animation */
+.navbar-content {
+  opacity: 0;
+}
+
+.mobile-navbar[data-state="open"] .navbar-content {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+/* Footer animation */
+.navbar-footer {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.mobile-navbar[data-state="open"] .navbar-footer {
+  animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+/* Hover effects for navbar items */
+.navbar-item:hover {
+  transform: translateX(8px);
+  background: var(--muted) !important;
+  box-shadow: 0 4px 12px rgba(51, 0, 153, 0.1);
+}
+
+.mobile-navbar[data-state="open"] .navbar-item:hover {
+  transform: translateX(8px);
+}
+
+/* Active state enhancement */
+.navbar-item[data-active="true"] {
+  border-left: 3px solid var(--primary);
+  margin-left: -4px;
+  padding-left: 16px;
+}
+
+/* ========================================================================== */
+/* MOBILE NAVBAR ANIMATION KEYFRAMES */
+/* ========================================================================== */
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for navbar items */
+.mobile-navbar[data-state="open"] .navbar-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.mobile-navbar[data-state="open"] .navbar-item:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.mobile-navbar[data-state="open"] .navbar-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.mobile-navbar[data-state="open"] .navbar-item:nth-child(4) {
+  animation-delay: 0.25s;
+}
+.mobile-navbar[data-state="open"] .navbar-item:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+/* Enhanced backdrop blur for modern browsers */
+@supports (backdrop-filter: blur(12px)) {
+  .mobile-navbar {
+    backdrop-filter: blur(12px);
+    background-color: rgba(254, 253, 248, 0.95);
+  }
+
+  [data-theme="dark"] .mobile-navbar {
+    background-color: rgba(26, 26, 26, 0.95);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+.navbar-item {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced motion support for mobile navbar */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-navbar[data-state="open"],
+  .mobile-navbar[data-state="closed"],
+  .navbar-header,
+  .navbar-item,
+  .navbar-content,
+  .navbar-footer {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .navbar-item {
+    transition: none !important;
+  }
+}
+
+/* Dark theme adjustments for mobile navbar */
+[data-theme="dark"] .navbar-item:hover {
+  box-shadow: 0 4px 12px rgba(124, 77, 255, 0.15);
+}
+
+/* Mobile navbar responsive adjustments */
+@media (max-width: 640px) {
+  .mobile-navbar {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .navbar-item {
+    font-size: 1.125rem !important;
+    padding: 1rem 1.25rem !important;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+.navbar-item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  background: var(--muted) !important;
+}
+
+/* Smooth scroll behavior for mobile */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Project page animations */
 .project-item {
   animation: fadeInUp 0.6s ease forwards;

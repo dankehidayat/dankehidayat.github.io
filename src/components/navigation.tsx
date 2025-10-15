@@ -80,9 +80,9 @@ export function Navigation() {
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-[300px] sm:w-[400px] p-0 bg-background border-r border-border"
+                className="w-[300px] sm:w-[400px] p-0 bg-background border-r border-border mobile-navbar"
               >
-                <SheetHeader className="flex flex-row items-center justify-between p-6 border-b border-border bg-background/95 backdrop-blur-sm">
+                <SheetHeader className="flex flex-row items-center justify-between p-6 border-b border-border bg-background/95 backdrop-blur-sm navbar-header">
                   <SheetTitle className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-primary flex items-center justify-center border border-primary transition-transform duration-300 hover:scale-105">
                       <BookOpen className="h-5 w-5 text-primary-foreground" />
@@ -98,14 +98,14 @@ export function Navigation() {
                   </SheetTitle>
                 </SheetHeader>
 
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-4 navbar-content">
                   {navigation.map((item, index) => (
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`block text-lg tracking-wide transition-all duration-300 font-domine py-3 px-4 rounded-lg hover:bg-muted ${
+                      className={`block text-lg tracking-wide transition-all duration-300 font-domine py-3 px-4 rounded-lg hover:bg-muted navbar-item ${
                         pathname === item.href
-                          ? "text-primary font-medium"
+                          ? "text-primary font-medium bg-primary/10"
                           : "text-foreground"
                       }`}
                       style={{
@@ -118,7 +118,7 @@ export function Navigation() {
                 </div>
 
                 {/* Footer with subtle animation */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border bg-muted/50">
+                <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border bg-muted/50 navbar-footer">
                   <p className="text-sm text-muted-foreground text-center font-domine transition-opacity duration-500">
                     Let&apos;s build something amazing together
                   </p>
