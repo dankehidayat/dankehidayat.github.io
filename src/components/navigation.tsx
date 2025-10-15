@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useState } from "react";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -24,6 +25,11 @@ const navigation = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
@@ -68,7 +74,7 @@ export function Navigation() {
           {/* Mobile menu button */}
           <div className="flex md:hidden items-center gap-2">
             <ThemeToggle />
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
@@ -103,6 +109,7 @@ export function Navigation() {
                     <Link
                       key={item.name}
                       href={item.href}
+                      onClick={closeMobileMenu}
                       className={`block text-lg tracking-wide transition-all duration-300 font-bodoni-moda font-semibold py-3 px-4 rounded-lg hover:bg-muted navbar-item ${
                         pathname === item.href
                           ? "text-primary font-medium bg-primary/10"
