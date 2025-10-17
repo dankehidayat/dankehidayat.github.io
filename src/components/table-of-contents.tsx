@@ -146,7 +146,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
         >
           <button
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-2 text-primary bg-card hover:bg-muted px-4 py-3 rounded-full border border-border shadow-lg text-sm font-domine transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="inline-flex items-center gap-2 text-foreground dark:text-foreground bg-card dark:bg-card hover:bg-muted dark:hover:bg-muted px-4 py-3 rounded-full border border-border dark:border-border shadow-lg text-sm font-domine transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <List className="h-5 w-5" />
             <span className="hidden sm:inline">Contents</span>
@@ -165,29 +165,29 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
         {/* Custom Sheet Content */}
         <div
-          className={`fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out ${
+          className={`fixed bottom-0 left-0 right-0 z-50 bg-card dark:bg-card border-t border-border dark:border-border rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out ${
             open ? "translate-y-0" : "translate-y-full"
           }`}
           style={{ height: "75vh" }}
         >
           <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="flex items-center justify-between py-4 px-6 border-b border-border">
-              <h3 className="font-domine font-bold text-xl text-black">
+            {/* Header - Decreased bottom padding, increased top padding */}
+            <div className="flex items-center justify-between pt-6 pb-3 px-6 border-b border-border dark:border-border">
+              <h3 className="font-domine font-bold text-xl text-foreground dark:text-foreground">
                 Table of Contents
               </h3>
               <button
                 onClick={() => setOpen(false)}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
+                className="p-2 hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors text-foreground dark:text-foreground"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            {/* Content with proper scrolling */}
+            {/* Content with proper scrolling - Increased top padding */}
             <div className="flex-1 overflow-hidden">
               <ScrollArea className="h-full">
-                <nav className="p-4">
+                <nav className="pt-4 pb-4">
                   <ul className="space-y-3">
                     {numberedHeadings.map((heading, index) => (
                       <li key={index}>
@@ -195,21 +195,21 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                           href={`#${heading.id}`}
                           className={`flex items-start gap-4 py-3 px-4 rounded-lg transition-all duration-200 font-domine text-sm ${
                             activeId === heading.id
-                              ? "text-primary bg-primary/10 font-semibold"
-                              : "text-black hover:text-primary hover:bg-muted"
+                              ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/10 font-semibold"
+                              : "text-foreground dark:text-foreground hover:text-primary dark:hover:text-primary hover:bg-muted dark:hover:bg-muted"
                           } ${heading.level === 3 ? "ml-6" : ""}`}
                           onClick={(e) => handleLinkClick(e, heading.id)}
                         >
                           <span
                             className={`font-domine text-sm font-semibold flex-shrink-0 min-w-8 text-right translate-y-1 ${
                               activeId === heading.id
-                                ? "text-primary"
-                                : "text-black/70"
+                                ? "text-primary dark:text-primary"
+                                : "text-muted-foreground dark:text-muted-foreground"
                             }`}
                           >
                             {heading.number}
                           </span>
-                          <span className="flex-1 leading-relaxed translate-y-1 text-black">
+                          <span className="flex-1 leading-relaxed translate-y-1 text-foreground dark:text-foreground">
                             {heading.text}
                           </span>
                         </a>
@@ -228,8 +228,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   // Desktop View - Always Visible Sidebar
   return (
     <div className="w-80 sticky top-24 h-fit">
-      <div className="bg-card border border-border rounded-lg p-6">
-        <h3 className="font-domine font-bold text-lg text-black mb-4">
+      <div className="bg-card dark:bg-card border border-border dark:border-border rounded-lg p-6">
+        <h3 className="font-domine font-bold text-lg text-foreground dark:text-foreground mb-4">
           Table of Contents
         </h3>
 
@@ -242,21 +242,21 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                     href={`#${heading.id}`}
                     className={`flex items-start gap-4 py-2 px-3 rounded-lg transition-all duration-200 font-domine text-sm ${
                       activeId === heading.id
-                        ? "text-primary bg-primary/10 font-semibold border-l-2 border-primary"
-                        : "text-black hover:text-primary hover:bg-muted"
+                        ? "text-primary dark:text-primary bg-primary/10 dark:bg-primary/10 font-semibold border-l-2 border-primary dark:border-primary"
+                        : "text-foreground dark:text-foreground hover:text-primary dark:hover:text-primary hover:bg-muted dark:hover:bg-muted"
                     } ${heading.level === 3 ? "ml-6" : ""}`}
                     onClick={(e) => handleLinkClick(e, heading.id)}
                   >
                     <span
                       className={`font-domine text-sm font-semibold flex-shrink-0 min-w-6 text-right translate-y-0.5 ${
                         activeId === heading.id
-                          ? "text-primary"
-                          : "text-black/70"
+                          ? "text-primary dark:text-primary"
+                          : "text-muted-foreground dark:text-muted-foreground"
                       }`}
                     >
                       {heading.number}
                     </span>
-                    <span className="flex-1 leading-relaxed translate-y-0.5 text-black">
+                    <span className="flex-1 leading-relaxed translate-y-0.5 text-foreground dark:text-foreground">
                       {heading.text}
                     </span>
                   </a>
