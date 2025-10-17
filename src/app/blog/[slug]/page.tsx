@@ -70,14 +70,13 @@ async function getBlogPost(slug: string) {
       return null;
     }
 
-    const files = readdirSync(folderPath);
-    const mdxFile = files.find((file) => file.endsWith(".mdx"));
+    const filePath = `${folderPath}/index.mdx`;
 
-    if (!mdxFile) {
+    if (!existsSync(filePath)) {
       return null;
     }
 
-    const fileContent = readFileSync(`${folderPath}/${mdxFile}`, "utf8");
+    const fileContent = readFileSync(filePath, "utf8");
     const { data, content } = matter(fileContent);
 
     // Convert markdown to HTML
@@ -142,7 +141,7 @@ export default async function BlogPostPage(props: PageProps) {
                   </span>
                 </div>
 
-                <h1 className="text-3xl! md:text-3xl! font-heading font-bold text-foreground mb-6 leading-tight">
+                <h1 className="text-2xl! md:text-2xl! font-heading font-bold text-foreground mb-6 leading-tight">
                   {post.title}
                 </h1>
 
@@ -174,22 +173,22 @@ export default async function BlogPostPage(props: PageProps) {
               {/* Article Content */}
               <div className="p-8">
                 <div
-                  className="prose prose-base max-w-none 
+                  className="prose prose-sm max-w-none 
                              prose-headings:font-bold prose-headings:text-foreground prose-headings:font-heading
-                             prose-h1:text-2xl prose-h1:mb-6 prose-h1:border-b prose-h1:pb-4 prose-h1:border-border
-                             prose-h2:text-xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:scroll-mt-20
-                             prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3 prose-h3:scroll-mt-20
-                             prose-p:text-foreground prose-p:leading-relaxed prose-p:mb-4 prose-p:text-[14px]!
-                             prose-li:text-foreground prose-li:leading-relaxed prose-li:text-[14px]!
+                             prose-h1:text-xl prose-h1:mb-6 prose-h1:border-b prose-h1:pb-4 prose-h1:border-border
+                             prose-h2:text-lg prose-h2:mt-8 prose-h2:mb-4 prose-h2:scroll-mt-20
+                             prose-h3:text-base prose-h3:mt-6 prose-h3:mb-3 prose-h3:scroll-mt-20
+                             prose-p:text-foreground prose-p:leading-relaxed prose-p:mb-4 prose-p:text-[13px]!
+                             prose-li:text-foreground prose-li:leading-relaxed prose-li:text-[13px]!
                              prose-strong:text-foreground prose-strong:font-bold
-                             prose-code:text-foreground prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                             prose-code:text-foreground prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs
                              prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-pre:p-4
                              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 
-                             prose-blockquote:italic prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:my-6 prose-blockquote:text-[14px]!
+                             prose-blockquote:italic prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:my-6 prose-blockquote:text-[13px]!
                              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                              prose-table:border prose-table:border-border prose-table:my-6
-                             prose-th:bg-muted prose-th:font-bold prose-th:p-3
-                             prose-td:border prose-td:border-border prose-td:p-3
+                             prose-th:bg-muted prose-th:font-bold prose-th:p-3 prose-th:text-[13px]!
+                             prose-td:border prose-td:border-border prose-td:p-3 prose-td:text-[13px]!
                              prose-img:rounded-lg prose-img:shadow-md prose-img:my-6
                              prose-ul:list-disc prose-ol:list-decimal prose-ul:my-6 prose-ol:my-6
                              prose-li:my-1"
