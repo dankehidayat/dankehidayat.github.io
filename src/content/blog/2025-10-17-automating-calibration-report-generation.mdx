@@ -25,8 +25,6 @@ When I first started comparing the accuracy of my **DHT11 sensor**, I didn’t e
 
 This post walks through how I designed that system — how I collected and analyzed the calibration data, applied fuzzy logic for comfort assessment, and produced a full scientific report automatically.
 
----
-
 ## Introduction
 
 Monitoring environmental conditions like temperature and humidity is critical for maintaining comfort and energy efficiency, especially in tropical office environments.
@@ -34,16 +32,12 @@ Low-cost IoT sensors such as the DHT11 are convenient but not always reliable. M
 
 To make the process reproducible and less error-prone, I conducted the entire analysis in **Google Colab**, which offered a complete Python environment, built-in plotting, and direct Google Drive integration for storing results.
 
----
-
 ## Data Collection
 
 The experiment took place in a **naturally ventilated office** located in Indonesia. I placed both sensors — DHT11 and HTC-1 — side by side under identical conditions to minimize spatial variation.
 I collected two datasets: one **before calibration** and one **after calibration**, representing the performance difference.
 
 The measurements covered several hours of normal office operation, capturing both day and evening temperature fluctuations. Each dataset contained paired readings of temperature and humidity.
-
----
 
 ## Statistical Analysis in Colab
 
@@ -80,16 +74,12 @@ $$
 This helped determine how calibration improved the sensor’s linear relationship. I also used **Bland–Altman analysis** to study the bias and consistency between the sensors.
 After calibration, the bias was notably smaller, and the readings were more uniform, confirming the improvement.
 
----
-
 ## Calibration Outcome
 
 After running the calibration procedure, the results were clear:
 the DHT11 sensor’s measurement accuracy improved dramatically for both temperature and humidity.
 While the pre-calibration readings showed noticeable offsets, the post-calibration values closely matched the reference measurements.
 This validated that even inexpensive sensors could achieve acceptable accuracy when proper calibration and statistical correction are applied.
-
----
 
 ## Applying Fuzzy Mamdani Logic for Comfort Evaluation
 
@@ -107,8 +97,6 @@ The fuzzy logic approach allowed me to quantify comfort perception on a continuo
 The analysis revealed that most readings fell within the _Comfortable_ range, suggesting that the room environment maintained stable and favorable conditions throughout most of the observation period.
 
 This was a useful complement to the calibration analysis, providing a more intuitive interpretation of what the sensor readings meant in human terms.
-
----
 
 ## Automating LaTeX Report Generation
 
@@ -141,8 +129,6 @@ doc.generate_pdf('/content/drive/MyDrive/Scientific_Thermal_Comfort_Report', cle
 
 This made the report instantly accessible through a shareable Drive link once the notebook finished running.
 
----
-
 ## Reflections
 
 What began as a small calibration test turned into a complete research workflow combining **data analysis**, **fuzzy logic modeling**, and **automated documentation**.
@@ -152,8 +138,6 @@ The integration of LaTeX generation was the most satisfying part — it transfor
 
 This project reminded me how automation can enhance both accuracy and presentation in small-scale research.
 It also showed that with the right tools, even low-cost sensors like the DHT11 can deliver meaningful and interpretable insights when supported by data-driven calibration.
-
----
 
 ## Source and Availability
 
@@ -166,4 +150,5 @@ The automatically generated PDF report can be viewed on Google Drive:
 ---
 
 _Written by Danke Hidayat_
+
 _Bandung, Indonesia — October 17, 2025_
