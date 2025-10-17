@@ -13,6 +13,8 @@ tags:
     "Automation",
     "Data Science",
   ]
+categories: ["embedded-systems", "data-analysis", "research"]
+
 slug: "automating-calibration-report-generation"
 description: "A personal developer journal on automating sensor calibration analysis using Google Colab, comparing DHT11 and HTC-1 sensors with fuzzy logic and automatic LaTeX PDF report generation."
 ---
@@ -61,9 +63,9 @@ These two metrics provide a clear picture of how close the low-cost sensor’s r
 
 The equations I used were:
 
-[
+$$
 MAE = \frac{1}{n} \sum |X_i - Y_i|, \quad RMSE = \sqrt{\frac{1}{n} \sum (X_i - Y_i)^2}
-]
+$$
 
 The MAE shows the average absolute error, while RMSE penalizes larger deviations more strongly.
 
@@ -71,9 +73,9 @@ The MAE shows the average absolute error, while RMSE penalizes larger deviations
 
 Next, I applied a **linear regression model** to characterize how DHT11 readings align with HTC-1 readings:
 
-[
+$$
 Y = \beta_0 + \beta_1 X + \epsilon
-]
+$$
 
 This helped determine how calibration improved the sensor’s linear relationship. I also used **Bland–Altman analysis** to study the bias and consistency between the sensors.
 After calibration, the bias was notably smaller, and the readings were more uniform, confirming the improvement.
