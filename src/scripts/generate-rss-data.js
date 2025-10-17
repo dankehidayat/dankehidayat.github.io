@@ -23,17 +23,28 @@ function generateRSSData() {
       return;
     }
 
-    const files = fs.readdirSync(blogDir);
-    console.log(`📁 Found ${files.length} blog files`);
+    // Get all folders in blog directory
+    const folders = fs
+      .readdirSync(blogDir, { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
+
+    console.log(`📁 Found ${folders.length} blog folders`);
 
     const posts = [];
     let errorCount = 0;
 
-    files.forEach((file) => {
-      if (!file.endsWith(".mdx")) return;
-
+    folders.forEach((folder) => {
       try {
-        const filePath = path.join(blogDir, file);
+        const folderPath = path.join(blogDir, folder);
+        const filePath = path.join(folderPath, "index.mdx");
+
+        // Check if index.mdx exists
+        if (!fs.existsSync(filePath)) {
+          console.log(`⚠️ No index.mdx found in folder: ${folder}`);
+          return;
+        }
+
         const fileContent = fs.readFileSync(filePath, "utf8");
         const { data, content } = matter(fileContent);
 
@@ -44,10 +55,25 @@ function generateRSSData() {
         // Convert basic markdown to HTML (simple approach)
         let contentHtml = convertMarkdownToHTML(cleanedContent);
 
+        // Use folder name as slug, fallback to filename without extension
+        const slug = folder;
+
+        // Use frontmatter date, fallback to folder name (if it contains date), then current date
+        let date = data.date;
+        if (!date) {
+          // Try to extract date from folder name (format: YYYY-MM-DD-rest-of-slug)
+          const dateMatch = folder.match(/^(\d{4}-\d{2}-\d{2})-/);
+          if (dateMatch) {
+            date = dateMatch[1];
+          } else {
+            date = new Date().toISOString().split("T")[0];
+          }
+        }
+
         posts.push({
-          slug: file.replace(".mdx", ""),
+          slug: slug,
           title: data.title || "Untitled",
-          date: data.date || new Date().toISOString().split("T")[0],
+          date: date,
           excerpt: data.excerpt || "",
           author: data.author || "Danke Hidayat",
           tags: data.tags || [],
@@ -57,15 +83,15 @@ function generateRSSData() {
           contentHtml: contentHtml,
         });
 
-        console.log(`✅ Processed: ${file}`);
+        console.log(`✅ Processed: ${folder}`);
       } catch (error) {
-        console.error(`❌ Error processing ${file}:`, error.message);
+        console.error(`❌ Error processing folder ${folder}:`, error.message);
         errorCount++;
       }
     });
 
     if (errorCount > 0) {
-      console.log(`⚠️  ${errorCount} files had errors and were skipped`);
+      console.log(`⚠️  ${errorCount} folders had errors and were skipped`);
     }
 
     const sortedPosts = posts.sort(

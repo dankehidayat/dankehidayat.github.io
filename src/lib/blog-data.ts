@@ -8,8 +8,8 @@ export interface BlogPost {
   tags: string[];
   categories: string[];
   labels: string[];
-  content?: string; // Add this
-  contentHtml?: string; // Add this
+  content?: string;
+  contentHtml?: string;
 }
 
 export interface BlogFilters {
@@ -83,7 +83,7 @@ export function getFilterCounts(posts: BlogPost[]) {
 }
 
 // Development-only function
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync, readFileSync, existsSync } from "fs";
 import matter from "gray-matter";
 import path from "path";
 import { remark } from "remark";
@@ -96,46 +96,131 @@ function getDevelopmentPosts(): BlogPost[] {
 
   try {
     const blogDir = path.join(process.cwd(), "src/content/blog");
-    const files = readdirSync(blogDir);
 
-    const posts = files
-      .map((file) => {
-        if (!file.endsWith(".mdx")) return null;
+    // Check if blog directory exists
+    if (!existsSync(blogDir)) {
+      console.warn("Blog directory not found:", blogDir);
+      return [];
+    }
 
-        const filePath = path.join(blogDir, file);
-        const fileContent = readFileSync(filePath, "utf8");
-        const { data, content } = matter(fileContent);
+    // Get all folders in blog directory
+    const folders = readdirSync(blogDir, { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
 
-        let contentHtml = "";
-        if (content) {
-          try {
-            const processedContent = remark().use(html).processSync(content);
-            contentHtml = processedContent.toString();
-          } catch (error) {
-            console.error(`Error processing content for ${file}:`, error);
-          }
+    console.log(`📁 Found ${folders.length} blog folders in development`);
+
+    const posts = folders
+      .map((folder) => {
+        const folderPath = path.join(blogDir, folder);
+        const files = readdirSync(folderPath);
+
+        // Look for .mdx files in the folder
+        const mdxFile = files.find((file) => file.endsWith(".mdx"));
+        if (!mdxFile) {
+          console.warn(`⚠️ No .mdx file found in folder: ${folder}`);
+          return null;
         }
 
-        return {
-          slug: file.replace(".mdx", ""),
-          title: data.title || "Untitled",
-          date: data.date || new Date().toISOString().split("T")[0],
-          excerpt: data.excerpt || "",
-          author: data.author || "Danke Hidayat",
-          tags: data.tags || [],
-          categories: data.categories || [],
-          labels: data.labels || [],
-          content: content,
-          contentHtml: contentHtml,
-        };
+        const filePath = path.join(folderPath, mdxFile);
+
+        try {
+          const fileContent = readFileSync(filePath, "utf8");
+          const { data, content } = matter(fileContent);
+
+          let contentHtml = "";
+          if (content) {
+            try {
+              const processedContent = remark().use(html).processSync(content);
+              contentHtml = processedContent.toString();
+            } catch (error) {
+              console.error(`Error processing content for ${folder}:`, error);
+            }
+          }
+
+          // Use folder name as slug, fallback to filename without extension
+          const slug = folder;
+
+          // Use frontmatter date, fallback to folder name (if it contains date), then current date
+          let date = data.date;
+          if (!date) {
+            // Try to extract date from folder name (format: YYYY-MM-DD-rest-of-slug)
+            const dateMatch = folder.match(/^(\d{4}-\d{2}-\d{2})-/);
+            if (dateMatch) {
+              date = dateMatch[1];
+            } else {
+              date = new Date().toISOString().split("T")[0];
+            }
+          }
+
+          return {
+            slug: slug,
+            title: data.title || "Untitled",
+            date: date,
+            excerpt: data.excerpt || "",
+            author: data.author || "Danke Hidayat",
+            tags: data.tags || [],
+            categories: data.categories || [],
+            labels: data.labels || [],
+            content: content,
+            contentHtml: contentHtml,
+          };
+        } catch (error) {
+          console.error(`❌ Error reading file ${filePath}:`, error);
+          return null;
+        }
       })
       .filter(Boolean) as BlogPost[];
 
-    return posts.sort(
+    // Sort by date descending
+    const sortedPosts = posts.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+
+    console.log(`✅ Loaded ${sortedPosts.length} blog posts in development`);
+    return sortedPosts;
   } catch (error) {
     console.error("Error reading blog posts from file system:", error);
     return [];
   }
+}
+
+// Utility function to get all blog post slugs (useful for static generation)
+export function getAllBlogSlugs(): string[] {
+  return blogPosts.map((post) => post.slug);
+}
+
+// Utility function to get posts by tag/category/label
+export function getPostsByTag(tag: string): BlogPost[] {
+  return blogPosts.filter((post) => post.tags.includes(tag));
+}
+
+export function getPostsByCategory(category: string): BlogPost[] {
+  return blogPosts.filter((post) => post.categories.includes(category));
+}
+
+export function getPostsByLabel(label: string): BlogPost[] {
+  return blogPosts.filter((post) => post.labels.includes(label));
+}
+
+// Utility function to get recent posts
+export function getRecentPosts(limit: number = 5): BlogPost[] {
+  return blogPosts
+    .filter((post) => post.contentHtml) // Only posts with content
+    .slice(0, limit);
+}
+
+// Utility function to search posts
+export function searchPosts(query: string): BlogPost[] {
+  const lowerQuery = query.toLowerCase();
+  return blogPosts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(lowerQuery) ||
+      post.excerpt.toLowerCase().includes(lowerQuery) ||
+      post.content?.toLowerCase().includes(lowerQuery) ||
+      post.tags.some((tag) => tag.toLowerCase().includes(lowerQuery)) ||
+      post.categories.some((category) =>
+        category.toLowerCase().includes(lowerQuery)
+      )
+  );
 }

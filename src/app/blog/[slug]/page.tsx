@@ -1,5 +1,5 @@
 // src/app/blog/[slug]/page.tsx
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync, readFileSync, existsSync } from "fs";
 import matter from "gray-matter";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,9 +16,18 @@ interface PageProps {
 
 // Generate static params for all blog posts
 export async function generateStaticParams() {
-  const files = readdirSync("./src/content/blog");
-  return files.map((file) => ({
-    slug: file.replace(".mdx", ""),
+  const blogDir = "./src/content/blog";
+
+  if (!existsSync(blogDir)) {
+    return [];
+  }
+
+  const folders = readdirSync(blogDir, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
+  return folders.map((folder) => ({
+    slug: folder,
   }));
 }
 
@@ -55,7 +64,20 @@ function extractHeadings(htmlContent: string) {
 // Get blog post data
 async function getBlogPost(slug: string) {
   try {
-    const fileContent = readFileSync(`./src/content/blog/${slug}.mdx`, "utf8");
+    const folderPath = `./src/content/blog/${slug}`;
+
+    if (!existsSync(folderPath)) {
+      return null;
+    }
+
+    const files = readdirSync(folderPath);
+    const mdxFile = files.find((file) => file.endsWith(".mdx"));
+
+    if (!mdxFile) {
+      return null;
+    }
+
+    const fileContent = readFileSync(`${folderPath}/${mdxFile}`, "utf8");
     const { data, content } = matter(fileContent);
 
     // Convert markdown to HTML
@@ -67,19 +89,19 @@ async function getBlogPost(slug: string) {
 
     return {
       title: data.title || "Untitled",
-      date: data.date || new Date().toISOString().split("T")[0],
+      date: data.date || slug, // Use folder name as fallback date
       author: data.author || "Danke Hidayat",
       excerpt: data.excerpt || "",
       content: contentHtml,
       headings,
     };
-  } catch {
+  } catch (error) {
+    console.error(`Error loading blog post ${slug}:`, error);
     return null;
   }
 }
 
 export default async function BlogPostPage(props: PageProps) {
-  // Await the params object
   const params = await props.params;
   const post = await getBlogPost(params.slug);
 
