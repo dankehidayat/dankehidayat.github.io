@@ -115,13 +115,12 @@ export default async function BlogPostPage(props: PageProps) {
               {/* Article Header */}
               <header className="border-b border-border p-8">
                 <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-domine font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                    <FileText className="h-4 w-4 mr-1" />
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs! font-domine font-medium border border-foreground text-foreground">
                     Blog Post
                   </span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6 leading-tight">
+                <h1 className="text-3xl! md:text-3xl! font-heading font-bold text-foreground mb-6 leading-tight">
                   {post.title}
                 </h1>
 
@@ -129,22 +128,22 @@ export default async function BlogPostPage(props: PageProps) {
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="text-sm font-domine">
+                      <User className="h-3 w-3" />
+                      <span className="text-xs! font-domine">
                         By {post.author}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <time className="text-sm font-domine">
+                      <Calendar className="h-3 w-3" />
+                      <time className="text-xs! font-domine">
                         {formatDate(post.date)}
                       </time>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      <span className="text-sm font-domine">5 min read</span>
+                      <Clock className="h-3 w-3" />
+                      <span className="text-xs! font-domine">5 min read</span>
                     </div>
                   </div>
                 </div>
@@ -153,18 +152,18 @@ export default async function BlogPostPage(props: PageProps) {
               {/* Article Content */}
               <div className="p-8">
                 <div
-                  className="prose prose-lg max-w-none 
+                  className="prose prose-base max-w-none 
                              prose-headings:font-bold prose-headings:text-foreground prose-headings:font-heading
-                             prose-h1:text-4xl prose-h1:mb-8 prose-h1:border-b prose-h1:pb-4 prose-h1:border-border
-                             prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:scroll-mt-20
-                             prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:scroll-mt-20
-                             prose-p:text-foreground prose-p:leading-relaxed prose-p:mb-6
-                             prose-li:text-foreground prose-li:leading-relaxed
+                             prose-h1:text-2xl prose-h1:mb-6 prose-h1:border-b prose-h1:pb-4 prose-h1:border-border
+                             prose-h2:text-xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:scroll-mt-20
+                             prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3 prose-h3:scroll-mt-20
+                             prose-p:text-foreground prose-p:leading-relaxed prose-p:mb-4 prose-p:text-[14px]!
+                             prose-li:text-foreground prose-li:leading-relaxed prose-li:text-[14px]!
                              prose-strong:text-foreground prose-strong:font-bold
                              prose-code:text-foreground prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
                              prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-pre:p-4
                              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 
-                             prose-blockquote:italic prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:my-6
+                             prose-blockquote:italic prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:my-6 prose-blockquote:text-[14px]!
                              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                              prose-table:border prose-table:border-border prose-table:my-6
                              prose-th:bg-muted prose-th:font-bold prose-th:p-3
@@ -198,39 +197,6 @@ export default async function BlogPostPage(props: PageProps) {
                 </div>
               </footer>
             </article>
-
-            {/* Related Posts Section */}
-            <div className="mt-8 bg-card rounded-lg border border-border shadow-sm p-8">
-              <h3 className="text-2xl font-heading font-bold mb-6">
-                More Articles
-              </h3>
-              <div className="grid gap-6 md:grid-cols-2">
-                <div className="border border-border rounded-lg p-6">
-                  <h4 className="font-heading font-semibold mb-3">
-                    Building Modern Web Applications
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    Learn how to create scalable web apps with modern frameworks
-                    and best practices...
-                  </p>
-                  <span className="text-xs text-primary font-medium font-domine">
-                    Read more →
-                  </span>
-                </div>
-                <div className="border border-border rounded-lg p-6">
-                  <h4 className="font-heading font-semibold mb-3">
-                    The Future of Frontend Development
-                  </h4>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    Exploring emerging trends and technologies in frontend
-                    development and user experience...
-                  </p>
-                  <span className="text-xs text-primary font-medium font-domine">
-                    Read more →
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Desktop TOC - only visible on desktop */}
