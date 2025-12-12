@@ -28,6 +28,7 @@ export type Subscribe = {
     title?: string;
     text?: string;
     form?: SubscribeForm;
+    rssLink?: string;
 };
 
 export type SiteConfig = {

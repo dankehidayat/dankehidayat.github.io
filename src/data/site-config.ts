@@ -6,11 +6,12 @@ const siteConfig: SiteConfig = {
     website: 'https://example.com',
     avatar: {
         src: avatar,
-        alt: 'Ethan Donovan'
+        alt: 'Danke Hidayat'
     },
-    title: 'Dante',
-    subtitle: 'Minimal Astro.js theme',
-    description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
+    title: 'Danke Hidayat',
+    subtitle: 'Junior Software Developer & IoT Engineer',
+    description:
+        'Junior software developer at PT. Labdha Teknika Nusantara specializing in embedded electronics, IoT integration, web development with SvelteKit, and Android apps with Flutter.',
     image: {
         src: '/dante-preview.jpg',
         alt: 'Dante - Astro.js and Tailwind CSS theme'
@@ -23,6 +24,10 @@ const siteConfig: SiteConfig = {
         {
             text: 'Projects',
             href: '/projects'
+        },
+        {
+            text: 'Experience',
+            href: '/experience'
         },
         {
             text: 'Blog',
@@ -41,36 +46,28 @@ const siteConfig: SiteConfig = {
         {
             text: 'Contact',
             href: '/contact'
-        },
-        {
-            text: 'Terms',
-            href: '/terms'
-        },
-        {
-            text: 'Download theme',
-            href: 'https://github.com/JustGoodUI/dante-astro-theme'
         }
     ],
     socialLinks: [
         {
-            text: 'Dribbble',
-            href: 'https://dribbble.com/'
+            text: 'Github',
+            href: 'https://github.com/dankehidayat'
         },
         {
-            text: 'Instagram',
-            href: 'https://instagram.com/'
+            text: 'Bluesky',
+            href: 'https://bsky.app/profile/dankehidayat.my.id'
         },
         {
-            text: 'X/Twitter',
-            href: 'https://twitter.com/'
+            text: 'RSS',
+            href: '/rss.xml'
         }
     ],
     hero: {
-        title: 'Hi There & Welcome to My Corner of the Web!',
-        text: "I'm **Ethan Donovan**, a web developer at Amazing Studio, dedicated to the realms of collaboration and artificial intelligence.\nMy approach involves embracing intuition, conducting just enough research, and leveraging aesthetics as a catalyst for exceptional products.\nI have a profound appreciation for top-notch software, visual design, and the principles of product-led growth.\n\nFeel free to explore some of my coding endeavors on [GitHub](https://github.com/JustGoodUI/dante-astro-theme) or follow me on [Twitter/X](https://twitter.com/justgoodui).",
+        title: 'Building Connected Systems & Elegant Interfaces',
+        text: "I'm **Danke Hidayat**, a junior software developer at [PT. Labdha Teknika Nusantara](https://www.linkedin.com/company/labdha), focused on bridging hardware and software to build real-world solutions.\n\nI design and ship connected systems that combine embedded electronics, resilient firmware, and clear user interfaces — from low‑power sensor integrations and LoRaWAN deployments to mobile apps and web dashboards. I also prototype UI/UX in Figma and develop cross‑platform apps with Flutter (for example, *trenvm*), and help deliver client demos such as the ITB PRISM financial stress‑testing prototype.\n\nI specialize in **embedded electronics**, **IoT integration**, **web development with SvelteKit**, and **Android apps with Flutter**. I prioritize pragmatic solutions: robust edge software, efficient data pipelines, and approachable UX that helps people act on data.\n\nWhen I'm not prototyping hardware or coding UIs, I enjoy measuring system performance, iterating on designs, and mentoring teammates.\n\nExplore my work on [GitHub](https://github.com/dankehidayat) or connect with me on [Bluesky](https://bsky.app/profile/dankehidayat.my.id).",
         image: {
             src: hero,
-            alt: 'A person sitting at a desk in front of a computer'
+            alt: 'Danke Hidayat working on embedded systems and software development'
         },
         actions: [
             {
@@ -81,11 +78,9 @@ const siteConfig: SiteConfig = {
     },
     subscribe: {
         enabled: true,
-        title: 'Subscribe to Dante Newsletter',
-        text: 'One update per week. All the latest posts directly in your inbox.',
-        form: {
-            action: '#'
-        }
+        title: 'Subscribe to My Blog',
+        text: 'Get the latest posts delivered to your RSS reader.',
+        rssLink: 'https://dankehidayat.my.id/rss.xml'
     },
     postsPerPage: 8,
     projectsPerPage: 8
