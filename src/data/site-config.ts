@@ -63,7 +63,7 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        title: 'Building Connected Systems & Elegant Interfaces',
+        title: 'Hi there, and welcome to my corner of the web!',
         text: "I'm **Danke Hidayat**, a junior software developer at [PT. Labdha Teknika Nusantara](https://www.linkedin.com/company/labdha), focused on bridging hardware and software to build real-world solutions.\n\nI design and ship connected systems that combine embedded electronics, resilient firmware, and clear user interfaces — from low‑power sensor integrations and LoRaWAN deployments to mobile apps and web dashboards. I also prototype UI/UX in Figma and develop cross‑platform apps with Flutter (for example, *trenvm*), and help deliver client demos such as the ITB PRISM financial stress‑testing prototype.\n\nI specialize in **embedded electronics**, **IoT integration**, **web development with SvelteKit**, and **Android apps with Flutter**. I prioritize pragmatic solutions: robust edge software, efficient data pipelines, and approachable UX that helps people act on data.\n\nWhen I'm not prototyping hardware or coding UIs, I enjoy measuring system performance, iterating on designs, and mentoring teammates.\n\nExplore my work on [GitHub](https://github.com/dankehidayat) or connect with me on [Bluesky](https://bsky.app/profile/dankehidayat.my.id).",
         image: {
             src: hero,

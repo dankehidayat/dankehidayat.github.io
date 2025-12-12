@@ -8,11 +8,11 @@ tags:
   - Technology
 seo:
   image:
-    src: '../../assets/images/post-1.webp'
+    src: '../../assets/images/blog/skinner-box/thumbnail.webp'
     alt: Baby inside skinner box
 ---
 
-![Baby inside skinner box](../../assets/images/post-1.webp)
+![Baby inside skinner box](../../assets/images/blog/skinner-box/thumbnail.webp)
 
 An American psychologist named B. F. Skinner (1904–1990) became widely known for the _Skinner Box_, a device used in animal behavior experiments. In his research, he placed rats inside a box equipped with lights, levers, and other mechanisms. He programmed the box so that when a rat stood on a lever or pressed it at a certain moment, it might receive a reward, such as a food pellet, or a mild electric shock. Although the experiments involved animals, the ideas behind them were aimed at understanding human behavior.
 
