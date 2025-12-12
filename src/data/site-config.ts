@@ -1,9 +1,9 @@
-import avatar from '../assets/images/avatar.jpg';
+import avatar from '../assets/images/avatar.jpeg';
 import hero from '../assets/images/hero.jpg';
 import type { SiteConfig } from '../types';
 
 const siteConfig: SiteConfig = {
-    website: 'https://example.com',
+    website: 'https://dankehidayat.my.id',
     avatar: {
         src: avatar,
         alt: 'Danke Hidayat'
@@ -13,7 +13,7 @@ const siteConfig: SiteConfig = {
     description:
         'Junior software developer at PT. Labdha Teknika Nusantara specializing in embedded electronics, IoT integration, web development with SvelteKit, and Android apps with Flutter.',
     image: {
-        src: '/dante-preview.jpg',
+        src: '/avatar.jpeg',
         alt: 'Dante - Astro.js and Tailwind CSS theme'
     },
     headerNavLinks: [

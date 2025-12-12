@@ -3,13 +3,7 @@ title: 'HydroleVI (Water Levelling Monitoring Control System)'
 description: Water level monitoring and control system with multi-tier alerts for community safety.
 publishDate: 'Aug 01 2023'
 isFeatured: true
-seo:
-  image:
-    src: '../../assets/images/project-3.jpg'
-    alt: HydroleVI preview
 ---
-
-![Project preview](../../assets/images/project-3.jpg)
 
 Engineered a water level monitoring and control system with multi-tier alert mechanisms (Safe, Warning, and Dangerous levels) designed to protect communities from flooding. When water reaches dangerous levels, the system automatically triggers a local siren to alert nearby residents while simultaneously logging real-time status updates. The system supports both online monitoring via the Blynk mobile app and offline operation through embedded logic, ensuring reliability in all conditions.
 
