@@ -2,42 +2,60 @@
 title: About
 seo:
   title: About Me
-  description: Learn more about the person behind the website and embark on a journey of inspiration and shared experiences.
+  description: Passionate Computer Engineer and IoT Developer crafting smart embedded systems and network solutions. Open-source enthusiast and problem-solver.
   image:
     src: '../../assets/images/about.jpg'
-    alt: A person sitting at a desk in front of a computer
+    alt: Danke Hidayat - Computer Engineer and IoT Developer
 ---
 
-![Alt text for image](../../assets/images/about.jpg)
+![Danke Hidayat - Computer Engineer](../../assets/images/hero.jpeg)
 
-**Note!:** This about page is entirely fictional and created for the purpose of showcasing [Dante Astro.js theme functionality](https://justgoodui.com/astro-themes/dante/).
+## Danke Hidayat – Computer Engineer and IoT Developer
 
-## Ethan Donovan - Web Developer based in Estonia
+Hi, I’m Danke Hidayat. I’m a Computer Engineering student at IPB University, based in Depok, Indonesia. I spend most of my time working with IoT systems, embedded programming, and network infrastructure. I enjoy building things that connect, measure, respond, and make life a little easier.
 
-**Greetings!** I'm Ethan Donovan, a passionate web developer residing in the picturesque landscapes of [Estonia](https://en.wikipedia.org/wiki/Estonia). With a keen eye for design and a love for crafting seamless digital experiences, I bring a unique blend of creativity and technical expertise to the world of web development.
+> *Even if I have to fight you, I won’t stop moving forward.*  
+> — Maya Tendō (Revue Starlight)
 
-## Skills and Expertise
+## What I Work On
 
-I specialize in front-end and back-end development, utilizing the latest technologies to build responsive and user-friendly websites. My proficiency includes **HTML**, **CSS**, **JavaScript**, and frameworks such as **Astro.js** for dynamic and interactive user interfaces. On the server side, I'm well-versed in Node.js and have experience with database management systems like MongoDB.
+I like working at the point where hardware and software meet. Here’s what I focus on:
 
-## Innovation and Problem-Solving
+* **IoT and Embedded Systems:** Smart devices, sensors, microcontrollers, and real-time data work (ESP32, Arduino, Raspberry Pi).
+* **Networking and Security:** CCNA and CCNP certified with experience in network setup, security basics, and IT infrastructure.
+* **Full-Stack Development:** Web apps with Laravel, plus front-end work using HTML, CSS, JavaScript, and React.
+* **Data and Cloud Tools:** Data processing with Google Sheets and cloud-based database setups.
+* **Electronics Design:** Schematics, PCB layouts (Proteus & Fritzing), and hardware assembly for custom projects.
 
-I thrive on solving complex problems and transforming ideas into functional, elegant websites. Whether it's optimizing performance, implementing new features, or troubleshooting issues, I approach each challenge with enthusiasm and a commitment to delivering high-quality solutions.
+## Where I’ve Been
 
-## Global Perspective, Local Impact
+My work experience mixes hands-on engineering with analysis and testing:
 
-Living in Estonia has not only influenced my appreciation for nature and culture but has also shaped my approach to web development. I understand the importance of creating digital solutions that resonate with local audiences while maintaining a global perspective.
+* **Data Analyst and Software Tester** at PT. Global Kreatif Inovasi. I focused on data accuracy, app testing, and checking UI and UX details.
+* **Assistant IT Officer** at Wyndham Hotel, handling infrastructure, security updates, RFID systems, and on-site support.
+* **IoT Project Lead** for systems like an energy monitoring tool using **Mamdani Fuzzy Logic** and an automatic trash-sorting bin. Both combined hardware, software, and cloud dashboards (Blynk).
 
-## Continuous Learning
+## Academic Work
 
-The dynamic nature of the tech industry inspires me to stay up-to-date with the latest trends and advancements. I'm always eager to expand my skill set and embrace emerging technologies that enhance the functionality and aesthetics of the websites I create.
+At IPB University (current GPA: 3.57), I’ve taken part in several research and development projects, such as:
 
-## Collaboration and Communication
+* Using fuzzy logic for real-time energy tracking and cost estimates.
+* Designing web and mobile apps with the UCD method.
+* Co-authoring papers on inventory systems, livestock tools, and environmental monitoring sites.
 
-I believe in the power of collaboration and effective communication. Whether working with clients, designers, or fellow developers, I value clear communication to ensure the success of every project.
+## How I Think
 
-## Get in Touch
+I’m a bit of a geek for tools like Vim, Linux, and anything open source. I enjoy tuning my setup until it fits how I work. My general approach looks like this:
 
-Are you looking to elevate your online presence or bring your digital ideas to life? I'd love to hear from you! Feel free to reach out for collaboration, consultation, or just a friendly chat about all things web development.
+* **Solve the real problem.**
+* **Keep learning.**
+* **Pay attention to the details.**
+* **Work well with others**, whether that’s designers, developers, or clients.
 
-_Let's build something amazing together!_
+## Outside of Tech
+
+I’m learning Japanese, active in robotics groups, and work through online certifications like those from FreeCodeCamp. I also earned a **TOEIC score of 755**, which helps me collaborate comfortably in English.
+
+## Let’s Connect
+
+I’m always open to projects and conversations around IoT, embedded systems, or connected devices. If you want to build something or just talk ideas, feel free to reach out.
