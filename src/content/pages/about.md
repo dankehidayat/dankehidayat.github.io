@@ -4,58 +4,68 @@ seo:
   title: About Me
   description: Passionate Computer Engineer and IoT Developer crafting smart embedded systems and network solutions. Open-source enthusiast and problem-solver.
   image:
-    src: '../../assets/images/about.jpg'
+    src: '../../assets/images/hero.jpeg'
     alt: Danke Hidayat - Computer Engineer and IoT Developer
 ---
 
 ![Danke Hidayat - Computer Engineer](../../assets/images/hero.jpeg)
 
-## Danke Hidayat – Computer Engineer and IoT Developer
+## About me
 
-Hi, I’m Danke Hidayat. I’m a Computer Engineering student at IPB University, based in Depok, Indonesia. I spend most of my time working with IoT systems, embedded programming, and network infrastructure. I enjoy building things that connect, measure, respond, and make life a little easier.
+I'm Danke Hidayat, a Computer Engineering student at IPB University in Depok, Indonesia. I've always been drawn to how things work—especially how hardware and software come together to create systems that actually help people. Whether it's a sensor network that saves energy or a smarter way to sort waste, I enjoy solving problems that have real impact.
 
-> *Even if I have to fight you, I won’t stop moving forward.*  
-> — Maya Tendō (Revue Starlight)
+That quote from Maya Tendō—"Even if I have to fight you, I won't stop moving forward"—resonates with how I approach engineering challenges. Some problems are stubborn, but I believe persistence and good thinking usually find a way through.
 
-## What I Work On
+## What I do
 
-I like working at the point where hardware and software meet. Here’s what I focus on:
+My work sits right at the intersection of hardware and software:
 
-* **IoT and Embedded Systems:** Smart devices, sensors, microcontrollers, and real-time data work (ESP32, Arduino, Raspberry Pi).
-* **Networking and Security:** CCNA and CCNP certified with experience in network setup, security basics, and IT infrastructure.
-* **Full-Stack Development:** Web apps with Laravel, plus front-end work using HTML, CSS, JavaScript, and React.
-* **Data and Cloud Tools:** Data processing with Google Sheets and cloud-based database setups.
-* **Electronics Design:** Schematics, PCB layouts (Proteus & Fritzing), and hardware assembly for custom projects.
+- **IoT and Embedded Systems** – Building with ESP32, Arduino, and similar platforms to create devices that sense, process, and communicate data.
+- **Networking and Security** – I'm CCNA/CCNP certified and enjoy designing networks that are both reliable and secure.
+- **Full-Stack Development** – Creating complete applications, from Laravel backends to responsive frontends.
+- **Data and Cloud** – Working with sensor data flows, cloud databases, and visualization dashboards.
+- **Electronics Design** – Designing circuits and PCBs, turning ideas into physical prototypes.
 
-## Where I’ve Been
+## Work experience
 
-My work experience mixes hands-on engineering with analysis and testing:
+My professional background has given me a mix of technical and analytical perspectives:
 
-* **Data Analyst and Software Tester** at PT. Global Kreatif Inovasi. I focused on data accuracy, app testing, and checking UI and UX details.
-* **Assistant IT Officer** at Wyndham Hotel, handling infrastructure, security updates, RFID systems, and on-site support.
-* **IoT Project Lead** for systems like an energy monitoring tool using **Mamdani Fuzzy Logic** and an automatic trash-sorting bin. Both combined hardware, software, and cloud dashboards (Blynk).
+- **Data Analyst and Software Tester** at PT. Global Kreatif Inovasi – Here I learned how important clean data and thoughtful user experience really are. Testing applications taught me to see software from the user's perspective.
+- **Assistant IT Officer** at Wyndham Hotel – This was my introduction to maintaining critical systems under real-world pressure. Everything from network troubleshooting to configuring POS systems.
+- **IoT projects** – Leading the development of an energy monitoring system using fuzzy logic and building an automated trash sorting bin have been particularly rewarding. Both required thinking about hardware constraints, user needs, and practical deployment.
 
-## Academic Work
+## Academic work
 
-At IPB University (current GPA: 3.57), I’ve taken part in several research and development projects, such as:
+At IPB University (current GPA: 3.57/4.00), I've been involved in several research projects that bridge theory and practice:
 
-* Using fuzzy logic for real-time energy tracking and cost estimates.
-* Designing web and mobile apps with the UCD method.
-* Co-authoring papers on inventory systems, livestock tools, and environmental monitoring sites.
+- Applying fuzzy logic to energy monitoring and cost prediction
+- Co-authoring papers on inventory systems, livestock platforms, and environmental monitoring
+- Using User-Centered Design methods to build more intuitive applications
+- Serving as course coordinator, which helped me learn how to explain technical concepts clearly
 
-## How I Think
+## How I work
 
-I’m a bit of a geek for tools like Vim, Linux, and anything open source. I enjoy tuning my setup until it fits how I work. My general approach looks like this:
+I've found that successful engineering projects usually share a few common approaches:
 
-* **Solve the real problem.**
-* **Keep learning.**
-* **Pay attention to the details.**
-* **Work well with others**, whether that’s designers, developers, or clients.
+- **Start with the problem** – Understanding what needs solving before jumping to solutions
+- **Pay attention to details** – Small calibration adjustments or code optimizations often make big differences
+- **Keep learning** – Technology changes fast, and staying curious is essential
+- **Work well with others** – Some of my best results have come from collaborating with designers, other engineers, and end-users
 
-## Outside of Tech
+## Other interests
 
-I’m learning Japanese, active in robotics groups, and work through online certifications like those from FreeCodeCamp. I also earned a **TOEIC score of 755**, which helps me collaborate comfortably in English.
+When I'm not working on technical projects, I might be:
 
-## Let’s Connect
+- Learning Japanese (both language and cultural context)
+- Participating in robotics clubs and hardware workshops
+- Writing about technical topics on my blog
+- Working through online certifications to expand my skills
+- Communicating in English (TOEIC: 755) with international colleagues
 
-I’m always open to projects and conversations around IoT, embedded systems, or connected devices. If you want to build something or just talk ideas, feel free to reach out.
+## Getting in touch
+
+I'm currently looking for opportunities in IoT development, embedded systems, and connected device projects. If you're working on something interesting in these areas, I'd be happy to hear about it.
+
+You can download my full resume [here](/Resume_Danke_Hidayat.pdf) for more details about my background and projects.
+
+Feel free to reach out through any of the links above—I'm always open to talking about technology, potential collaborations, or interesting problems worth solving.

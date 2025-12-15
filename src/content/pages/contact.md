@@ -1,25 +1,28 @@
 ---
-title: Get in touch
+title: Contact
 seo:
   title: Contact
   description: Get in touch through email or social media! Let me know how I can help.
 ---
 
-Thank you for reaching out! Whether you have a question, a suggestion, or just want to share your thoughts, I'm all ears. Feel free to get in touch through any of the methods below:
+Thanks for stopping by! If you'd like to discuss a project, ask a question, or just chat about technology, feel free to reach out. I'm always interested in connecting with people who share similar interests in IoT, embedded systems, or software development.
 
-## _Email_
+## Email
 
-Feel free to drop me an email at [contact@dankehidayat.my.id](mailto:contact@dankehidayat.my.id), and I'll do my best to respond as soon as possible.
+The easiest way to reach me is at [contact@dankehidayat.my.id](mailto:contact@dankehidayat.my.id). I usually respond within a day or two.
 
-## _Social Media_
+## Social media
 
-Connect with me on various platforms:
+You can also find me on these platforms:
 
 - [LinkedIn](https://www.linkedin.com/in/dankehidayat/)
 - [Bluesky](https://bsky.app/profile/dankehidayat.my.id)
 - [Instagram](https://instagram.com/dankehidayat)
 - [Last.fm](https://www.last.fm/user/nishi-miya)
 
-## _Blog_
+## Other links
 
-Check out my thoughts and projects on my [blog](https://dankehidayat.my.id/blog).
+- [My blog](https://dankehidayat.my.id/blog) – where I write about projects and technical topics
+- [My resume](/Resume_Danke_Hidayat.pdf) – if you'd like to see my background in more detail
+
+Looking forward to hearing from you!
