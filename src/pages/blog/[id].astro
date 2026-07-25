@@ -1,13 +1,14 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
-import PostPreview from '../../components/PostPreview.astro';
+import PostCard from '../../components/PostCard.astro';
 import Subscribe from '../../components/Subscribe.astro';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePath, useTranslations } from '../../i18n/utils';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 import { slugify } from '../../utils/common-utils';
-import siteConfig from '../../data/site-config';
 
 export async function getStaticPaths() {
     const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
@@ -22,82 +23,89 @@ export async function getStaticPaths() {
     }));
 }
 
-type Props = { post: CollectionEntry<'blog'>; prevPost: CollectionEntry<'blog'>; nextPost: CollectionEntry<'blog'> };
+type Props = {
+    post: CollectionEntry<'blog'>;
+    prevPost: CollectionEntry<'blog'> | null;
+    nextPost: CollectionEntry<'blog'> | null;
+};
 
-// Use siteConfig.website for the base URL
-const baseUrl = siteConfig.website || Astro.url.origin;
-const href = baseUrl + Astro.url.pathname;
 const { post, prevPost, nextPost } = Astro.props;
 const { title, publishDate, updatedDate, excerpt, tags = [], seo } = post.data;
 const { Content } = await render(post);
+const lang = 'en' as const;
+const t = useTranslations(lang);
+const baseUrl = siteConfig.website || Astro.url.origin;
+const href = baseUrl + Astro.url.pathname;
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" showHeader={false}>
-    <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>
-            <div class="mt-4 text-sm">
-                <FormattedDate date={publishDate} />
+<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" lang={lang}>
+    <article class="content-page reading-column">
+        <header class="page-header" data-reveal>
+            <div class="post-meta" style="margin-bottom:0.75rem">
+                <FormattedDate date={publishDate} lang={lang} />
                 {
                     updatedDate && (
-                        <>
-                            {' '}
-                            <span>
-                                (Updated on <FormattedDate date={updatedDate} />)
-                            </span>
-                        </>
+                        <span>
+                            · {t('blog.updated')} <FormattedDate date={updatedDate} lang={lang} />
+                        </span>
                     )
                 }
             </div>
+            <h1 class="display-lg" style="margin:0">{title}</h1>
+            {excerpt && <p class="page-lede" style="margin-top:0.85rem">{excerpt}</p>}
         </header>
-        <div class="prose sm:prose-lg max-w-none">
+        <div class="prose prose-lg prose-blog max-w-none" data-reveal>
             <Content />
         </div>
-        <div class="mt-8 flex flex-wrap items-center justify-between gap-6 text-sm sm:mt-12 sm:text-base">
+        <script>
+            import '../../scripts/code-blocks.ts';
+        </script>
+        <div class="post-footer" data-reveal>
             {
                 tags.length > 0 && (
-                    <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                    <div class="tag-row">
                         {tags.map((tag) => (
-                            <a class="text-main hover:underline" href={`/tags/${slugify(tag)}`}>
-                                #{tag}
-                            </a>
+                            <a href={localePath(lang, `/tags/${slugify(tag)}`)}>#{tag}</a>
                         ))}
                     </div>
                 )
             }
-            <Button class="copy-url-button" aria-label="Copy link" data-url={href} data-tooltip-default="Copy link" data-tooltip-success="Copied">Share</Button>
+            <Button class="copy-url-button" aria-label={t('blog.copyLink')} data-url={href} variant="secondary">
+                {t('blog.share')}
+            </Button>
         </div>
     </article>
+
     {
         (prevPost || nextPost) && (
-            <div class="my-16 sm:my-24">
-                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">Read Next</h2>
-                {nextPost && <PostPreview post={nextPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
-                {prevPost && <PostPreview post={prevPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
-            </div>
+            <section class="reading-column" style="margin:3rem auto">
+                <h2 class="display-md" style="margin-bottom:1rem" data-reveal>
+                    {t('blog.readNext')}
+                </h2>
+                <div class="writing-wall" data-reveal>
+                    {nextPost && <PostCard post={nextPost} lang={lang} />}
+                    {prevPost && <PostCard post={prevPost} lang={lang} />}
+                </div>
+            </section>
         )
     }
-    <Subscribe class="my-16 sm:my-24" />
+
+    <div class="reading-column">
+        <Subscribe lang={lang} class="my-10" />
+    </div>
 </BaseLayout>
 
 <script>
     document.addEventListener('astro:page-load', () => {
-        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement;
+        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement | null;
         copyUrlButton?.addEventListener('click', async () => {
-            await copyUrl(copyUrlButton);
-        });
-
-        async function copyUrl(button: HTMLButtonElement) {
-            let url = button.getAttribute('data-url') || '';
-            let label = button.innerText;
-
+            const url = copyUrlButton.getAttribute('data-url') || '';
+            const label = copyUrlButton.innerText;
             await navigator.clipboard.writeText(url);
-
-            button.innerText = 'Copied';
-
+            copyUrlButton.innerText = 'Copied';
             setTimeout(() => {
-                button.innerText = label;
+                copyUrlButton.innerText = label;
             }, 2500);
-        }
+        });
     });
 </script>

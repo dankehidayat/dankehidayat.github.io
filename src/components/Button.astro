@@ -1,23 +1,21 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type AnchorProps = HTMLAttributes<'a'> & { href: string; type?: never };
-type ButtonProps = HTMLAttributes<'button'> & { href?: never };
-
+type AnchorProps = HTMLAttributes<'a'> & { href: string; type?: never; variant?: 'primary' | 'secondary' | 'ghost' };
+type ButtonProps = HTMLAttributes<'button'> & { href?: never; variant?: 'primary' | 'secondary' | 'ghost' };
 type Props = ButtonProps | AnchorProps;
 
-const { href, class: className, ...rest } = Astro.props;
-const buttonClasses =
-    'inline-flex items-center justify-center px-6 py-2 font-serif leading-tight italic text-main bg-transparent border border-main rounded-full transition-colors hover:bg-muted';
+const { href, class: className, variant = 'secondary', ...rest } = Astro.props;
+const classes = ['btn', `btn-${variant}`, className].filter(Boolean).join(' ');
 ---
 
 {
     href ? (
-        <a href={href} class:list={[buttonClasses, className]} {...rest}>
+        <a href={href} class={classes} {...rest}>
             <slot />
         </a>
     ) : (
-        <button class:list={[buttonClasses, 'cursor-pointer', className]} {...rest}>
+        <button class:list={[classes, 'cursor-pointer']} {...rest}>
             <slot />
         </button>
     )

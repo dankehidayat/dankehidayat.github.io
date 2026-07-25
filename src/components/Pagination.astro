@@ -1,33 +1,48 @@
 ---
-import ArrowLeft from '../assets/icons/arrow-left.svg';
-import ArrowRight from '../assets/icons/arrow-right.svg';
-import IconButton from './IconButton.astro';
+import type { Page } from 'astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
 
-const { page, class: className } = Astro.props;
+type Props = { page: Page<unknown>; lang: Lang; class?: string };
+const { page, lang, class: className } = Astro.props;
+const t = useTranslations(lang);
 ---
 
-<nav aria-label="Pagination" class:list={['relative px-12 py-2 text-center', className]}>
-    {
-        page.url.prev && (
-            <IconButton
-                class="absolute top-1/2 left-0 -translate-y-1/2"
-                href={page.url.prev}
-                aria-label={`Go to page ${page.currentPage - 1} of ${page.lastPage}`}
-            >
-                <ArrowLeft class="h-5 w-5 fill-current" />
-            </IconButton>
-        )
+{
+    (page.url.prev || page.url.next) && (
+        <nav class:list={['pagination', className]} aria-label="Pagination">
+            {page.url.prev ? (
+                <a href={page.url.prev} class="btn btn-secondary">
+                    ← {t('pagination.prev')}
+                </a>
+            ) : (
+                <span />
+            )}
+            <span class="page-num">
+                {page.currentPage} / {page.lastPage}
+            </span>
+            {page.url.next ? (
+                <a href={page.url.next} class="btn btn-secondary">
+                    {t('pagination.next')} →
+                </a>
+            ) : (
+                <span />
+            )}
+        </nav>
+    )
+}
+
+<style is:global>
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
     }
-    <span class="text-sm" aria-current="page">Page {page.currentPage} of {page.lastPage}</span>
-    {
-        page.url.next && (
-            <IconButton
-                class="absolute top-1/2 right-0 -translate-y-1/2"
-                href={page.url.next}
-                aria-label={`Go to page ${page.currentPage + 1} of ${page.lastPage}`}
-            >
-                <ArrowRight class="h-5 w-5 fill-current" />
-            </IconButton>
-        )
+    .page-num {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--slate-muted);
+        font-variant-numeric: tabular-nums;
     }
-</nav>
+</style>

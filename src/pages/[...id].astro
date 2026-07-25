@@ -1,31 +1,94 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import { marked } from 'marked';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactPanel from '../components/ContactPanel.astro';
+import { aboutByLang } from '../data/about';
+import { useTranslations } from '../i18n/utils';
+import siteConfig from '../data/site-config';
 
 export async function getStaticPaths() {
     const pages = await getCollection('pages');
-    return pages.map((page) => {
-        return {
+    return pages
+        .filter((page) => page.id !== 'experience')
+        .map((page) => ({
             params: { id: page.id },
             props: { page }
-        };
-    });
+        }));
 }
 
 type Props = { page: CollectionEntry<'pages'> };
-
 const { page } = Astro.props;
 const { title, seo } = page.data;
-const { Content } = await render(page);
+const lang = 'en' as const;
+const t = useTranslations(lang);
+
+const titleMap: Record<string, string> = {
+    about: t('about.title'),
+    contact: t('contact.title')
+};
+const displayTitle = titleMap[page.id] ?? title;
+const isAbout = page.id === 'about';
+const isContact = page.id === 'contact';
+const avatar = siteConfig.avatar;
+const heroImg = siteConfig.image;
+
+const aboutHtml = isAbout ? await marked.parse(aboutByLang[lang]) : '';
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description} image={seo?.image} showHeader={false}>
-    <article class="mb-16 sm:mb-24">
-        <header class="mb-8">
-            <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>
-        </header>
-        <div class="prose sm:prose-lg max-w-none">
-            <Content />
-        </div>
-    </article>
+<BaseLayout title={seo?.title ?? displayTitle} description={seo?.description} image={seo?.image} lang={lang}>
+    {
+        isContact ? (
+            <div class="wide-page contact-page">
+                <header class="page-header contact-header" data-reveal>
+                    <p class="label-kicker">{displayTitle}</p>
+                    <h1 class="display-lg" style="margin:0.65rem 0 0">
+                        {displayTitle}
+                    </h1>
+                    <p class="page-lede">{t('contact.lede')}</p>
+                </header>
+                <ContactPanel lang={lang} />
+            </div>
+        ) : (
+            <article class="content-page reading-column">
+                <header class="page-header" data-reveal>
+                    <p class="label-kicker">{displayTitle}</p>
+                    <h1 class="display-lg" style="margin:0.65rem 0 0">
+                        {displayTitle}
+                    </h1>
+                    {isAbout && avatar?.src && typeof avatar.src !== 'string' && (
+                        <div class="about-avatar-row">
+                            <Image
+                                src={avatar.src}
+                                alt={avatar.alt || 'Danke Hidayat'}
+                                width={72}
+                                height={72}
+                                class="about-avatar"
+                                densities={[1, 2]}
+                            />
+                            <div>
+                                <strong>Danke Hidayat</strong>
+                                <span>{t('about.role')}</span>
+                            </div>
+                        </div>
+                    )}
+                </header>
+                {
+                    isAbout && heroImg?.src && typeof heroImg.src !== 'string' && (
+                        <div class="about-hero-img" data-reveal>
+                            <Image
+                                src={heroImg.src}
+                                alt={heroImg.alt || 'Danke Hidayat'}
+                                widths={[640, 800, 960]}
+                                sizes="(min-width: 720px) 42rem, 100vw"
+                                class="about-feature-photo"
+                            />
+                        </div>
+                    )
+                }
+                {isAbout && <div class="prose prose-lg max-w-none" data-reveal set:html={aboutHtml} />}
+            </article>
+        )
+    }
 </BaseLayout>

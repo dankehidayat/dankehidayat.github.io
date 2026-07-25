@@ -2,26 +2,33 @@
 import type { GetStaticPathsOptions, Page } from 'astro';
 import { type CollectionEntry, getCollection } from 'astro:content';
 import Pagination from '../../components/Pagination.astro';
-import PostPreview from '../../components/PostPreview.astro';
+import PostCard from '../../components/PostCard.astro';
 import Subscribe from '../../components/Subscribe.astro';
 import siteConfig from '../../data/site-config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { useTranslations } from '../../i18n/utils';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-    return paginate(posts, { pageSize: siteConfig.postsPerPage || 4 });
+    return paginate(posts, { pageSize: siteConfig.postsPerPage || 8 });
 }
 
 type Props = { page: Page<CollectionEntry<'blog'>> };
-
 const { page } = Astro.props;
-const blog = page.data;
+const lang = 'en' as const;
+const t = useTranslations(lang);
 ---
 
-<BaseLayout title="Blog" description="Embark on a journey of personal insights and experiences through my blog" showHeader={false}>
-    <h1 class="mb-12 font-serif text-2xl leading-tight italic sm:mb-16 sm:text-4xl">Blog Archive</h1>
-    {blog.map((post) => <PostPreview post={post} class="mb-10 sm:mb-12" />)}
-    <Pagination page={page} class="my-16 sm:my-24" />
-    <Subscribe class="my-16 sm:my-24" />
+<BaseLayout title={t('blog.title')} description={t('blog.lede')} lang={lang}>
+    <header class="page-header" data-reveal>
+        <p class="label-kicker">{t('blog.title')}</p>
+        <h1 class="display-lg" style="margin:0.65rem 0 0">{t('blog.title')}</h1>
+        <p class="page-lede">{t('blog.lede')}</p>
+    </header>
+    <div class="writing-wall" data-reveal>
+        {page.data.map((post) => <PostCard post={post} lang={lang} headingLevel="h2" />)}
+    </div>
+    <Pagination page={page} lang={lang} class="my-14 md:my-16" />
+    <Subscribe lang={lang} class="my-8" />
 </BaseLayout>

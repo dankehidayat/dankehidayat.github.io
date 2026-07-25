@@ -16,6 +16,7 @@ const seoSchema = (image: ImageFunction) =>
     });
 
 const blog = defineCollection({
+    // Prefer MDX; plain .md still works if you drop one in
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
     schema: ({ image }) =>
         z.object({
@@ -44,6 +45,7 @@ const projects = defineCollection({
         z.object({
             title: z.string(),
             description: z.string().optional(),
+            descriptionId: z.string().optional(),
             publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
             seo: seoSchema(image).optional()

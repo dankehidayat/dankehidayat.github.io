@@ -1,98 +1,34 @@
 ---
-import siteConfig from '../data/site-config';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
 
-type Props = { class?: string };
-
-const { class: className } = Astro.props;
-const subscribe = siteConfig.subscribe;
-if (!subscribe?.enabled) {
-    return;
-}
+type Props = { lang?: Lang };
+const lang = Astro.props.lang ?? 'en';
+const t = useTranslations(lang);
 ---
 
-<section class:list={['border-main flex flex-col items-center gap-2 border border-dashed px-8 py-12 text-center sm:px-12 sm:py-16', className]}>
-    {subscribe.title && <h2 class="w-full max-w-xl font-serif text-2xl leading-tight font-medium sm:text-4xl">{subscribe.title}</h2>}
-    {subscribe.text && <p class="w-full max-w-xl text-sm leading-normal">{subscribe.text}</p>}
-    <div class:list={['flex w-full max-w-xl flex-col items-center gap-3 sm:flex-row sm:justify-center', { 'mt-6': subscribe.title || subscribe.text }]}>
-        <button
-            id="rss-copy-btn"
-            class="text-main border-main hover:bg-main/10 cursor-pointer rounded border bg-transparent px-4 py-2 text-sm transition-all duration-200 hover:shadow-sm active:scale-95"
-            data-rss-link={subscribe.rssLink}
-            title="Click to copy RSS link"
-        >
-            <span id="btn-text">{subscribe.rssLink}</span>
-        </button>
-    </div>
-</section>
+<aside class="subscribe-band" data-reveal>
+    <p class="label-kicker">{t('subscribe.title')}</p>
+    <p class="subscribe-text">{t('subscribe.text')}</p>
+    <a class="btn btn-secondary" href="/rss.xml">{t('subscribe.cta')}</a>
+</aside>
 
-<style>
-    @keyframes slideOut {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
+<style is:global>
+    .subscribe-band {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+        margin-top: 2.5rem;
+        padding: 1.5rem 1.5rem;
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        border: 1px solid var(--line);
     }
-
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(8px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .slide-out {
-        animation: slideOut 0.3s ease-out forwards;
-    }
-
-    .slide-in {
-        animation: slideIn 0.3s ease-out forwards;
+    .subscribe-text {
+        margin: 0;
+        color: var(--ink-soft);
+        max-width: 30rem;
+        line-height: 1.55;
     }
 </style>
-
-<script>
-    const btn = document.getElementById('rss-copy-btn');
-    const btnText = document.getElementById('btn-text');
-    if (btn && btnText) {
-        btn.addEventListener('click', async () => {
-            const rssLink = btn.getAttribute('data-rss-link');
-            if (rssLink) {
-                try {
-                    await navigator.clipboard.writeText(rssLink);
-                    const originalText = btnText.textContent;
-
-                    // Animate text out
-                    btnText.classList.add('slide-out');
-
-                    setTimeout(() => {
-                        // Change text and animate in
-                        btnText.textContent = 'Copied!';
-                        btnText.classList.remove('slide-out');
-                        btnText.classList.add('slide-in', 'animate-pulse');
-                    }, 150);
-
-                    // Reset after delay
-                    setTimeout(() => {
-                        btnText.classList.add('slide-out');
-                        btnText.classList.remove('slide-in', 'animate-pulse');
-
-                        setTimeout(() => {
-                            btnText.textContent = originalText;
-                            btnText.classList.remove('slide-out');
-                            btnText.classList.add('slide-in');
-                        }, 150);
-                    }, 2000);
-                } catch (err) {
-                    console.error('Failed to copy:', err);
-                }
-            }
-        });
-    }
-</script>

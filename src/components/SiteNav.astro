@@ -1,0 +1,94 @@
+---
+import type { Lang } from '../i18n/ui';
+import { localePath, useTranslations } from '../i18n/utils';
+import LangSwitch from './LangSwitch.astro';
+
+type Props = { lang: Lang };
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const links = [
+    { key: 'nav.home' as const, href: localePath(lang, '/') },
+    { key: 'nav.projects' as const, href: localePath(lang, '/projects') },
+    { key: 'nav.experience' as const, href: localePath(lang, '/experience') },
+    { key: 'nav.blog' as const, href: localePath(lang, '/blog') },
+    { key: 'nav.about' as const, href: localePath(lang, '/about') }
+];
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-nav">
+    <div class="site-shell">
+        <div class="site-nav-inner">
+            <a href={localePath(lang, '/')} class="site-logo">Danke<span>.</span></a>
+
+            <nav class="site-links" aria-label="Primary">
+                {
+                    links.map((link) => {
+                        const active =
+                            link.href.replace(/\/$/, '') === pathname ||
+                            (link.href !== localePath(lang, '/') && pathname.startsWith(link.href.replace(/\/$/, '')));
+                        return (
+                            <a
+                                href={link.href}
+                                class:list={['site-link', active && 'is-active']}
+                                aria-current={active ? 'page' : undefined}
+                            >
+                                {t(link.key)}
+                            </a>
+                        );
+                    })
+                }
+            </nav>
+
+            <div class="site-nav-end">
+                <LangSwitch lang={lang} class="inline-flex" />
+                <a href={localePath(lang, '/contact')} class="btn btn-primary site-nav-cta">{t('hero.cta')}</a>
+                <button
+                    type="button"
+                    class="site-menu-btn"
+                    aria-label={t('nav.open')}
+                    aria-expanded="false"
+                    aria-controls="site-mobile"
+                >
+                    {t('nav.menu')}
+                </button>
+            </div>
+        </div>
+
+        <div id="site-mobile" class="site-mobile" hidden>
+            {
+                links.map((link) => (
+                    <a href={link.href} class="site-mobile-link">
+                        {t(link.key)}
+                    </a>
+                ))
+            }
+            <a href={localePath(lang, '/contact')} class="btn btn-primary" style="margin-top:0.5rem">
+                {t('hero.cta')}
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+    function bind() {
+        const btn = document.querySelector<HTMLButtonElement>('.site-menu-btn');
+        const menu = document.querySelector<HTMLElement>('#site-mobile');
+        if (!btn || !menu) return;
+        btn.onclick = () => {
+            const open = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+            menu.hidden = open;
+        };
+        menu.querySelectorAll('a').forEach((a) =>
+            a.addEventListener('click', () => {
+                menu.hidden = true;
+                btn.setAttribute('aria-expanded', 'false');
+            })
+        );
+    }
+    bind();
+    document.addEventListener('astro:page-load', bind);
+</script>

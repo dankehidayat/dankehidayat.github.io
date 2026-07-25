@@ -1,0 +1,94 @@
+---
+title: "Authoring notes: MDX, math, and code blocks"
+excerpt: "Quick reference for writing posts on this site with MDX, LaTeX math, and syntax-highlighted code."
+publishDate: "Jan 01 2099"
+isFeatured: false
+tags:
+  - Meta
+  - Writing
+---
+
+This file is a **template / cheat sheet**. Delete it or change the date before publishing for real.
+
+## Where posts live
+
+Create a file under `src/content/blog/`:
+
+```text
+src/content/blog/YYYY-MM-DD-my-slug.mdx
+```
+
+Frontmatter fields:
+
+```yaml
+---
+title: "Your title"
+excerpt: "One or two sentences for cards and SEO."
+publishDate: "Mar 20 2026"
+updatedDate: "Mar 21 2026"   # optional
+isFeatured: true             # optional, home "field notes"
+tags:
+  - IoT
+  - Notes
+---
+```
+
+Then write MDX body under the second `---`.
+
+## Math (LaTeX via KaTeX)
+
+Inline: $E = mc^2$ and $\alpha + \beta$.
+
+Display:
+
+$$
+\hat{y} = ax + b
+$$
+
+Aligned systems:
+
+$$
+\begin{aligned}
+MAE &= \frac{1}{n}\sum_{i=1}^{n}|e_i| \\
+R^2 &= 1 - \frac{SS_{res}}{SS_{tot}}
+\end{aligned}
+$$
+
+## Code blocks
+
+Fenced code gets Shiki highlighting (theme: night-owl), a language chip, and a copy button.
+
+```python
+def hello(name: str) -> str:
+    return f"hi, {name}"
+```
+
+Highlight a line with a Shiki notation comment (language-dependent):
+
+```ts
+const a = 1
+const b = 2 // [!code highlight]
+const c = a + b
+```
+
+Diff-style:
+
+```ts
+const before = 1 // [!code --]
+const after = 2 // [!code ++]
+```
+
+## MDX extras
+
+You can import Astro/React components later if you add islands. For most posts, Markdown-in-MDX is enough: images, links, lists, headings.
+
+```mdx
+![Alt text](../../assets/images/blog/your-image.png)
+```
+
+## Publish
+
+```bash
+pnpm dev    # preview
+pnpm build  # static site
+```

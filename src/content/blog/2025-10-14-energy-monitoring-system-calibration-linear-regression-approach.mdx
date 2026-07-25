@@ -2,6 +2,7 @@
 title: "Energy Monitoring System Calibration: Linear Regression Approach for Sensor Accuracy"
 excerpt: "A practical look at calibrating DHT11 sensors using linear regression to improve temperature and humidity accuracy for energy monitoring systems."
 publishDate: "Oct 14 2025"
+isFeatured: true
 tags:
   - IoT
   - Data Analysis
@@ -37,11 +38,28 @@ In total, I collected 19 sets of paired readings. Temperatures ranged from the m
 
 ## Using Linear Regression for Calibration
 
-Instead of using a complex model, I chose a simple linear regression approach. The goal was to find a line that corrected each DHT11 reading so it lined up with the reference values.
+Instead of a fancy model, I used ordinary linear regression. The idea is simple: map a raw DHT11 reading $x$ onto a calibrated value $\hat{y}$ that tracks the HTC-1.
 
-I built one regression model for temperature and another for humidity. Each model produced two numbers: a slope and an intercept. With those, I could turn a raw DHT11 value into a calibrated one.
+$$
+\hat{y} = ax + b
+$$
 
-The nice part about this approach is that it’s light enough to run on small embedded systems, but still accurate enough for real-world monitoring.
+Here $a$ is the slope and $b$ is the intercept, fit separately for temperature and humidity. After training I got roughly:
+
+$$
+\begin{aligned}
+\hat{T} &= 1.343\,T_{\text{raw}} - 7.689 \\
+\hat{H} &= 0.914\,H_{\text{raw}} + 5.127
+\end{aligned}
+$$
+
+Mean absolute error after calibration is just the average gap against the reference:
+
+$$
+\mathrm{MAE} = \frac{1}{n}\sum_{i=1}^{n}\left|\hat{y}_i - y_i\right|
+$$
+
+Light enough for embedded hardware, still useful outdoors in a real room.
 
 ## What the Calibration Achieved
 
@@ -63,7 +81,7 @@ Overall, temperature accuracy improved by nearly **80%** and humidity accuracy b
 
 Here’s a simplified version of the calibration class I used in Python:
 
-```python
+```python title="sensor_calibrator.py"
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
@@ -96,7 +114,7 @@ class SensorCalibrator:
             'r2': r2,
             'calibrated_readings': calibrated
         }
-````
+```
 
 A quick example:
 

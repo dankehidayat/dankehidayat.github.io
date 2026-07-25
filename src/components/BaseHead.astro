@@ -1,10 +1,13 @@
 ---
-import interWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import unboundedWoff2 from '@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url';
+import manropeWoff2 from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import { getImage } from 'astro:assets';
 import siteConfig from '../data/site-config';
 import type { ImageInput } from '../types';
+import type { Lang } from '../i18n/ui';
+import { locales } from '../i18n/utils';
 
+import 'katex/dist/katex.min.css';
 import '../styles/global.css';
 
 export type Props = {
@@ -12,18 +15,16 @@ export type Props = {
     description?: string;
     image?: ImageInput | undefined;
     pageType?: 'website' | 'article';
+    lang?: Lang;
 };
 
-const { description = '', pageType = 'website' } = Astro.props;
-const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' | ');
+const { description = '', pageType = 'website', lang = 'en' } = Astro.props;
+const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' · ');
 const image = Astro.props.image ?? siteConfig.image;
 let resolvedImage: { src: string; alt?: string } | undefined;
 if (image?.src) {
     if (typeof image.src === 'string') {
-        resolvedImage = {
-            src: new URL(image.src, Astro.site).toString(),
-            alt: image.alt
-        };
+        resolvedImage = { src: new URL(image.src, Astro.site).toString(), alt: image.alt };
     } else {
         const optimizedImage = await getImage({
             src: image.src as ImageMetadata,
@@ -40,52 +41,47 @@ if (image?.src) {
 }
 const canonicalURL = new URL(Astro.request.url, Astro.site);
 
-/**
- * Enforce some standard canonical URL formatting across the site.
- */
 function formatCanonicalURL(url: string | URL) {
     const path = url.toString();
     const hasQueryParams = path.includes('?');
-    // If there are query params, make sure the URL has no trailing slash
-    if (hasQueryParams) {
-        path.replace(/\/?$/, '');
-    }
-    // otherwise, canonical URL always has a trailing slash
     return path.replace(/\/?$/, hasQueryParams ? '' : '/');
 }
 ---
 
-<!-- High Priority Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>{title}</title>
 <meta name="generator" content={Astro.generator} />
 
-<!-- Fonts -->
-<link rel="preload" as="font" type="font/woff2" href={interWoff2} crossorigin="anonymous" />
-<link rel="preload" as="font" type="font/woff2" href={newsreaderWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={unboundedWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={manropeWoff2} crossorigin="anonymous" />
 
-<!-- Low Priority Global Metadata -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS" />
+<link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${siteConfig.title} RSS`} />
 
-<!-- Page Metadata -->
+{
+    locales.map((l) => (
+        <link rel="alternate" hreflang={l} href={new URL(l === 'en' ? '/' : `/${l}/`, Astro.site).toString()} />
+    ))
+}
+<link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).toString()} />
+
 <link rel="canonical" href={formatCanonicalURL(canonicalURL)} />
 <meta name="description" content={description} />
+<meta name="theme-color" content="#0c0e14" />
+<meta name="color-scheme" content="dark" />
 
-<!-- Open Graph / Facebook -->
 <meta property="og:type" content={pageType} />
 <meta property="og:url" content={formatCanonicalURL(canonicalURL)} />
 <meta property="og:title" content={title} />
+<meta property="og:locale" content={lang === 'id' ? 'id_ID' : 'en_US'} />
 {description && <meta property="og:description" content={description} />}
 {resolvedImage?.src && <meta property="og:image" content={resolvedImage.src} />}
 {resolvedImage?.alt && <meta property="og:image:alt" content={resolvedImage.alt} />}
 
-<!-- X/Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={formatCanonicalURL(canonicalURL)} />
 <meta name="twitter:title" content={title} />
 {description && <meta name="twitter:description" content={description} />}
 {resolvedImage?.src && <meta name="twitter:image" content={resolvedImage.src} />}
-{resolvedImage?.alt && <meta name="twitter:image:alt" content={resolvedImage.alt} />}

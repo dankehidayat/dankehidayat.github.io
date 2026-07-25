@@ -1,35 +1,49 @@
 ---
+/**
+ * THESIS: Night Signal — bold type as live telemetry; refuse square gallery cards and cream SaaS.
+ * OWN-WORLD: Deep lab field, mint signal, ember warmth, soft organic modules, Unbounded + Manrope.
+ * STORY: Feel Danke's personality, trust the shipped systems, start a conversation.
+ * FIRST VIEWPORT: Oversized name typeset + claim; soft blob portrait; primary CTA.
+ * FORM: Night Signal · grounded #5 live telemetry status wall × soft chromatophore modules · seed 5d8702a8.
+ */
 import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Nav from '../components/Nav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteNav from '../components/SiteNav.astro';
+import type { Lang } from '../i18n/ui';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
-export type Props = HeadProps & { showHeader?: boolean };
+export type Props = HeadProps & { lang?: Lang };
 
-const { showHeader = true, ...head } = Astro.props;
+const lang = Astro.props.lang ?? getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const { ...head } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="wrap-break-words antialiased">
+<html lang={lang} class="antialiased">
     <head>
-        <BaseHead {...head} />
-        <script>
-            if (localStorage.theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        </script>
+        <BaseHead {...head} lang={lang} />
         <ClientRouter />
-        <script is:inline src="/theme-toggle.js"></script>
     </head>
-    <body class="bg-main text-main">
-        <div class="flex min-h-screen flex-col px-4 md:px-8">
-            <Nav />
-            {showHeader && <Header />}
-            <main class="mx-auto w-full max-w-3xl grow">
+    <body class="min-h-dvh text-ink">
+        <!--
+          THESIS: Night Signal — bold typeset hero as live status, organic soft modules, not square gallery.
+          OWN-WORLD: Deep field #0c0e14, mint signal, ember accent, Unbounded display + Manrope UI, pill controls.
+          STORY: Meet Danke, scan real work, email him.
+          FIRST VIEWPORT: Split name stack + claim + soft portrait vessel + CTAs.
+          FORM: Night Signal · grounded #5 · seed 5d8702a8 · type-led hero.
+        -->
+        <a class="skip-link" href="#main">{t('theme.skip')}</a>
+        <div class="flex min-h-dvh flex-col">
+            <SiteNav lang={lang} />
+            <main id="main" class="site-shell grow pb-20 pt-8 md:pb-28 md:pt-12">
                 <slot />
             </main>
-            <Footer />
+            <SiteFooter lang={lang} />
         </div>
+        <script>
+            import '../scripts/motion.ts';
+        </script>
     </body>
 </html>

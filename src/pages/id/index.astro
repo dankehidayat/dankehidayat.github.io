@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Button from '../../components/Button.astro';
+import PostCard from '../../components/PostCard.astro';
+import StationCard from '../../components/StationCard.astro';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { localePath, useTranslations } from '../../i18n/utils';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+const lang = 'id' as const;
+const t = useTranslations(lang);
+
+const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+const featuredPosts = posts.filter(({ data }) => data.isFeatured).slice(0, 3);
+const showPosts = featuredPosts.length ? featuredPosts : posts.slice(0, 3);
+const projects = (await getCollection('projects')).sort(sortItemsByDateDesc).slice(0, 6);
+const heroImg = siteConfig.hero?.image ?? siteConfig.image;
+const avatar = siteConfig.avatar;
+---
+
+<BaseLayout description={t('meta.homeDescription')} lang={lang} image={siteConfig.image}>
+    <div data-home-snap>
+        <section class="hero-signal snap-section" data-hero data-snap-section>
+            <div class="hero-copy">
+                <h1 class="hero-name">
+                    <span class="line"><span>{t('hero.titleLine1')}</span></span>
+                    <span class="line accent"><span>{t('hero.titleLine2')}</span></span>
+                </h1>
+                <p class="hero-claim" data-hero-claim>{t('hero.claim')}</p>
+                <p class="hero-lede" data-hero-lede>{t('hero.lede')}</p>
+                <div class="hero-actions" data-hero-actions>
+                    <Button href={localePath(lang, '/contact')} variant="primary">{t('hero.cta')}</Button>
+                    <Button href={localePath(lang, '/projects')} variant="secondary">{t('hero.ctaSecondary')}</Button>
+                    <Button href="/Resume_Danke_Hidayat.pdf" variant="ghost">{t('hero.ctaResume')}</Button>
+                </div>
+            </div>
+
+            <figure class="hero-figure" data-hero-figure>
+                <div class="hero-orb hero-orb-a" aria-hidden="true"></div>
+                <div class="hero-orb hero-orb-b" aria-hidden="true"></div>
+                <div class="hero-portrait-wrap">
+                    {
+                        heroImg?.src && typeof heroImg.src !== 'string' && (
+                            <Image
+                                src={heroImg.src}
+                                alt={heroImg.alt || 'Danke Hidayat'}
+                                widths={[360, 480, 640, 800]}
+                                sizes="(min-width: 960px) 380px, 85vw"
+                                class="hero-portrait"
+                                loading="eager"
+                                fetchpriority="high"
+                            />
+                        )
+                    }
+                </div>
+                <figcaption class="hero-caption">
+                    <strong>Danke Hidayat</strong>
+                    {t('hero.caption')}
+                </figcaption>
+            </figure>
+        </section>
+
+        <section class="section-block snap-section" data-snap-section>
+            <div class="section-head" data-reveal>
+                <div>
+                    <p class="label-kicker">{t('section.projects')}</p>
+                    <h2 class="display-md" style="margin:0.5rem 0 0">{t('section.projects')}</h2>
+                    <p class="section-hint">{t('section.projectsHint')}</p>
+                </div>
+                <Button href={localePath(lang, '/projects')} variant="ghost">{t('section.viewAll')} →</Button>
+            </div>
+            <div class="work-grid">
+                {projects.map((project, index) => <StationCard project={project} lang={lang} index={index} />)}
+            </div>
+        </section>
+
+        {
+            showPosts.length > 0 && (
+                <section class="section-block snap-section" data-snap-section>
+                    <div class="section-head" data-reveal>
+                        <div>
+                            <p class="label-kicker">{t('section.writing')}</p>
+                            <h2 class="display-md" style="margin:0.5rem 0 0">
+                                {t('section.writing')}
+                            </h2>
+                            <p class="section-hint">{t('section.writingHint')}</p>
+                        </div>
+                        <Button href={localePath(lang, '/blog')} variant="ghost">
+                            {t('section.viewAll')} →
+                        </Button>
+                    </div>
+                    <div class="writing-wall" data-reveal>
+                        {showPosts.map((post) => (
+                            <PostCard post={post} lang={lang} />
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+
+        {
+            avatar?.src && typeof avatar.src !== 'string' && (
+                <section class="closing-section snap-section" data-snap-section>
+                    <aside class="closing-band" data-reveal>
+                        <Image
+                            src={avatar.src}
+                            alt=""
+                            width={60}
+                            height={60}
+                            class="closing-avatar"
+                            densities={[1, 2]}
+                        />
+                        <div class="closing-copy">
+                            <p class="label-kicker">{t('section.now')}</p>
+                            <p class="closing-text">{t('section.nowText')}</p>
+                        </div>
+                    </aside>
+                </section>
+            )
+        }
+    </div>
+</BaseLayout>

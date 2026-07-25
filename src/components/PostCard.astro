@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Lang } from '../i18n/ui';
+import { localePath } from '../i18n/utils';
+import FormattedDate from './FormattedDate.astro';
+
+type Props = {
+    post: CollectionEntry<'blog'>;
+    lang: Lang;
+    class?: string;
+    headingLevel?: 'h2' | 'h3';
+};
+
+const { post, lang, class: className, headingLevel = 'h3' } = Astro.props;
+const Tag = headingLevel;
+const href = localePath(lang, `/blog/${post.id}`);
+---
+
+<article class:list={['post-row', className]}>
+    <a href={href} class="post-row-link">
+        <div class="post-row-meta">
+            <FormattedDate date={post.data.publishDate} lang={lang} />
+            {
+                post.data.tags?.slice(0, 2).map((tag) => (
+                    <span>#{tag}</span>
+                ))
+            }
+        </div>
+        <Tag class="post-row-title">{post.data.title}</Tag>
+        {post.data.excerpt && <p class="post-row-excerpt">{post.data.excerpt}</p>}
+    </a>
+</article>

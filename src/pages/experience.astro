@@ -1,0 +1,19 @@
+---
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useTranslations } from '../i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('experience.title')} description={t('experience.lede')} lang={lang}>
+    <div class="wide-page">
+        <header class="page-header" data-reveal>
+            <p class="label-kicker">{t('experience.title')}</p>
+            <h1 class="display-lg" style="margin:0.65rem 0 0">{t('experience.title')}</h1>
+            <p class="page-lede">{t('experience.lede')}</p>
+        </header>
+        <ExperienceTimeline lang={lang} />
+    </div>
+</BaseLayout>
