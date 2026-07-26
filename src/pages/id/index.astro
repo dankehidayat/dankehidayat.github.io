@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Button from '../../components/Button.astro';
+import CertPanel from '../../components/CertPanel.astro';
 import PostCard from '../../components/PostCard.astro';
 import StationCard from '../../components/StationCard.astro';
 import siteConfig from '../../data/site-config';
@@ -74,6 +75,17 @@ const avatar = siteConfig.avatar;
             <div class="work-grid">
                 {projects.map((project, index) => <StationCard project={project} lang={lang} index={index} />)}
             </div>
+        </section>
+
+        <section class="section-block snap-section" data-snap-section>
+            <div class="section-head" data-reveal>
+                <div>
+                    <p class="label-kicker">{t('section.certs')}</p>
+                    <h2 class="display-md" style="margin:0.5rem 0 0">{t('section.certs')}</h2>
+                    <p class="section-hint">{t('section.certsHint')}</p>
+                </div>
+            </div>
+            <CertPanel lang={lang} />
         </section>
 
         {

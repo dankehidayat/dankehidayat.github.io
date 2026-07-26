@@ -37,6 +37,13 @@ export const ui = {
         'section.now': 'Right now',
         'section.nowText':
             'Shipping connected systems at Labdha. Reading yuri, writing fanfic and novels when I can. Also deep into Revue Starlight, BanG Dream (Ave Mujica, MyGO, Mugendai Mewtype), Path to Nowhere, Cities: Skylines, and Insurgency.',
+        'section.certs': 'Credentials',
+        'section.certsHint':
+            'Coursera, IBM, EDUCBA, and Cisco Networking Academy. Click through when there is a public badge.',
+        'certs.signal': 'Cred',
+        'certs.id': 'ID',
+        'certs.verify': 'Verify',
+        'certs.noLink': 'No public link yet',
         'projects.title': 'Work',
         'projects.lede': 'IoT and monitoring projects I actually put in the wild. Not mockups.',
         'blog.title': 'Notes',
@@ -112,6 +119,13 @@ export const ui = {
         'section.now': 'Sekarang',
         'section.nowText':
             'Membangun sistem terhubung di Labdha. Baca yuri, nulis fanfic dan novel kalau sempat. Juga kecanduan Revue Starlight, BanG Dream (Ave Mujica, MyGO, Mugendai Mewtype), Path to Nowhere, Cities: Skylines, dan Insurgency.',
+        'section.certs': 'Kredensial',
+        'section.certsHint':
+            'Coursera, IBM, EDUCBA, dan Cisco Networking Academy. Klik kalau ada badge publik.',
+        'certs.signal': 'Kred',
+        'certs.id': 'ID',
+        'certs.verify': 'Verifikasi',
+        'certs.noLink': 'Belum ada tautan publik',
         'projects.title': 'Karya',
         'projects.lede': 'Proyek IoT dan monitoring yang benar-benar saya taruh di dunia. Bukan mockup.',
         'blog.title': 'Catatan',
