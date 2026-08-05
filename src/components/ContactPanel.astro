@@ -1,57 +1,56 @@
 ---
 import siteConfig from '../data/site-config';
-import type { Lang } from '../i18n/ui';
-import { useTranslations } from '../i18n/utils';
 import Button from './Button.astro';
-
-type Props = { lang: Lang };
-const { lang } = Astro.props;
-const t = useTranslations(lang);
+import Icon from './Icon.astro';
 
 const primaryEmail = 'contact@dankehidayat.my.id';
 const alternateEmail = 'dnk.hidayat@gmail.com';
 const resumeHref = '/Resume_Danke_Hidayat.pdf';
 
 const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('rss'));
+const iconFor = (href: string) =>
+    href.includes('github') ? 'github' : href.includes('linkedin') ? 'linkedin' : 'bluesky';
 ---
 
-<section class="contact-panel" aria-label={t('contact.title')}>
-    <div class="contact-primary" data-reveal>
-        <p class="label-kicker">{t('contact.channel')}</p>
-        <a class="contact-email" href={`mailto:${primaryEmail}`}>{primaryEmail}</a>
-        <p class="contact-hint">{t('contact.emailHint')}</p>
-        <div class="contact-actions">
-            <Button href={`mailto:${primaryEmail}`} variant="primary">{t('contact.write')}</Button>
-            <Button href={resumeHref} variant="secondary" download>{t('contact.resume')}</Button>
-        </div>
-        <p class="contact-alt">
-            <span class="contact-alt-label">{t('contact.altLabel')}</span>
-            <a href={`mailto:${alternateEmail}`}>{alternateEmail}</a>
-        </p>
-    </div>
+<section class="contact" id="contact" aria-label="Contact">
+    <div class="site-shell">
+        <div class="contact-inner">
+            <div class="contact-primary" data-reveal>
+                <header class="contact-head">
+                    <span class="section-tick" aria-hidden="true" />
+                    <h2 class="section-title">Contact</h2>
+                </header>
+                <a class="contact-email" href={`mailto:${primaryEmail}`}>{primaryEmail}</a>
+                <p class="contact-lede">
+                    Open to opportunities in software development, DevOps, and IoT. I usually reply within a few days.
+                </p>
+                <div class="contact-actions">
+                    <Button href={`mailto:${primaryEmail}`} variant="dark">Write me</Button>
+                    <Button href={resumeHref} variant="dark-ghost" download>Resume</Button>
+                </div>
+                <p class="contact-alt">
+                    Alternative address: <a href={`mailto:${alternateEmail}`}>{alternateEmail}</a>
+                </p>
+            </div>
 
-    <div class="contact-side" data-reveal>
-        <div class="contact-note">
-            <p class="label-kicker">{t('contact.noteLabel')}</p>
-            <p class="contact-note-body">{t('contact.note')}</p>
-        </div>
-
-        <div class="contact-elsewhere">
-            <p class="label-kicker">{t('contact.social')}</p>
-            <ul class="contact-social-list">
-                {
-                    socials.map((link) => (
-                        <li>
-                            <a href={link.href} target="_blank" rel="noopener noreferrer">
-                                <span class="contact-social-name">{link.text}</span>
-                                <span class="contact-social-arrow" aria-hidden="true">
-                                    →
-                                </span>
-                            </a>
-                        </li>
-                    ))
-                }
-            </ul>
+            <div class="contact-side" data-reveal>
+                <p class="contact-side-title">Elsewhere</p>
+                <ul class="contact-social-list">
+                    {
+                        socials.map((link) => (
+                            <li>
+                                <a href={link.href} target="_blank" rel="noopener noreferrer">
+                                    <span class="social-icon">
+                                        <Icon name={iconFor(link.href)} aria-hidden="true" />
+                                        {link.text}
+                                    </span>
+                                    <Icon name="arrow-right" class="social-arrow" aria-hidden="true" />
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
         </div>
     </div>
 </section>

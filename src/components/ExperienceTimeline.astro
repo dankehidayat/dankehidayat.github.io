@@ -1,51 +1,38 @@
 ---
-import {
-    additionalTimeline,
-    educationTimeline,
-    localizeItem,
-    workTimeline
-} from '../data/experience';
-import type { Lang } from '../i18n/ui';
-import { useTranslations } from '../i18n/utils';
-
-type Props = { lang: Lang };
-const { lang } = Astro.props;
-const t = useTranslations(lang);
-
-const sections = [
-    { title: t('experience.work'), items: workTimeline.map((i) => localizeItem(i, lang)) },
-    { title: t('experience.education'), items: educationTimeline.map((i) => localizeItem(i, lang)) },
-    { title: t('experience.additional'), items: additionalTimeline.map((i) => localizeItem(i, lang)) }
-] as const;
+import { workTimeline } from '../data/experience';
+import SectionHeading from './SectionHeading.astro';
 ---
 
-{
-    sections.map((section) => (
-        <section class="exp-section" data-reveal>
-            <h2 class="display-md exp-heading">{section.title}</h2>
-            <ol class="timeline">
-                {section.items.map((item) => (
-                    <li class="timeline-item">
-                        <span class="timeline-dot" aria-hidden="true" />
-                        <div class="timeline-meta">
-                            <div>{item.period}</div>
-                            <div class="timeline-loc">{item.location}</div>
-                        </div>
-                        <div class="timeline-card">
-                            <h3>{item.title}</h3>
-                            <p class="org">{item.org}</p>
-                            {item.summary && <p class="exp-summary">{item.summary}</p>}
-                            {item.points && item.points.length > 0 && (
-                                <ul>
-                                    {item.points.map((p) => (
-                                        <li set:html={p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    </li>
-                ))}
-            </ol>
-        </section>
-    ))
-}
+<SectionHeading
+    id="experience"
+    title="Work Experience"
+    intro="Where I've worked and what I own, most recent first."
+    variant="white"
+>
+    <ol class="exp-list">
+        {
+            workTimeline.map((item) => (
+                <li class="exp-row" data-row>
+                    <div class="exp-period">
+                        {item.period}
+                    </div>
+                    <div class="exp-main">
+                        <h3 class="exp-role">{item.title}</h3>
+                        <p class="exp-org">
+                            {item.org}
+                            <span class="exp-org-loc"> · {item.location}</span>
+                        </p>
+                        {item.summary && <p class="exp-summary">{item.summary}</p>}
+                        {item.points && item.points.length > 0 && (
+                            <ul class="exp-points">
+                                {item.points.map((point) => (
+                                    <li set:html={point.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </li>
+            ))
+        }
+    </ol>
+</SectionHeading>

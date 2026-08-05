@@ -1,72 +1,78 @@
 ---
-import type { Lang } from '../i18n/ui';
-import { localePath, useTranslations } from '../i18n/utils';
-import LangSwitch from './LangSwitch.astro';
-
-type Props = { lang: Lang };
-const { lang } = Astro.props;
-const t = useTranslations(lang);
+import Icon from './Icon.astro';
 
 const links = [
-    { key: 'nav.home' as const, href: localePath(lang, '/') },
-    { key: 'nav.projects' as const, href: localePath(lang, '/projects') },
-    { key: 'nav.experience' as const, href: localePath(lang, '/experience') },
-    { key: 'nav.blog' as const, href: localePath(lang, '/blog') },
-    { key: 'nav.about' as const, href: localePath(lang, '/about') }
+    { text: 'About', href: '#about' },
+    { text: 'Experience', href: '#experience' },
+    { text: 'Stack', href: '#stack' },
+    { text: 'Projects', href: '#projects' },
+    { text: 'Notes', href: '#blog' },
+    { text: 'Fun', href: '/fun' }
 ];
 
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = pathname === '/';
+// On any non-home route the section links must navigate home first,
+// otherwise clicking a nav link on a blog post only appends the hash
+// to the current post URL (e.g. /blog/slug/#experience).
+// Absolute routes (e.g. /fun) pass through unchanged.
+const anchor = (hash: string) => (!isHome && hash.startsWith('#')) ? `/${hash}` : hash;
+const activeId = isHome ? pathname.split('#')[0] : null;
 ---
 
 <header class="site-nav">
-    <div class="site-shell">
+    <div class="site-nav-pill">
         <div class="site-nav-inner">
-            <a href={localePath(lang, '/')} class="site-logo">Danke<span>.</span></a>
+            <a href="/" class="site-logo">
+                Danke Hidayat
+            </a>
 
             <nav class="site-links" aria-label="Primary">
                 {
-                    links.map((link) => {
-                        const active =
-                            link.href.replace(/\/$/, '') === pathname ||
-                            (link.href !== localePath(lang, '/') && pathname.startsWith(link.href.replace(/\/$/, '')));
-                        return (
-                            <a
-                                href={link.href}
-                                class:list={['site-link', active && 'is-active']}
-                                aria-current={active ? 'page' : undefined}
-                            >
-                                {t(link.key)}
-                            </a>
-                        );
-                    })
+                    links.map((link) => (
+                        <a
+                            href={anchor(link.href)}
+                            class:list={['site-link', isHome && activeId === link.href.slice(1) && 'is-active']}
+                        >
+                            {link.text}
+                        </a>
+                    ))
                 }
             </nav>
 
             <div class="site-nav-end">
-                <LangSwitch lang={lang} class="inline-flex" />
-                <a href={localePath(lang, '/contact')} class="btn btn-primary site-nav-cta">{t('hero.cta')}</a>
+                <a href={anchor('#contact')} class="btn btn-tangerine site-nav-cta">
+                    Contact
+                    <Icon name="arrow-right" aria-hidden="true" />
+                </a>
                 <button
                     type="button"
                     class="site-menu-btn"
-                    aria-label={t('nav.open')}
+                    aria-label="Open menu"
                     aria-expanded="false"
                     aria-controls="site-mobile"
                 >
-                    {t('nav.menu')}
+                    <span class="menu-bars" aria-hidden="true">
+                        <span class="menu-bar"></span>
+                        <span class="menu-bar"></span>
+                        <span class="menu-bar"></span>
+                    </span>
                 </button>
             </div>
         </div>
 
-        <div id="site-mobile" class="site-mobile" hidden>
+        <div id="site-mobile" class="site-mobile">
             {
                 links.map((link) => (
-                    <a href={link.href} class="site-mobile-link">
-                        {t(link.key)}
+                    <a href={anchor(link.href)} class="site-mobile-link">
+                        {link.text}
+                        <Icon name="arrow-right" />
                     </a>
                 ))
             }
-            <a href={localePath(lang, '/contact')} class="btn btn-primary" style="margin-top:0.5rem">
-                {t('hero.cta')}
+            <a href={anchor('#contact')} class="btn btn-tangerine">
+                Contact
+                <Icon name="arrow-right" aria-hidden="true" />
             </a>
         </div>
     </div>
@@ -77,17 +83,62 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
         const btn = document.querySelector<HTMLButtonElement>('.site-menu-btn');
         const menu = document.querySelector<HTMLElement>('#site-mobile');
         if (!btn || !menu) return;
-        btn.onclick = () => {
-            const open = btn.getAttribute('aria-expanded') === 'true';
-            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-            menu.hidden = open;
+
+        const setOpen = (open: boolean) => {
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+            menu.classList.toggle('is-open', open);
         };
-        menu.querySelectorAll('a').forEach((a) =>
-            a.addEventListener('click', () => {
-                menu.hidden = true;
-                btn.setAttribute('aria-expanded', 'false');
-            })
+
+        const close = () => setOpen(false);
+
+        btn.onclick = () => {
+            const open = btn.getAttribute('aria-expanded') !== 'true';
+            setOpen(open);
+            if (open) {
+                menu.querySelector<HTMLAnchorElement>('a')?.focus();
+            }
+        };
+
+        menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+                close();
+                btn.focus();
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (
+                menu.classList.contains('is-open') &&
+                !menu.contains(e.target as Node) &&
+                !btn.contains(e.target as Node)
+            ) {
+                close();
+            }
+        });
+
+        // Mark the nav link for the section currently in view (home page only).
+        const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.site-link'));
+        const sections = links
+            .map((link) => link.hash && document.getElementById(link.hash.slice(1)))
+            .filter((el): el is HTMLElement => Boolean(el));
+        if (!sections.length) return;
+
+        const setActive = (id: string | null) => {
+            links.forEach((link) => {
+                const isMatch = id !== null && link.hash === `#${id}`;
+                link.classList.toggle('is-active', isMatch);
+            });
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+                if (visible[0]) setActive(visible[0].target.id);
+            },
+            { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.25, 0.5, 1] }
         );
+        sections.forEach((s) => observer.observe(s));
     }
     bind();
     document.addEventListener('astro:page-load', bind);

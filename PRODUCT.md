@@ -8,9 +8,9 @@ web
 
 ## Users
 
-**Primary:** Hiring managers, recruiters, and technical collaborators evaluating Danke Hidayat for junior software, IoT, embedded, or full-stack work. They need a clear, trustworthy picture of skills, shipped projects, work history, and how to reach him—while also getting a sense of the person behind the resume.
+**Primary:** Hiring managers, recruiters, and technical collaborators evaluating Danke Hidayat for junior software, DevOps, IoT, embedded, or full-stack work. They need a clear, trustworthy picture of skills, shipped projects, work history, and how to reach him.
 
-**Secondary:** Readers who discover the blog (RSS, social, or via the portfolio). Writing supports credibility and personality; it is not the primary job of the site.
+**Secondary:** Readers who discover the blog (RSS, social, or via the portfolio). Writing supports credibility; personal-interest posts live on the blog, not in the professional bio.
 
 ## Product Purpose
 
@@ -18,92 +18,93 @@ Personal portfolio and professional presence for **Danke Hidayat** at [dankehida
 
 The site makes it possible to:
 
-- Present who Danke is, what he builds, and where he works
-- Show real project work (IoT, embedded, monitoring systems) and career history
-- Share technical and personal writing
+- Present who Danke is, what he builds, and where he works — on a single page, scannable in one pass
+- Show real project work (IoT, embedded, monitoring systems, DevOps) and career history
+- Share technical writing on the blog
 - Offer a low-friction path to contact (email, socials, resume PDF)
 
-**Success (next year):** both inbound opportunities from the right people *and* a living, credible technical presence—portfolio with personality first; writing second.
+**Success (next year):** both inbound opportunities from the right people *and* a living, credible technical presence — portfolio first; writing second.
 
 ## Positioning
 
-Junior software developer and IoT engineer who bridges **hardware and software into systems that work in the real world**—sensors, firmware, edge-to-cloud data, mobile/web interfaces—prioritizing stability, simplicity, and clarity over flash.
+Junior Software Developer & DevOps Engineer who bridges **hardware and software into systems that work in the real world** — sensors, firmware, edge-to-cloud data, containers and deployments — prioritizing stability, simplicity, and clarity over flash.
 
-Not a generic “full-stack portfolio”: the durable claim is hands-on connected-device and integration work (ESP32/Arduino, LoRaWAN, calibration/monitoring, Flutter/SvelteKit when the project needs an interface), grounded in Computer Engineering training and current employment at PT. Labdha Teknika Nusantara.
+Not a generic "full-stack portfolio": the durable claim is hands-on connected-device and integration work (ESP32/Arduino, calibration/monitoring, React/TypeScript dashboards, Docker/Ansible/Caddy), grounded in Computer Engineering training and current employment at PT. Labdha Teknika Nusantara.
 
 ## Operating Context
 
-- **Static personal site** built with Astro + Tailwind (Dante theme lineage), content collections for blog, projects, and static pages
-- **Routes visitors use:** Home (hero + featured work/writing), Projects, Experience, Blog (+ tags), About, Contact; RSS and sitemap
-- **Identity sources:** `src/data/site-config.ts`, Markdown in `src/content/`, resume at `public/Resume_Danke_Hidayat.pdf`
+- **Static personal site** built with Astro 5 + Tailwind 4, content collections for blog and projects
+- **Routes:** `/` (single-page: Hero, About, Experience, Projects, Notes, Certifications, Contact), `/blog`, `/blog/[slug]`, `/rss.xml`, sitemap, `/404`; old routes (`/projects`, `/experience`, `/about`, `/contact`, `/tags`, `/id/*`) redirect to their single-page anchors
+- **Language:** English only (Indonesian routes removed in the 2026 redesign)
+- **Theme:** light-only — no dark mode, no theme toggle
+- **Identity sources:** `src/data/site-config.ts`, `src/data/experience.ts`, `src/data/about.ts`, `src/data/certifications.ts`, `src/data/projects.ts`, `src/data/stats.ts`, `src/data/publications.ts`, Markdown in `src/content/`, resume at `public/Resume_Danke_Hidayat.pdf`
 - **Public URL:** https://dankehidayat.my.id
-- **Social / external:** GitHub, Bluesky, LinkedIn, Instagram, Last.fm, AniList (as linked in content)
-- **Authoring model:** Markdown/MDX content + site-config; dark/light theme; no app login or multi-user roles
+- **Social / external:** GitHub, Bluesky, LinkedIn, RSS (as linked on the site)
+- **Authoring model:** Markdown/MDX content + data files; no app login or multi-user roles
 
 ## Capabilities and Constraints
 
 **Capabilities (confirmed in the product today):**
 
-- Hero bio with primary CTA to Contact
-- Project portfolio (listing + detail), blog (listing, detail, tags, pagination), Experience, About, Contact
-- RSS feed; SEO (canonical, Open Graph, sitemap)
-- Theme toggle (light/dark)
-- Resume download (PDF)
-- Subscribe block points visitors to RSS (not a third-party email form as primary)
+- Single-page home: hero with arch portrait and two actions; About with stats bar; work experience timeline; tech stack ledger; six project cards; three latest craft posts; certifications list; contact panel with email, socials, and resume
+- Blog: index, post layout (680px reading column, KaTeX math, code blocks with copy buttons, prev/next navigation), RSS feed
+- SEO: canonical URLs, Open Graph, sitemap; light-only `theme-color` and `color-scheme`
+- Motion on the home page only: GSAP + ScrollTrigger entrance/reveals, Lenis smooth scroll, timeline rail draw; static under `prefers-reduced-motion`
 
 **Constraints:**
 
 - Single-author personal site; no product multi-tenancy or auth
 - Content and claims must stay factual; do not invent employers, metrics, clients, or testimonials
-- Theme origin is Just Good UI’s Dante (GPL-3.0); product identity is Danke’s, not the theme brand
-- Technical stack (Astro 5, Tailwind 4, content collections) is current implementation, not a product promise to visitors
+- Stats bar and Publications section are **evidence-gated**: values and entries render only when the owner supplies them from the CV (`src/data/stats.ts`, `src/data/publications.ts` — currently placeholders)
+- Theme origin is Just Good UI's Dante (GPL-3.0); product identity is Danke's, not the theme brand
 
 **Confirmed after redesign brief (2026-07):**
 
-- **i18n:** English (default, unprefixed) + Indonesian (`/id/…`). UI chrome and key marketing strings are bilingual; long-form blog/project bodies may remain English until translated.
-- **Atmosphere:** Night Signal (deep lab field); mint “online” signal + warm ember accent; soft organic modules — not square gallery cards.
-- **Motion:** GSAP + ScrollTrigger only (hero typeset, scroll reveals). **No** Lenis / third-party smooth scroll.
-- **Visual world (2026 redesign):** Night Signal — Unbounded display + Manrope UI, typeset-first hero, EN/ID + blog/RSS retained.
+- **Language:** English only; no i18n, no `/id/` routes
+- **Theme:** light-only; no dark mode, no theme toggle
+- **Visual world:** Warm Signal — warm paper `#FBF5EA`, leaf-green `#1E6B4A` / tangerine `#E05D1E` / saffron `#E5A81C` signal tricolor, Bricolage Grotesque display (no cursive), ledger rows and signal ticks, arch portrait, light-only
+- **Personality:** professional, measured tone on the main page; personal interests (yuri, BanG Dream!, Japanese) live in blog posts, not the bio
+- **Motion:** GSAP + ScrollTrigger + Lenis smooth scroll, home page only; blog pages static
 
 **Still open:**
 
-- Whether newsletter email capture should replace or complement RSS-only subscribe
-- Specific role/title targets beyond the stated junior software / IoT / embedded / connected-device focus
-- Full Indonesian translations of long-form markdown content
+- Owner-supplied publication entries and stats numbers (currently marked placeholders)
+- Deployment target is the owner's infrastructure call (repo ships the GitHub Pages workflow; static output deploys anywhere)
 
 ## Brand Commitments
 
 - **Name:** Danke Hidayat
-- **Role framing:** Junior Software Developer & IoT Engineer (site subtitle / positioning)
+- **Role framing:** Junior Software Developer & DevOps Engineer (site subtitle / positioning)
 - **Employer (current):** PT. Labdha Teknika Nusantara
 - **Domain / email:** dankehidayat.my.id · contact@dankehidayat.my.id
-- **Voice:** First-person, clear and technical without empty hype; comfortable mixing engineering depth with personal interests (manga/light novels especially yuri, BanG Dream! / The iDOLM@STER, Japanese language, music)
-- **Personality is part of the product:** portfolio leads, but personal interests and writing remain legitimate site content—not optional decoration to strip by default
+- **Voice:** First-person, clear, technical, measured; specifics over generalizations; no hype words ("passionate", "excited", "thrilled") in professional copy
+- **Personality lives on the blog:** personal-interest writing remains legitimate site content, but the home bio stays professional
 
 ## Evidence on Hand
 
-Real assets and content that future work must use or honestly omit—not fabricate:
+Real assets and content that future work must use or honestly omit — not fabricate:
 
 | Kind | Location / note |
 |------|-----------------|
-| Avatar & hero imagery | `src/assets/images/avatar.jpeg`, `hero.jpeg`, `about.jpg` |
+| Avatar & hero imagery | `src/assets/images/avatar.jpeg`, `hero.jpeg` |
 | Resume PDF | `public/Resume_Danke_Hidayat.pdf` |
-| Projects | Energy & Temperature Monitoring; HydroleVI Water Levelling Monitoring Control System; IoT-based Automatic Trash Bin Sorter (`src/content/projects/`) |
-| Blog posts | Six posts (society/tech opinion, performance, anime review, Japanese input guide, calibration/Colab) in `src/content/blog/` |
-| About / Experience / Contact | `src/content/pages/` |
+| Projects | selene, flowpoint-next, flora, eco-office, ecobin-sorter, hydrolevi (`src/content/projects/` + `src/data/projects.ts` for tech/links) |
+| Blog posts | Six posts (tech opinion, performance, anime review, Japanese input guide, calibration, Colab automation) in `src/content/blog/` |
+| Experience / education | `src/data/experience.ts` |
+| Certifications | Eleven credentials with verify links (`src/data/certifications.ts`) |
 | Site copy & nav | `src/data/site-config.ts` |
-| Social proof links | GitHub, Bluesky, LinkedIn, Instagram, AniList, Last.fm as published |
+| Social links | GitHub, Bluesky, LinkedIn, RSS as published |
 
-**Absences:** No third-party testimonials, case-study metrics from clients, press quotes, or paid product claims on hand. Do not invent them.
+**Absences:** No third-party testimonials, client case-study metrics, press quotes, or paid product claims on hand. No publications data or confirmed stat numbers yet — `src/data/stats.ts` and `src/data/publications.ts` hold marked placeholders until the owner supplies real values from the CV. Do not invent them.
 
 ## Product Principles
 
-1. **Portfolio with personality first** — Help evaluators decide quickly, without sanding off who Danke is.
+1. **Professional first, personality in the writing** — Help evaluators decide quickly on the single page; let personal interests live in blog posts.
 2. **Show real work, not claims** — Projects, experience, resume, and writing are the proof; unsubstantiated polish is not.
 3. **Clarity over spectacle** — Stability and simplicity in systems mirror how the site should communicate: scannable, honest, decision-friendly.
-4. **Writing is secondary, not discarded** — Blog and interests deepen trust and voice; they should not compete with or bury the professional job.
+4. **Measured voice** — Direct, first-person, technical; specifics over generalizations.
 5. **Preserve published truth** — Existing pages, projects, posts, and links stay in scope unless the owner deliberately changes them.
 
 ## Accessibility & Inclusion
 
-No product-specific legal standard was established beyond ordinary good practice for a public personal site (readable type, contrast, keyboard-usable controls, meaningful alt text for real photos). Prefer inclusive defaults when changing UI.
+Light-only, high-contrast warm palette (body text and muted text both exceed 4.5:1 on their surfaces; primary button text passes on its fill). Full keyboard focus treatment, visible focus rings, semantic landmarks, `prefers-reduced-motion` support, and meaningful alt text for real photos.

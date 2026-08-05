@@ -19,4 +19,5 @@ React, TypeScript, Fastify (Bun), PostgreSQL, TimescaleDB, Docker, Caddy.
 - Dual Mamdani fuzzy inference engines: 15-rule energy classification (Economical / Normal / Wasteful) and 14-rule ASHRAE 55 climate engine for thermal comfort.
 - ML-powered 24-hour forecasting with adaptive horizons (1h to 1y), Bland-Altman analysis, box plots, decision surfaces, and membership charts.
 - JWT authentication with role-based access (User / Admin), admin panel, and login history.
+- Native MQTT ingestion (EMQX broker) alongside WebSocket, so ESP32 nodes publish telemetry and receive OTA commands over MQTT.
 - Deployed with Docker and Caddy reverse proxy with automatic SSL; modular microservices direction including a standalone MQTT ingestor.

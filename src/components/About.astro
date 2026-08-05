@@ -1,0 +1,28 @@
+---
+import { marked } from 'marked';
+import { aboutMarkdown } from '../data/about';
+import { stats } from '../data/stats';
+import SectionHeading from './SectionHeading.astro';
+
+const aboutHtml = marked.parse(aboutMarkdown) as string;
+---
+
+<SectionHeading
+    id="about"
+    title="About"
+    intro="A short profile of what I do and where I work."
+>
+    <div class="about-grid">
+        <div class="about-body" data-reveal set:html={aboutHtml} />
+        <div class="stats-ledger" data-reveal>
+            {
+                stats.map((stat) => (
+                    <div class="stat">
+                        <span class="stat-value">{stat.value}</span>
+                        <span class="stat-label">{stat.label}</span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</SectionHeading>

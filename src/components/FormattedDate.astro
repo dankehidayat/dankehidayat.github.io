@@ -1,11 +1,11 @@
 ---
-type Props = { date: Date; lang?: string };
-const { date, lang = 'en' } = Astro.props;
+type Props = { date: Date };
+const { date } = Astro.props;
 ---
 
 <time datetime={date.toISOString()}>
     {
-        date.toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US', {
+        date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric'

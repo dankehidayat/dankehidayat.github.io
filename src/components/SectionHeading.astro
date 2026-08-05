@@ -1,0 +1,22 @@
+---
+type Props = {
+    title: string;
+    intro?: string;
+    id?: string;
+    variant?: 'white' | 'tint';
+};
+
+const { title, intro, id, variant } = Astro.props;
+const sectionClass = variant === 'white' ? 'section-white' : variant === 'tint' ? 'section-tint' : '';
+---
+
+<section class:list={['section', sectionClass]} id={id}>
+    <div class="site-shell">
+        <header class="section-head" data-head>
+            <span class="section-tick" aria-hidden="true" />
+            <h2 class="section-title">{title}</h2>
+            {intro && <p class="section-intro">{intro}</p>}
+        </header>
+        <slot />
+    </div>
+</section>

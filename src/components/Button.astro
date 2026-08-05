@@ -1,8 +1,9 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type AnchorProps = HTMLAttributes<'a'> & { href: string; type?: never; variant?: 'primary' | 'secondary' | 'ghost' };
-type ButtonProps = HTMLAttributes<'button'> & { href?: never; variant?: 'primary' | 'secondary' | 'ghost' };
+type Variant = 'primary' | 'secondary' | 'inverse' | 'inverse-ghost' | 'dark' | 'dark-ghost';
+type AnchorProps = HTMLAttributes<'a'> & { href: string; type?: never; variant?: Variant };
+type ButtonProps = HTMLAttributes<'button'> & { href?: never; variant?: Variant };
 type Props = ButtonProps | AnchorProps;
 
 const { href, class: className, variant = 'secondary', ...rest } = Astro.props;

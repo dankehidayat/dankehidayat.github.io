@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from './PostCard.astro';
+import SectionHeading from './SectionHeading.astro';
+import { sortItemsByDateDesc } from '../utils/data-utils';
+
+// Home preview shows only craft posts: engineering notes and guides.
+// Opinion pieces and the anime review stay on the blog index.
+const excludedSlugs = new Set([
+    '2021-08-08-social-media-and-the-mechanics-of-behavioral-influence',
+    '2024-11-30-computers-were-faster-when-they-were-slower',
+    '2025-04-15-beneath-the-masks-ave-mujica-review'
+]);
+
+const posts = (await getCollection('blog'))
+    .filter((post) => !excludedSlugs.has(post.id))
+    .sort(sortItemsByDateDesc)
+    .slice(0, 3);
+---
+
+<SectionHeading
+    id="blog"
+    title="Notes"
+    intro="Notes on software, systems, and engineering — the latest three."
+    variant="white"
+>
+    <div class="post-rows">
+        {posts.map((post) => <PostCard post={post} />)}
+    </div>
+    <p class="section-more">
+        <a href="/blog" class="btn btn-secondary">All notes</a>
+    </p>
+</SectionHeading>

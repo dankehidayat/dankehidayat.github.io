@@ -1,0 +1,693 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FunCard from '../components/FunCard.astro';
+import Icon from '../components/Icon.astro';
+import { funManga, funAnime, funNovels, musicGroups, musicArtists } from '../data/fun';
+
+const allEntries = [...funManga, ...funAnime, ...funNovels];
+---
+
+<BaseLayout
+    title="Fun"
+    description="The leisurely corner of Danke Hidayat's site: yuri manga, anime, light novels, and music."
+>
+    <div class="content-page site-shell">
+        <header class="page-header fun-header">
+            <p class="fun-kicker">The leisurely corner</p>
+            <h1 class="page-title">Fun</h1>
+            <p class="page-lede">
+                This page corner is where we stop with all the work life for a while. Just the yuri
+                manga, the anime, the light novels, and the songs on repeat. Tap any cover for the
+                full detail, and fair warning: I tend to reread and rewatch things a lot.
+            </p>
+        </header>
+
+        <section class="fun-section" id="manga">
+            <div class="fun-heading-row">
+                <div>
+                    <h2 class="fun-heading">Manga</h2>
+                    <p class="fun-intro">
+                        The series that made me fall for the genre, and the new ones I can't stop
+                        thinking about.
+                    </p>
+                </div>
+                <span class="fun-count">{funManga.length}</span>
+            </div>
+            <div class="fun-grid">
+                {funManga.map((entry) => <FunCard entry={entry} />)}
+            </div>
+        </section>
+
+        <section class="fun-section" id="anime">
+            <div class="fun-heading-row">
+                <div>
+                    <h2 class="fun-heading">Anime</h2>
+                    <p class="fun-intro">
+                        Some of these I rewatch yearly. The ones marked with a heart I've probably
+                        rewatched more times than I should admit.
+                    </p>
+                </div>
+                <span class="fun-count">{funAnime.length}</span>
+            </div>
+            <div class="fun-grid">
+                {funAnime.map((entry) => <FunCard entry={entry} />)}
+            </div>
+        </section>
+
+        <section class="fun-section" id="novels">
+            <div class="fun-heading-row">
+                <div>
+                    <h2 class="fun-heading">Light novels</h2>
+                    <p class="fun-intro">
+                        The books I actually read, as opposed to the ones I keep telling myself I'll
+                        get to.
+                    </p>
+                </div>
+                <span class="fun-count">{funNovels.length}</span>
+            </div>
+            <div class="fun-grid">
+                {funNovels.map((entry) => <FunCard entry={entry} />)}
+            </div>
+        </section>
+
+        <section class="fun-section fun-music" id="music">
+            <h2 class="fun-heading">Music</h2>
+            <p class="fun-intro">
+                What's on repeat right now, grouped by who's making it.
+            </p>
+
+            <!-- Live now-playing, filled by the client from /api/now-playing (Vercel fn) -->
+            <div class="now-playing" id="now-playing" hidden>
+                <div class="now-playing-card">
+                    <img id="now-playing-art" class="now-playing-art" alt="" width="96" height="96" hidden />
+                    <div class="now-playing-body">
+                        <p class="now-playing-label" id="now-playing-label">
+                            <span class="now-playing-dot" id="now-playing-dot" aria-hidden="true"></span>
+                            <span id="now-playing-label-text">Now playing</span>
+                        </p>
+                        <p class="now-playing-track" id="now-playing-track"></p>
+                        <p class="now-playing-artist" id="now-playing-artist"></p>
+                    </div>
+                    <a class="now-playing-link" id="now-playing-link" href="#" target="_blank" rel="noopener">
+                        <span>on last.fm</span>
+                        <Icon name="external" aria-hidden="true" />
+                    </a>
+                </div>
+            </div>
+
+            {
+                musicGroups.map((group) => (
+                    <div class="fun-group">
+                        <h3 class="fun-group-artist">{group.artist}</h3>
+                        <div class="fun-tracks">
+                            {
+                                group.tracks.map((track) => (
+                                    <div class="fun-track">
+                                        <p class="fun-track-name">
+                                            {track.title}
+                                            <span class="fun-track-meta">{track.meta}</span>
+                                        </p>
+                                        <iframe
+                                            title={`${track.title} on Spotify`}
+                                            src={`https://open.spotify.com/embed/track/${track.spotifyId}?utm_source=generator&theme=1`}
+                                            width="100%"
+                                            height="152"
+                                            frameBorder="0"
+                                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                            loading="lazy"
+                                            class="fun-embed"
+                                        ></iframe>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                ))
+            }
+
+            <h3 class="fun-subheading">Also on rotation</h3>
+            <ul class="fun-artists">
+                {musicArtists.map((artist) => (
+                    <li>
+                        {artist.href ? (
+                            <a
+                                class="fun-artist"
+                                href={artist.href}
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                {artist.name}
+                                <Icon name="external" aria-hidden="true" />
+                            </a>
+                        ) : (
+                            <span class="fun-artist">{artist.name}</span>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        </section>
+    </div>
+
+    <!-- Detail view: one dialog for every entry, populated from the embedded data -->
+    <dialog class="fun-dialog" id="fun-dialog" aria-labelledby="fun-dialog-title">
+        <div class="fun-dialog-panel">
+            <button type="button" class="fun-dialog-close" aria-label="Close details">
+                <Icon name="close" />
+            </button>
+            <div class="fun-dialog-cover">
+                <img id="fun-dialog-cover" src="" alt="" width="460" height="690" />
+            </div>
+            <div class="fun-dialog-body">
+                <p class="fun-dialog-badge" id="fun-dialog-badge" hidden>
+                    <Icon name="heart-filled" />
+                    <span id="fun-dialog-badge-text">Favorite</span>
+                </p>
+                <h3 class="fun-dialog-title" id="fun-dialog-title"></h3>
+                <p class="fun-dialog-english" id="fun-dialog-english" hidden></p>
+                <p class="fun-dialog-creator" id="fun-dialog-creator"></p>
+                <p class="fun-dialog-note" id="fun-dialog-note" hidden></p>
+                <div class="fun-dialog-links" id="fun-dialog-links"></div>
+            </div>
+        </div>
+    </dialog>
+
+    <script type="application/json" id="fun-data" set:html={JSON.stringify(allEntries)}></script>
+
+    <script>
+        const data = JSON.parse(document.getElementById('fun-data').textContent);
+        const dialog = document.getElementById('fun-dialog') as HTMLDialogElement;
+        const bySlug = new Map(data.map((e: any) => [e.slug, e]));
+
+        const cover = document.getElementById('fun-dialog-cover') as HTMLImageElement;
+        const title = document.getElementById('fun-dialog-title') as HTMLElement;
+        const english = document.getElementById('fun-dialog-english') as HTMLElement;
+        const creator = document.getElementById('fun-dialog-creator') as HTMLElement;
+        const note = document.getElementById('fun-dialog-note') as HTMLElement;
+        const badge = document.getElementById('fun-dialog-badge') as HTMLElement;
+        const badgeText = document.getElementById('fun-dialog-badge-text') as HTMLElement;
+        const links = document.getElementById('fun-dialog-links') as HTMLElement;
+
+        const openEntry = (slug: string) => {
+            const e = bySlug.get(slug);
+            if (!e) return;
+            cover.src = `/fun/covers/${e.cover ?? e.slug}.jpg`;
+            cover.alt = `Cover of ${e.title}`;
+            title.textContent = e.title;
+            english.textContent = e.english ?? '';
+            english.hidden = !e.english;
+            creator.textContent = e.creator;
+            note.textContent = e.note ?? '';
+            note.hidden = !e.note;
+            badge.hidden = !e.badge;
+            badgeText.textContent = e.badge === 'all-time' ? 'All-time favorite' : 'Favorite';
+            badge.classList.toggle('fun-dialog-badge-all', e.badge === 'all-time');
+            links.innerHTML = (e.links ?? [])
+                .map(
+                    (l: any) =>
+                        `<a class="fun-dialog-link" href="${l.href}" target="_blank" rel="noopener">` +
+                        `<span>${l.label}</span>` +
+                        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5H19.5V10.5M19 5L11 13"/><path d="M19.5 14.5V18A2.5 2.5 0 0 1 17 20.5H6A2.5 2.5 0 0 1 3.5 18V7A2.5 2.5 0 0 1 6 4.5H9.5"/></svg>` +
+                        `</a>`
+                )
+                .join('');
+            dialog.showModal();
+            document.body.style.overflow = 'hidden';
+        };
+
+        const close = () => {
+            dialog.close();
+            document.body.style.overflow = '';
+        };
+
+        document.querySelectorAll('.fun-grid').forEach((grid) => {
+            grid.addEventListener('click', (ev) => {
+                const card = (ev.target as HTMLElement).closest('[data-slug]') as HTMLElement | null;
+                if (card) openEntry(card.dataset.slug ?? '');
+            });
+        });
+
+        document.querySelector('.fun-dialog-close')?.addEventListener('click', close);
+        dialog.addEventListener('click', (ev) => {
+            if (ev.target === dialog) close();
+        });
+        dialog.addEventListener('close', () => {
+            document.body.style.overflow = '';
+        });
+
+        // ── now playing (last.fm via the Vercel serverless function) ──
+        const nowPlaying = document.getElementById('now-playing');
+        if (nowPlaying) {
+            fetch('/api/now-playing')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (!data || !data.ok) return;
+                    const art = document.getElementById('now-playing-art') as HTMLImageElement;
+                    const label = document.getElementById('now-playing-label-text');
+                    const dot = document.getElementById('now-playing-dot');
+                    const track = document.getElementById('now-playing-track');
+                    const artist = document.getElementById('now-playing-artist');
+                    const link = document.getElementById('now-playing-link') as HTMLAnchorElement;
+                    if (data.image) {
+                        art.src = data.image;
+                        art.alt = `${data.album || data.track} cover`;
+                        art.hidden = false;
+                    }
+                    if (label) label.textContent = data.nowPlaying ? 'Listening now' : 'Last played';
+                    if (dot) dot.classList.toggle('now-playing-dot-idle', !data.nowPlaying);
+                    if (track) track.textContent = data.track;
+                    if (artist) artist.textContent = data.artist;
+                    if (link) link.href = data.url || '#';
+                    nowPlaying.hidden = false;
+                })
+                .catch(() => {
+                    // No serverless function (local dev, or non-Vercel hosting): stay hidden.
+                });
+        }
+    </script>
+</BaseLayout>
+
+<style>
+    .fun-kicker {
+        margin-bottom: 0.7rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-tangerine-deep);
+    }
+
+    .fun-section {
+        margin-top: clamp(2.75rem, 5.5vw, 4.25rem);
+        scroll-margin-top: 4rem;
+    }
+
+    .fun-heading-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .fun-heading {
+        margin: 0 0 0.4rem;
+        font-family: var(--font-display);
+        font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.15;
+        color: var(--color-ink);
+    }
+
+    .fun-count {
+        flex-shrink: 0;
+        margin-top: 0.35rem;
+        padding: 0.28rem 0.7rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--color-ink-muted);
+    }
+
+    .fun-intro {
+        margin: 0 0 1.75rem;
+        max-width: 46rem;
+        color: var(--color-ink-body);
+    }
+
+    /* ── grid ─────────────────────────────────────────────── */
+    .fun-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+        gap: 1.6rem 1.15rem;
+    }
+
+    /* ── music ────────────────────────────────────────────── */
+    .fun-tracks {
+        display: grid;
+        gap: 1.5rem;
+        max-width: 30rem;
+    }
+
+    .fun-track-name {
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 0.55rem;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--color-ink);
+    }
+
+    .fun-track-meta {
+        margin-top: 0.1rem;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-tangerine-deep);
+    }
+
+    .fun-embed {
+        display: block;
+        border-radius: var(--radius);
+        background: var(--color-surface);
+    }
+
+    .fun-subheading {
+        margin: 2.5rem 0 0.9rem;
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--color-ink);
+    }
+
+    .fun-group {
+        margin-top: 2rem;
+    }
+
+    .fun-group-artist {
+        margin: 0 0 0.9rem;
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--color-ink);
+    }
+
+    /* ── now playing (last.fm) ────────────────────────────── */
+    .now-playing {
+        margin-bottom: 0.5rem;
+    }
+
+    .now-playing-card {
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+        max-width: 30rem;
+        padding: 1rem 1.25rem;
+        border: 1px solid var(--color-border);
+        border-radius: 14px;
+        background: var(--color-surface);
+        box-shadow: 0 18px 34px -26px rgb(37 31 22 / 0.5);
+    }
+
+    .now-playing-art {
+        flex: none;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid var(--color-border);
+    }
+
+    .now-playing-body {
+        min-width: 0;
+    }
+
+    .now-playing-label {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 0.25rem;
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-ink-muted);
+    }
+
+    .now-playing-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--color-green-bright);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-green-bright) 25%, transparent);
+    }
+
+    .now-playing-dot-idle {
+        background: var(--color-ink-muted);
+        box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ink-muted) 20%, transparent);
+    }
+
+    .now-playing-track {
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--color-ink);
+    }
+
+    .now-playing-artist {
+        margin: 0.1rem 0 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        color: var(--color-tangerine-deep);
+    }
+
+    .now-playing-link {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--color-ink-muted);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.2s var(--ease);
+    }
+
+    .now-playing-link:hover {
+        color: var(--color-green-deep);
+    }
+
+    .now-playing-link svg {
+        width: 0.85rem;
+        height: 0.85rem;
+    }
+
+    .fun-artists {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .fun-artist {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.42rem 0.95rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 999px;
+        background: var(--color-surface);
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--color-ink);
+        text-decoration: none;
+        transition:
+            border-color 0.2s var(--ease),
+            color 0.2s var(--ease),
+            background 0.2s var(--ease);
+    }
+
+    a.fun-artist:hover {
+        border-color: var(--color-green);
+        color: var(--color-green-deep);
+        background: color-mix(in oklab, var(--color-green) 6%, var(--color-surface));
+    }
+
+    /* ── detail dialog ────────────────────────────────────── */
+    .fun-dialog {
+        width: min(34rem, calc(100vw - 2.5rem));
+        margin: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--color-ink-body);
+        overflow: visible;
+    }
+
+    .fun-dialog::backdrop {
+        background: rgb(37 31 22 / 0.5);
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+    }
+
+    .fun-dialog-panel {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(8.5rem, 10.5rem) 1fr;
+        gap: 1.75rem;
+        padding: 1.75rem;
+        border-radius: 18px;
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 30px 60px -30px rgb(37 31 22 / 0.6);
+    }
+
+    .fun-dialog-close {
+        position: absolute;
+        top: 0.85rem;
+        right: 0.85rem;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.1rem;
+        height: 2.1rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 50%;
+        background: var(--color-surface);
+        color: var(--color-ink);
+        cursor: pointer;
+        transition:
+            border-color 0.2s var(--ease),
+            color 0.2s var(--ease);
+    }
+
+    .fun-dialog-close:hover {
+        border-color: var(--color-tangerine);
+        color: var(--color-tangerine-deep);
+    }
+
+    .fun-dialog-cover {
+        align-self: start;
+        aspect-ratio: 2 / 3;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 18px 32px -20px rgb(37 31 22 / 0.5);
+    }
+
+    .fun-dialog-cover img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .fun-dialog-body {
+        min-width: 0;
+        padding-top: 0.35rem;
+    }
+
+    .fun-dialog-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin: 0 0 0.7rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        background: var(--color-tangerine);
+        color: var(--color-ink-on-tangerine);
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .fun-dialog-badge-all {
+        background: var(--color-ink);
+        color: var(--color-bg);
+    }
+
+    .fun-dialog-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -0.015em;
+        color: var(--color-ink);
+    }
+
+    .fun-dialog-english {
+        margin: 0.35rem 0 0;
+        font-size: 0.95rem;
+        color: var(--color-ink-muted);
+    }
+
+    .fun-dialog-creator {
+        margin: 0.9rem 0 0;
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        line-height: 1.6;
+        color: var(--color-green-deep);
+    }
+
+    .fun-dialog-note {
+        margin: 0.6rem 0 0;
+        font-size: 0.88rem;
+        line-height: 1.55;
+        color: var(--color-ink-muted);
+    }
+
+    .fun-dialog-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-top: 1.4rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .fun-dialog-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        background: var(--color-ink);
+        color: var(--color-bg);
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        transition: background 0.2s var(--ease);
+    }
+
+    .fun-dialog-link:hover {
+        background: var(--color-green-deep);
+    }
+
+    @media (min-width: 640px) {
+        .fun-grid {
+            grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+        }
+    }
+
+    @media (max-width: 560px) {
+        .fun-dialog {
+            width: 100%;
+            max-width: none;
+            margin: auto 0 0;
+        }
+
+        .fun-dialog-panel {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            padding: 1.5rem;
+            border-radius: 18px 18px 0 0;
+        }
+
+        .fun-dialog-cover {
+            width: 9rem;
+            margin-inline: auto;
+        }
+
+        .fun-dialog-body {
+            text-align: left;
+        }
+    }
+</style>

@@ -1,0 +1,28 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import BrandIcon from './BrandIcon.astro';
+import { stackGroups } from '../data/tech-stack';
+---
+
+<SectionHeading
+    id="stack"
+    title="Tech Stack"
+    intro="The tools I reach for across software, infrastructure, and connected devices."
+    variant="tint"
+>
+    <div class="stack-list">
+        {stackGroups.map((group) => (
+            <div class="stack-row" data-row>
+                <p class="stack-label">{group.label}</p>
+                <ul class="stack-chips">
+                    {group.items.map((item) => (
+                        <li class="tag-chip">
+                            <BrandIcon name={item.icon} size="0.95rem" />
+                            <span>{item.name}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+</SectionHeading>

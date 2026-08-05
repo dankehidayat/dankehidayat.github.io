@@ -17,13 +17,13 @@ importers:
       '@astrojs/sitemap':
         specifier: ^3.6.0
         version: 3.6.0
+      '@fontsource-variable/bricolage-grotesque':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource-variable/jetbrains-mono':
         specifier: ^5.3.0
         version: 5.3.0
-      '@fontsource-variable/manrope':
-        specifier: ^5.3.0
-        version: 5.3.0
-      '@fontsource-variable/unbounded':
+      '@fontsource-variable/source-sans-3':
         specifier: ^5.3.0
         version: 5.3.0
       '@shikijs/transformers':
@@ -56,6 +56,9 @@ importers:
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
+      simple-icons:
+        specifier: ^16.28.0
+        version: 16.28.0
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.18
@@ -284,14 +287,14 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@fontsource-variable/bricolage-grotesque@5.3.0':
+    resolution: {integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==}
+
   '@fontsource-variable/jetbrains-mono@5.3.0':
     resolution: {integrity: sha512-F32xpS2NsGYoQi2ADSkKTgpJj7ozajsGgDJ8woTnqjmIB+dxDIqImjl4pXZVEExu8UFZ2ndhmX18EBS/hdz3Lw==}
 
-  '@fontsource-variable/manrope@5.3.0':
-    resolution: {integrity: sha512-6D5dgokHsWDDMtmXHznKa0hK229NN+1a4BLPmUCLqcO1Pw5EEhWY5RFt0AcXnVRAljFFPfRtLkJePQj6LSsV6g==}
-
-  '@fontsource-variable/unbounded@5.3.0':
-    resolution: {integrity: sha512-ea565Ncn4r7gPdBEHcmaF31V11hDfkL7b/JCklLobQbMfbu2ZZQrVWNgdeEFWFLqNh36yhieZWOgxdAnMTzrLg==}
+  '@fontsource-variable/source-sans-3@5.3.0':
+    resolution: {integrity: sha512-dpi0GZk7EQe2tYpg6Q0Fx0OmUgnuGu+0rHPgtXqtKhglYmJuP7jZ12Mu1uN+NfRaJRY1Emn8AQJEWzmoZ4wa9g==}
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -1754,6 +1757,10 @@ packages:
   shiki@3.19.0:
     resolution: {integrity: sha512-77VJr3OR/VUZzPiStyRhADmO2jApMM0V2b1qf0RpfWya8Zr1PeZev5AEpPGAAKWdiYUtcZGBE4F5QvJml1PvWA==}
 
+  simple-icons@16.28.0:
+    resolution: {integrity: sha512-sQPR5AtK/ijRjou7zw7mlLp08oB6FH7i0lOy5XJ2zp9mJs/yejgiOn7KvQoe2q4YJIx6VmgUSW5AOefebPt5kg==}
+    engines: {node: '>=0.12.18'}
+
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
@@ -2267,11 +2274,11 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
+  '@fontsource-variable/bricolage-grotesque@5.3.0': {}
+
   '@fontsource-variable/jetbrains-mono@5.3.0': {}
 
-  '@fontsource-variable/manrope@5.3.0': {}
-
-  '@fontsource-variable/unbounded@5.3.0': {}
+  '@fontsource-variable/source-sans-3@5.3.0': {}
 
   '@img/colour@1.0.0': {}
 
@@ -4179,6 +4186,8 @@ snapshots:
       '@shikijs/types': 3.19.0
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
+
+  simple-icons@16.28.0: {}
 
   sisteransi@1.0.5: {}
 

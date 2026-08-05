@@ -1,6 +1,6 @@
 ---
 title: Automating Calibration and Report Generation with Google Colab
-excerpt: A hands-on look at comparing DHT11 and HTC-1 sensors, calibrating them with data-driven methods, and automating a full scientific report using Python, Fuzzy Logic, and LaTeX inside Google Colab.
+excerpt: A repeatable pipeline for comparing DHT11 and HTC-1 sensors, calibrating them with data-driven methods, classifying thermal comfort with fuzzy logic, and generating a LaTeX report, all inside Google Colab.
 publishDate: 'Oct 17 2025'
 tags:
   - IoT
@@ -8,52 +8,47 @@ tags:
   - Automation
 ---
 
-When I first compared my DHT11 sensor with an HTC-1, I thought it would be a quick check. It didn’t take long for the project to grow into a full workflow: data collection, calibration, fuzzy logic, and an auto-generated PDF report built right inside Google Colab.
+Comparing a low-cost sensor against a reference and writing up the result by hand is repetitive work. This note describes a workflow that does the whole thing inside Google Colab: extract paired readings from Google Sheets, calibrate the DHT11 against an HTC-1 reference, evaluate agreement with regression and Bland-Altman analysis, classify thermal comfort with a Mamdani fuzzy model, and generate a complete scientific-style report as a PDF, all from a single notebook.
 
-This post walks through how that happened and how automation made the whole process easier to repeat.
+## Objective
 
-## Why I Did This
+Temperature and humidity matter in tropical workspaces, where natural ventilation carries most of the thermal load. Low-cost sensors such as the DHT11 are widely used, but their readings drift. The goal was to quantify the offset against an HTC-1, correct it with a data-driven calibration, and produce a report that could be regenerated whenever new data arrived.
 
-Temperature and humidity matter a lot in tropical workspaces. Low-cost sensors like the DHT11 are popular, but their readings often drift. I wanted to see how far off it was from an HTC-1 and whether calibration could bring it closer.
+## Data Collection
 
-Doing everything in Google Colab kept the workflow simple and reproducible.
+The DHT11 and the HTC-1 sat side by side in a naturally ventilated office in Indonesia. Two datasets were recorded:
 
-## Collecting the Data
+- Before calibration, to establish the baseline error
+- After calibration, to verify the correction
 
-Both sensors sat next to each other in a naturally ventilated office in Indonesia. I recorded two sets of data:
+Each dataset spanned several hours of normal office activity, so the comparison covered realistic changes in temperature and humidity rather than a single static condition.
 
-- Before calibration  
-- After calibration  
+## Analysis in Colab
 
-The readings spanned several hours of typical office activity to capture natural changes in temperature and humidity.
+The notebook loads the paired readings from Google Sheets using gspread, then computes error metrics for the raw and the calibrated series. Mean absolute error and standard deviation summarize how far the DHT11 sits from the reference. A linear regression quantifies the relationship between the two sensors, and a Bland-Altman comparison checks bias and agreement across the measurement range instead of collapsing everything into one number.
 
-## Running the Analysis in Colab
+The key metric is the mean absolute error:
 
-I loaded the data and used Python tools to measure how different the DHT11 was from the HTC-1. Metrics like average error and deviation helped show how inaccurate the DHT11 was before calibration and how much it improved afterward.
-
-### Regression and Agreement
-
-I also ran a basic regression analysis to see how well the two sensors aligned. A Bland–Altman comparison helped check consistency and bias between the readings.
-
-After calibration, the DHT11 tracked the HTC-1 far more closely. The difference was easy to see in the plots.
+$$
+\mathrm{MAE} = \frac{1}{n}\sum_{i=1}^{n}\left|\hat{y}_i - y_i\right|
+$$
 
 ## Calibration Results
 
-Before calibration, the DHT11 showed noticeable offsets in both temperature and humidity. After calibration, the readings were much closer to the reference values.
+After calibration, the DHT11 tracked the reference much more closely. The mean error and its spread both shrank, and the fitted regression line moved toward the line of identity. For a low-cost sensor, the improvement was substantial enough to make the readings usable for further analysis.
 
-For a low-cost sensor, the improvement was impressive and made the results far more usable.
+## Fuzzy Mamdani Classification
 
-## Adding Fuzzy Mamdani Logic
+Raw numbers are hard to interpret, so a Mamdani fuzzy model converted each reading into a thermal comfort category. Membership functions over temperature and humidity produced states from COLD through COMFORTABLE to HOT, which read naturally when compared with how the room actually felt.
 
-Numbers are helpful, but I also wanted a human-readable interpretation of comfort. So I built a simple Fuzzy Mamdani model that classified readings into Cold, Comfortable, or Hot based on tropical conditions.
+The classified readings were then checked against the ASHRAE 55-2020 comfort range for naturally ventilated spaces in tropical climates, 23 to 28 degrees Celsius. The analysis reported the share of readings inside that band:
 
-The results showed that most measurements fell into the Comfortable range, which matched the actual feel of the room.
+- When less than 70% of readings were comfortable, it recommended specific actions: optimize natural ventilation during the hottest hours, add fans to improve air circulation, and review internal heat loads from equipment and lighting.
+- When at least 70% were comfortable, it recommended keeping the existing ventilation pattern and monitoring periodically to catch drift early.
 
-## Auto-Generating a LaTeX Report
+## Automated LaTeX Report
 
-Once everything worked, I used the `pylatex` library to automatically generate a full scientific-style PDF. The script built the sections, inserted the text, and added figures straight from Colab.
-
-Here’s the basic structure I used:
+Once the analysis finished, the notebook assembled the report with pylatex: sections for the methodology and results, plus figures inserted directly from the analysis. The document compiled to a PDF and was saved to Google Drive so it could be shared immediately after each run.
 
 ```python
 from pylatex import Document, Section
@@ -64,15 +59,11 @@ with doc.create(Section("Results and Discussion")):
     doc.append("This section presents the calibration outcomes and fuzzy logic analysis performed in Colab.")
 
 doc.generate_pdf(clean_tex=False)
-````
+```
 
-I saved the file directly to Google Drive so it was easy to share after each run.
+## Why Automate
 
-## Looking Back
-
-What began as a simple test turned into a full mini-research pipeline. Automating the workflow saved time and made the entire process repeatable with new data.
-
-It also showed that inexpensive sensors like the DHT11 can be surprisingly reliable once calibrated properly.
+The notebook turned a one-off comparison into a repeatable pipeline. New data can be added to the sheet and the report regenerated in a single run, which makes it practical to re-validate the calibration as the sensors age or the environment changes. It also showed that an inexpensive sensor like the DHT11 becomes far more reliable once its readings are corrected against a proper reference.
 
 ## Resources
 

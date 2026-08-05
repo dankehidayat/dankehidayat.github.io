@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+---
+
+<BaseLayout
+    title="Notes"
+    description="Notes on software and systems by Danke Hidayat."
+>
+    <div class="content-page site-shell">
+        <header class="page-header">
+            <h1 class="page-title">Notes</h1>
+            <p class="page-lede">
+                Notes on software, systems, and the craft of building them — newest first.
+            </p>
+        </header>
+        <div class="post-rows">
+            {posts.map((post) => <PostCard post={post} headingLevel="h2" />)}
+        </div>
+    </div>
+</BaseLayout>

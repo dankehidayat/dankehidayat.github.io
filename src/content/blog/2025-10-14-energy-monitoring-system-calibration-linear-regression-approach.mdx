@@ -1,85 +1,102 @@
 ---
 title: "Energy Monitoring System Calibration: Linear Regression Approach for Sensor Accuracy"
-excerpt: "A practical look at calibrating DHT11 sensors using linear regression to improve temperature and humidity accuracy for energy monitoring systems."
+excerpt: "How an ESP32 energy monitoring system calibrates DHT11 temperature and humidity readings with linear regression, and how the fitted model runs in production firmware."
 publishDate: "Oct 14 2025"
 isFeatured: true
 tags:
   - IoT
   - Data Analysis
   - Sensor Calibration
-
 ---
 
+An energy monitoring system is only as trustworthy as the data it collects. When the readings feed HVAC control, small sensor errors compound into real misallocation of energy. This note describes how the Eco Office monitor, an ESP32-based system, calibrates its DHT11 temperature and humidity sensors against a reference instrument using ordinary least squares regression, and how the fitted model is deployed directly in the firmware.
 
-When I first started working on my energy monitoring system, I knew I needed accurate temperature and humidity data. The whole point was to feed reliable numbers into HVAC optimization, so the system could cool or heat efficiently without wasting energy.
-
-The problem? I was using DHT11 sensors.
-
-They’re cheap and easy to use, but their readings can drift quite a bit. To make the system trustworthy, I needed to calibrate them against a more reliable reference device—in this case, the HTC-1.
+The DHT11 is inexpensive and easy to interface, but its accuracy is limited. Compared against a calibrated HTC-1 reference, the raw readings showed a mean absolute error of 3.84 degrees Celsius in temperature and 14.18% in relative humidity. Those offsets are too large for a system that uses environmental data to regulate cooling and heating.
 
 ## Why Calibration Was Needed
 
-After comparing the raw DHT11 readings to the HTC-1, the gap was immediately obvious. Temperature was off by several degrees, humidity by double digits. In an energy system, those errors stack up fast and can throw off the whole optimization logic.
+Before calibration, the raw DHT11 readings diverged from the reference across the whole measurement range:
 
-Before calibration, the readings were roughly:
+- Temperature: mean absolute error around 3.84 degrees Celsius, with maximum errors approaching 5 degrees
+- Humidity: mean absolute error around 14.18%, with large spikes at the extremes
+- A consistent negative bias in temperature and a positive bias in humidity
 
-- Temperature error around **4°C**
-- Humidity error around **14%**
-- Noticeable negative bias, especially in temperature
-- Large maximum spikes in both measurements
+Errors of this size would distort any downstream calculation, from thermal comfort classification to energy consumption analysis. The readings had to be corrected before they could be used.
 
-These numbers clearly weren’t good enough for a system meant to save energy.
+## Measurement Setup and Data Collection
 
-## How I Collected the Data
+The DHT11 and the HTC-1 were placed side by side in a naturally ventilated office in Indonesia and logged concurrently for about nine hours. Logging spanned warm and cool parts of the day so that the model would see realistic variation.
 
-To calibrate the sensors properly, I logged readings from both the DHT11 and the HTC-1 at the same time for about nine hours. The data covered different parts of the day so I could see how the sensors behaved as the room warmed up or cooled down.
+In total, 19 paired readings were collected. Temperature ranged from the mid-20s to the upper-20s degrees Celsius and relative humidity from around 46% to the low 70s. That spread is sufficient to fit a first-order model and to check how the correction behaves across the operating range.
 
-In total, I collected 19 sets of paired readings. Temperatures ranged from the mid-23s to the upper-27s, and humidity shifted from around 46% up to the low 70s. Plenty of variation to build a decent calibration model.
+## Calibration Model
 
-## Using Linear Regression for Calibration
-
-Instead of a fancy model, I used ordinary linear regression. The idea is simple: map a raw DHT11 reading $x$ onto a calibrated value $\hat{y}$ that tracks the HTC-1.
+For each variable, a first-order model maps a raw reading $x$ onto a corrected value $\hat{y}$:
 
 $$
-\hat{y} = ax + b
+\hat{y} = a x + b
 $$
 
-Here $a$ is the slope and $b$ is the intercept, fit separately for temperature and humidity. After training I got roughly:
+where $a$ is the slope and $b$ is the intercept, fitted separately for temperature and humidity. The coefficients fitted from the paired data and later embedded in the firmware are:
 
 $$
 \begin{aligned}
-\hat{T} &= 1.343\,T_{\text{raw}} - 7.689 \\
-\hat{H} &= 0.914\,H_{\text{raw}} + 5.127
+\hat{T} &= 0.923\,T_{\text{raw}} - 1.618 \\
+\hat{H} &= 0.926\,H_{\text{raw}} + 18.052
 \end{aligned}
 $$
 
-Mean absolute error after calibration is just the average gap against the reference:
+The quality of the correction is reported as the mean absolute error (MAE) against the reference:
 
 $$
 \mathrm{MAE} = \frac{1}{n}\sum_{i=1}^{n}\left|\hat{y}_i - y_i\right|
 $$
 
-Light enough for embedded hardware, still useful outdoors in a real room.
+## Model Deployment in Firmware
 
-## What the Calibration Achieved
+The firmware stores the four fitted coefficients as constants and applies them on every DHT11 read, so each measurement is corrected before it is used or published:
 
-Once I applied the calibration models, the difference was dramatic.
+```cpp title="calibration.h"
+const float TEMP_SLOPE = 0.923;
+const float TEMP_INTERCEPT = -1.618;
+const float HUM_SLOPE = 0.926;
+const float HUM_INTERCEPT = 18.052;
 
-### Temperature improvements:
-- Average error dropped from **3.84°C** to **0.80°C**
-- Maximum error went from almost **5°C** to around **1.4°C**
-- The results lined up much more cleanly with the reference readings
+float calibrateTemperature(float rawTemp) { return (TEMP_SLOPE * rawTemp) + TEMP_INTERCEPT; }
+float calibrateHumidity(float rawHum) { return (HUM_SLOPE * rawHum) + HUM_INTERCEPT; }
+```
 
-### Humidity improvements:
-- Average error dropped from **14.18%** to **1.15%**
-- Maximum error shrank to roughly **2%**
-- Much smaller bias and far better consistency across the range
+A multiply-add per reading is negligible on the ESP32, which is one of the reasons a linear model was chosen over a heavier approach.
 
-Overall, temperature accuracy improved by nearly **80%** and humidity accuracy by over **90%**. For a low-cost sensor, that’s a huge upgrade.
+The firmware also keeps a ring buffer of the last 10 per-sample errors and reports a running mean absolute error. That value is converted into an accuracy figure over the measurement range:
 
-## The Code Behind It
+$$
+\mathrm{accuracy} = \max\left(0,\; 100 - \frac{\mathrm{MAE}}{\mathrm{range}} \times 100\right)
+$$
 
-Here’s a simplified version of the calibration class I used in Python:
+This gives the dashboard a single percentage that summarizes how close the calibrated readings are to the reference.
+
+## Results
+
+After applying the fitted models, the error metrics improved substantially:
+
+### Temperature
+
+- Mean absolute error dropped from 3.84 degrees Celsius to 0.80 degrees Celsius
+- Maximum error dropped from roughly 5 degrees to about 1.4 degrees
+- The negative bias disappeared and the residuals scattered evenly around zero
+
+### Humidity
+
+- Mean absolute error dropped from 14.18% to 1.15%
+- Maximum error shrank to roughly 2%
+- Consistency across the range improved noticeably
+
+Overall, temperature accuracy improved by about 80% and humidity accuracy by more than 90%. For a low-cost sensor, that brings the readings within a useful range for energy analysis.
+
+## The Analysis Code
+
+The regression was fit with a small Python class. The coefficients below match the values deployed in the firmware:
 
 ```python title="sensor_calibrator.py"
 import numpy as np
@@ -91,11 +108,11 @@ class SensorCalibrator:
         self.temp_model = LinearRegression()
         self.humidity_model = LinearRegression()
 
-        # Coefficients from regression analysis
-        self.temp_coef = 1.343379812
-        self.temp_intercept = -7.688931392
-        self.humidity_coef = 0.914240883
-        self.humidity_intercept = 5.127226491
+        # Coefficients from the regression analysis
+        self.temp_coef = 0.923
+        self.temp_intercept = -1.618
+        self.humidity_coef = 0.926
+        self.humidity_intercept = 18.052
 
     def calibrate_temperature(self, raw_temp):
         return self.temp_coef * raw_temp + self.temp_intercept
@@ -122,33 +139,27 @@ A quick example:
 calibrator = SensorCalibrator()
 raw_temp = 25.0
 calibrated_temp = calibrator.calibrate_temperature(raw_temp)
-print(f"Raw: {raw_temp}°C → Calibrated: {calibrated_temp:.2f}°C")
+print(f"Raw: {raw_temp} C -> Calibrated: {calibrated_temp:.2f} C")
 ```
 
-## Visualizing the Results
+## Downstream Use in the System
 
-When I plotted the calibrated values against the HTC-1 readings, the improvement was easy to see. The points followed a clean line, and the scatter tightened compared to the raw data. Both temperature and humidity behaved far more predictably.
+Calibrated values feed several consumers inside the Eco Office monitor:
 
-This level of accuracy makes a big difference for energy applications—every degree and every percentage counts.
+1. A fuzzy Mamdani engine classifies thermal comfort into COLD, COOL, COMFORTABLE, WARM, and HOT states from temperature and humidity.
+2. A second fuzzy engine classifies energy consumption into ECONOMICAL, NORMAL, and WASTEFUL states using voltage, active power, power factor, and reactive power from the PZEM-004T.
+3. MQTT telemetry publishes the corrected readings every 30 seconds to the Selene platform.
+4. The on-device LCD and the Blynk widgets display the calibrated values and the fuzzy states.
 
-## Where This Helps in Energy Monitoring
-
-With the sensors now calibrated, the system can:
-
-1. Control HVAC equipment more precisely
-2. Detect occupancy patterns from environmental changes
-3. Analyze energy consumption more reliably
-4. Flag unusual temperature or humidity shifts for early maintenance
-
-With the errors reduced so much, the entire energy monitoring system becomes far more trustworthy.
+The PZEM-004T measures voltage, current, active power, power factor, frequency, and cumulative energy. One unit note matters here: the library method `PZEM004Tv30::energy()` returns kilowatt-hours directly, while the underlying register is stored in watt-hours and divided by 1000. The MQTT field, the Blynk widget, and the LCD all use kWh consistently.
 
 ## Final Thoughts
 
-Linear regression turned out to be a simple but highly effective way to calibrate low-cost sensors. It:
+Linear regression turned out to be a simple and effective way to calibrate low-cost sensors:
 
-* Sharply reduced temperature and humidity errors
-* Was fast enough to run on embedded hardware
-* Produced easy-to-understand calibration rules
-* Improved the overall performance of my energy monitoring setup
+- It reduced temperature and humidity errors to a fraction of their original values
+- A multiply-add per reading is cheap enough for embedded hardware
+- The resulting coefficients are easy to inspect, test, and update in the firmware
+- Corrected readings made the downstream fuzzy classification and telemetry substantially more reliable
 
-Next, I’m planning to explore non-linear calibration and automatic recalibration, especially to handle aging sensors or changes in environmental conditions.
+The next step is to explore non-linear calibration and automatic recalibration, particularly to handle sensor aging and slow changes in environmental conditions.

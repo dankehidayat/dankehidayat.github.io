@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { projectMeta } from '../data/projects';
+import Icon from './Icon.astro';
+
+type Props = {
+    project: CollectionEntry<'projects'>;
+};
+
+const { project } = Astro.props;
+const meta = projectMeta[project.id];
+const featuredTech = meta?.tech.slice(0, 4) ?? [];
+---
+
+<article class="project-plate" data-plate>
+    <h3 class="project-title">{project.data.title}</h3>
+    {project.data.description && <p class="project-desc">{project.data.description}</p>}
+    {featuredTech.length > 0 && (
+        <ul class="project-tech">
+            {featuredTech.map((tech) => (
+                <li class="tag-chip">{tech}</li>
+            ))}
+        </ul>
+    )}
+    {meta?.links && meta.links.length > 0 && (
+        <div class="project-links">
+            {meta.links.map((link) => (
+                <a href={link.href} class="project-link" target="_blank" rel="noopener noreferrer">
+                    {link.label}
+                    <Icon name={link.href.includes('github') ? 'github' : 'external'} aria-hidden="true" />
+                </a>
+            ))}
+        </div>
+    )}
+</article>

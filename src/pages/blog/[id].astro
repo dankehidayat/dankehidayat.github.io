@@ -1,14 +1,11 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-import Button from '../../components/Button.astro';
+import 'katex/dist/katex.min.css';
 import FormattedDate from '../../components/FormattedDate.astro';
-import PostCard from '../../components/PostCard.astro';
-import Subscribe from '../../components/Subscribe.astro';
+import Icon from '../../components/Icon.astro';
 import siteConfig from '../../data/site-config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { localePath, useTranslations } from '../../i18n/utils';
 import { sortItemsByDateDesc } from '../../utils/data-utils';
-import { slugify } from '../../utils/common-utils';
 
 export async function getStaticPaths() {
     const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
@@ -32,80 +29,79 @@ type Props = {
 const { post, prevPost, nextPost } = Astro.props;
 const { title, publishDate, updatedDate, excerpt, tags = [], seo } = post.data;
 const { Content } = await render(post);
-const lang = 'en' as const;
-const t = useTranslations(lang);
-const baseUrl = siteConfig.website || Astro.url.origin;
-const href = baseUrl + Astro.url.pathname;
+
+const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.round(words / 200));
 ---
 
-<BaseLayout title={seo?.title ?? title} description={seo?.description ?? excerpt} image={seo?.image} pageType="article" lang={lang}>
+<BaseLayout
+    title={seo?.title ?? title}
+    description={seo?.description ?? excerpt}
+    image={seo?.image}
+    pageType="article"
+>
     <article class="content-page reading-column">
-        <header class="page-header" data-reveal>
-            <div class="post-meta" style="margin-bottom:0.75rem">
-                <FormattedDate date={publishDate} lang={lang} />
+        <a href="/blog" class="post-back">
+            <Icon name="arrow-left" aria-hidden="true" />
+            All notes
+        </a>
+
+        <header>
+            <div class="post-meta">
+                <FormattedDate date={publishDate} />
+                <span class="dot" aria-hidden="true" />
+                <span>{readingMinutes} min read</span>
                 {
                     updatedDate && (
-                        <span>
-                            · {t('blog.updated')} <FormattedDate date={updatedDate} lang={lang} />
-                        </span>
+                        <>
+                            <span class="dot" aria-hidden="true" />
+                            <span>
+                                Updated <FormattedDate date={updatedDate} />
+                            </span>
+                        </>
                     )
                 }
             </div>
-            <h1 class="display-lg" style="margin:0">{title}</h1>
-            {excerpt && <p class="page-lede" style="margin-top:0.85rem">{excerpt}</p>}
+            <h1 class="post-title">{title}</h1>
+            {excerpt && <p class="page-lede">{excerpt}</p>}
         </header>
-        <div class="prose prose-lg prose-blog max-w-none" data-reveal>
+
+        <div class="prose">
             <Content />
         </div>
         <script>
             import '../../scripts/code-blocks.ts';
         </script>
-        <div class="post-footer" data-reveal>
-            {
-                tags.length > 0 && (
-                    <div class="tag-row">
-                        {tags.map((tag) => (
-                            <a href={localePath(lang, `/tags/${slugify(tag)}`)}>#{tag}</a>
-                        ))}
-                    </div>
-                )
-            }
-            <Button class="copy-url-button" aria-label={t('blog.copyLink')} data-url={href} variant="secondary">
-                {t('blog.share')}
-            </Button>
-        </div>
+
+        {
+            tags.length > 0 && (
+                <div class="post-tags">
+                    {tags.map((tag) => <span class="tag-chip">{tag}</span>)}
+                </div>
+            )
+        }
     </article>
 
     {
         (prevPost || nextPost) && (
-            <section class="reading-column" style="margin:3rem auto">
-                <h2 class="display-md" style="margin-bottom:1rem" data-reveal>
-                    {t('blog.readNext')}
-                </h2>
-                <div class="writing-wall" data-reveal>
-                    {nextPost && <PostCard post={nextPost} lang={lang} />}
-                    {prevPost && <PostCard post={prevPost} lang={lang} />}
-                </div>
-            </section>
+            <nav class="post-nav reading-column" aria-label="More notes">
+                {nextPost ? (
+                    <a href={`/blog/${nextPost.id}/`} class="post-nav-link">
+                        <span class="post-nav-label">Next</span>
+                        <span class="post-nav-title">{nextPost.data.title}</span>
+                    </a>
+                ) : (
+                    <span class="post-nav-link post-nav-link-empty" aria-hidden="true" />
+                )}
+                {prevPost ? (
+                    <a href={`/blog/${prevPost.id}/`} class="post-nav-link">
+                        <span class="post-nav-label">Previous</span>
+                        <span class="post-nav-title">{prevPost.data.title}</span>
+                    </a>
+                ) : (
+                    <span class="post-nav-link post-nav-link-empty" aria-hidden="true" />
+                )}
+            </nav>
         )
     }
-
-    <div class="reading-column">
-        <Subscribe lang={lang} class="my-10" />
-    </div>
 </BaseLayout>
-
-<script>
-    document.addEventListener('astro:page-load', () => {
-        const copyUrlButton = document.querySelector('.copy-url-button') as HTMLButtonElement | null;
-        copyUrlButton?.addEventListener('click', async () => {
-            const url = copyUrlButton.getAttribute('data-url') || '';
-            const label = copyUrlButton.innerText;
-            await navigator.clipboard.writeText(url);
-            copyUrlButton.innerText = 'Copied';
-            setTimeout(() => {
-                copyUrlButton.innerText = label;
-            }, 2500);
-        });
-    });
-</script>

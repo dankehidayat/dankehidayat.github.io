@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Page not found';
+const description = 'This page has moved or never existed.';
+---
+
+<BaseLayout title={`${title} · ${'Danke Hidayat'}`} description={description} pageType="website">
+    <section class="content-page not-found">
+        <div class="site-shell">
+            <header class="page-header" data-head>
+                <span class="section-tick" aria-hidden="true"></span>
+                <h1 class="page-title">Page not found</h1>
+                <p class="page-lede">
+                    This page has moved or never existed. The site now lives on a single page — start from the
+                    top and you'll find everything.
+                </p>
+                <div class="not-found-actions">
+                    <a class="btn btn-primary" href="/">Back to home</a>
+                    <a class="btn btn-secondary" href="/blog/">Read the notes</a>
+                </div>
+            </header>
+        </div>
+    </section>
+</BaseLayout>
+
+<style is:global>
+    .not-found .page-header {
+        max-width: 34rem;
+        padding-block: clamp(4rem, 10vh, 7rem);
+    }
+
+    .not-found-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+</style>

@@ -1,39 +1,64 @@
 ---
-import { marked } from 'marked';
-import type { Hero as HeroProps } from '../types';
-import Button from './Button.astro';
+import siteConfig from '../data/site-config';
 import CustomImage from './CustomImage.astro';
+import Icon from './Icon.astro';
 
-type Props = HeroProps;
-
-const { title, image, text, actions } = Astro.props;
+const avatar = siteConfig.avatar;
+const role = siteConfig.subtitle ?? '';
 ---
 
-{
-    (title || image?.src || text || (actions && actions.length > 0)) && (
-        <section class="mb-16 flex w-full flex-col gap-8 sm:mb-24">
-            {title && <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>}
-            {image?.src && (
-                <figure>
-                    <CustomImage
-                        class="w-full"
-                        {...image}
-                        widths={[480, 640, 768, 1024, 1536]}
-                        sizes="(min-width: 832px) 768px, calc(100vw - 32px)"
-                        fetchpriority="high"
-                        loading="eager"
-                    />
-                    {image.caption && <figcaption class="mt-1.5 text-xs sm:text-sm">{image.caption}</figcaption>}
-                </figure>
-            )}
-            {text && <div class="prose sm:prose-lg max-w-none" set:html={marked.parse(text)} />}
-            {actions && actions.length > 0 && (
-                <div class="flex flex-wrap gap-4">
-                    {actions.map((action) => (
-                        <Button href={action.href}>{action.text}</Button>
-                    ))}
+<section class="hero" data-hero>
+    <div class="site-shell">
+        <div class="hero-inner">
+            <div class="hero-copy">
+                <p class="hero-status" data-hero-item>
+                    <span class="hero-status-dot" aria-hidden="true"></span>
+                    Open to work · Bandung, Indonesia
+                </p>
+                <h1 class="hero-name">
+                    <span class="hero-first" data-hero-item>Danke</span>
+                    <span class="hero-last" data-hero-item>Hidayat</span>
+                </h1>
+                <p class="hero-headline" data-hero-item>
+                    I build software for connected systems, from embedded firmware to the dashboards that watch over them.
+                </p>
+                <div class="hero-actions" data-hero-item>
+                    <a href="#contact" class="btn btn-inverse">Contact</a>
+                    <a href="/Resume_Danke_Hidayat.pdf" class="btn btn-inverse-ghost" download>Resume</a>
                 </div>
-            )}
-        </section>
-    )
-}
+            </div>
+
+            <figure class="hero-photo" data-hero-photo>
+                <div class="hero-polaroid">
+                    <div class="hero-polaroid-photo">
+                        {
+                            avatar?.src && typeof avatar.src !== 'string' && (
+                                <CustomImage
+                                    src={avatar.src}
+                                    alt={avatar.alt || 'Danke Hidayat'}
+                                    class="hero-photo-img"
+                                    widths={[320, 480, 640]}
+                                    sizes="(min-width: 900px) 336px, min(64vw, 304px)"
+                                    loading="eager"
+                                    fetchpriority="high"
+                                />
+                            )
+                        }
+                    </div>
+                    <figcaption class="hero-polaroid-foot">
+                        <span class="hero-polaroid-brand">
+                            <span class="hero-polaroid-dot" aria-hidden="true"></span>
+                            Danke
+                        </span>
+                        <span class="hero-polaroid-name">Danke Hidayat</span>
+                        <span class="hero-polaroid-role">{role}</span>
+                    </figcaption>
+                </div>
+            </figure>
+        </div>
+    </div>
+    <a href="#about" class="hero-scroll" aria-label="Scroll to about section">
+        Scroll
+        <Icon name="arrow-down" />
+    </a>
+</section>

@@ -1,0 +1,54 @@
+---
+import { certificationsByDate } from '../data/certifications';
+import SectionHeading from './SectionHeading.astro';
+import BrandIcon from './BrandIcon.astro';
+import Icon from './Icon.astro';
+
+const items = certificationsByDate;
+
+/** Map an issuer to a brand mark for the record row. */
+function issuerIcon(issuer: string): string {
+    if (issuer.includes('IBM')) return 'ibm';
+    if (issuer.includes('Cisco')) return 'cisco';
+    return 'coursera';
+}
+---
+
+<SectionHeading
+    id="certifications"
+    title="Certifications"
+    intro="Courses and certifications I've completed, newest first."
+>
+    <div class="record-list">
+        {
+            items.map((cert) => (
+                <div class="record-row" data-row>
+                    <div class="record-brand" aria-hidden="true">
+                        <BrandIcon name={issuerIcon(cert.issuer)} size="1.15rem" />
+                    </div>
+                    <div>
+                        <h3 class="record-title">{cert.title}</h3>
+                        <p class="record-sub">
+                            {cert.issuer}
+                            {cert.credentialId && (
+                                <>
+                                    <span class="dot" aria-hidden="true" />
+                                    {cert.credentialId}
+                                </>
+                            )}
+                        </p>
+                    </div>
+                    <div class="record-meta">
+                        <span>{cert.issued}</span>
+                        {cert.url && (
+                            <a class="record-verify" href={cert.url} target="_blank" rel="noopener noreferrer">
+                                Verify
+                                <Icon name="external" aria-hidden="true" />
+                            </a>
+                        )}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</SectionHeading>

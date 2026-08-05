@@ -30,26 +30,16 @@ const blog = defineCollection({
         })
 });
 
-const pages = defineCollection({
-    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
-    schema: ({ image }) =>
-        z.object({
-            title: z.string(),
-            seo: seoSchema(image).optional()
-        })
-});
-
 const projects = defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
     schema: ({ image }) =>
         z.object({
             title: z.string(),
             description: z.string().optional(),
-            descriptionId: z.string().optional(),
             publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
             seo: seoSchema(image).optional()
         })
 });
 
-export const collections = { blog, pages, projects };
+export const collections = { blog, projects };

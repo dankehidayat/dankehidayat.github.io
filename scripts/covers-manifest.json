@@ -1,0 +1,26 @@
+{
+  "lycoris-recoil": {
+    "slug": "lycoris-recoil",
+    "ok": true,
+    "file": "lycoris-recoil.jpg",
+    "bytes": 144567,
+    "color": "#e45078",
+    "title": "Lycoris Recoil"
+  },
+  "lycoris-recoil-manga": {
+    "slug": "lycoris-recoil-manga",
+    "ok": true,
+    "file": "lycoris-recoil-manga.jpg",
+    "bytes": 126878,
+    "color": "#35aee4",
+    "title": "Lycoris Recoil"
+  },
+  "lycoris-recoil-ordinary-days": {
+    "slug": "lycoris-recoil-ordinary-days",
+    "ok": true,
+    "file": "lycoris-recoil-ordinary-days.jpg",
+    "bytes": 89429,
+    "color": "#f15093",
+    "title": "Lycoris Recoil: Ordinary days"
+  }
+}

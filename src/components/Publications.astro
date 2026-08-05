@@ -1,0 +1,31 @@
+---
+import { publications } from '../data/publications';
+import SectionHeading from './SectionHeading.astro';
+
+// Hidden entirely until real entries exist (see src/data/publications.ts).
+if (publications.length === 0) return;
+---
+
+<SectionHeading
+    id="publications"
+    title="Publications"
+    intro="Papers and proceedings I've contributed to."
+    variant="white"
+>
+    <div class="record-list">
+        {
+            publications.map((pub) => (
+                <div class="record-row" data-row>
+                    <div>
+                        <h3 class="record-title">{pub.title}</h3>
+                        <p class="record-sub">{pub.venue}</p>
+                    </div>
+                    <div class="record-meta">
+                        <span>{pub.date}</span>
+                        {pub.doi && <a class="doi" href={`https://doi.org/${pub.doi}`} target="_blank" rel="noopener noreferrer">DOI</a>}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</SectionHeading>

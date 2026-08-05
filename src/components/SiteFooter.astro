@@ -1,45 +1,63 @@
 ---
 import siteConfig from '../data/site-config';
-import type { Lang } from '../i18n/ui';
-import { localePath, useTranslations } from '../i18n/utils';
 
-type Props = { lang: Lang };
-const { lang } = Astro.props;
-const t = useTranslations(lang);
 const year = new Date().getFullYear();
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = pathname === '/';
+const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
+
+const navLinks = [
+    { text: 'About', href: anchor('#about') },
+    { text: 'Experience', href: anchor('#experience') },
+    { text: 'Stack', href: anchor('#stack') },
+    { text: 'Projects', href: anchor('#projects') },
+    { text: 'Notes', href: '/blog' },
+    { text: 'Fun', href: '/fun' }
+];
+
+const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('rss'));
 ---
 
 <footer class="site-footer">
     <div class="site-shell">
-        <div class="footer-grid">
+        <div class="site-footer-inner">
             <div>
                 <p class="footer-name">Danke Hidayat</p>
-                <p class="footer-note">{t('footer.built')}</p>
-                <p class="footer-copy">© {year}</p>
+                <p class="footer-role">Software developer &amp; DevOps engineer</p>
+                <p class="footer-note">
+                    I build software for connected systems, from embedded firmware to the dashboards that watch over them, and I write about the work as I go.
+                </p>
+                <blockquote class="footer-quote">
+                    <p class="footer-quote-text">“I was born to be the star.”</p>
+                    <span class="footer-quote-by">Saijou Claudine · Revue Starlight</span>
+                </blockquote>
             </div>
             <div class="footer-cols">
                 <div>
-                    <p class="label-kicker">{t('nav.home')}</p>
+                    <p class="footer-col-title">Sections</p>
                     <ul>
-                        <li><a href={localePath(lang, '/about')}>{t('nav.about')}</a></li>
-                        <li><a href={localePath(lang, '/experience')}>{t('nav.experience')}</a></li>
-                        <li><a href={localePath(lang, '/projects')}>{t('nav.projects')}</a></li>
-                        <li><a href={localePath(lang, '/blog')}>{t('nav.blog')}</a></li>
-                        <li><a href={localePath(lang, '/contact')}>{t('nav.contact')}</a></li>
+                        {navLinks.map((link) => (
+                            <li><a href={link.href}>{link.text}</a></li>
+                        ))}
                     </ul>
                 </div>
                 <div>
-                    <p class="label-kicker">{t('contact.social')}</p>
+                    <p class="footer-col-title">Elsewhere</p>
                     <ul>
-                        {
-                            siteConfig.socialLinks?.map((l) => (
-                                <li>
-                                    <a href={l.href}>{l.text}</a>
-                                </li>
-                            ))
-                        }
+                        {socials.map((link) => (
+                            <li><a href={link.href} target="_blank" rel="noopener noreferrer">{link.text}</a></li>
+                        ))}
+                        <li><a href="/rss.xml">RSS</a></li>
                     </ul>
                 </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© {year} Danke Hidayat. Built with Astro.</p>
+                <p class="footer-bottom-links">
+                    <a href="/rss.xml">RSS</a>
+                    <a href="/Resume_Danke_Hidayat.pdf">Resume</a>
+                </p>
             </div>
         </div>
     </div>

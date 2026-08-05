@@ -1,13 +1,10 @@
 ---
-import unboundedWoff2 from '@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url';
-import manropeWoff2 from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import bricolageWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
+import sourceSansWoff2 from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
 import { getImage } from 'astro:assets';
 import siteConfig from '../data/site-config';
 import type { ImageInput } from '../types';
-import type { Lang } from '../i18n/ui';
-import { locales } from '../i18n/utils';
 
-import 'katex/dist/katex.min.css';
 import '../styles/global.css';
 
 export type Props = {
@@ -15,10 +12,9 @@ export type Props = {
     description?: string;
     image?: ImageInput | undefined;
     pageType?: 'website' | 'article';
-    lang?: Lang;
 };
 
-const { description = '', pageType = 'website', lang = 'en' } = Astro.props;
+const { description = '', pageType = 'website' } = Astro.props;
 const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' · ');
 const image = Astro.props.image ?? siteConfig.image;
 let resolvedImage: { src: string; alt?: string } | undefined;
@@ -53,29 +49,22 @@ function formatCanonicalURL(url: string | URL) {
 <title>{title}</title>
 <meta name="generator" content={Astro.generator} />
 
-<link rel="preload" as="font" type="font/woff2" href={unboundedWoff2} crossorigin="anonymous" />
-<link rel="preload" as="font" type="font/woff2" href={manropeWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={bricolageWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={sourceSansWoff2} crossorigin="anonymous" />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${siteConfig.title} RSS`} />
 
-{
-    locales.map((l) => (
-        <link rel="alternate" hreflang={l} href={new URL(l === 'en' ? '/' : `/${l}/`, Astro.site).toString()} />
-    ))
-}
-<link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).toString()} />
-
 <link rel="canonical" href={formatCanonicalURL(canonicalURL)} />
 <meta name="description" content={description} />
-<meta name="theme-color" content="#0c0e14" />
-<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#1E6B4A" />
+<meta name="color-scheme" content="light" />
 
 <meta property="og:type" content={pageType} />
 <meta property="og:url" content={formatCanonicalURL(canonicalURL)} />
 <meta property="og:title" content={title} />
-<meta property="og:locale" content={lang === 'id' ? 'id_ID' : 'en_US'} />
+<meta property="og:locale" content="en_US" />
 {description && <meta property="og:description" content={description} />}
 {resolvedImage?.src && <meta property="og:image" content={resolvedImage.src} />}
 {resolvedImage?.alt && <meta property="og:image:alt" content={resolvedImage.alt} />}

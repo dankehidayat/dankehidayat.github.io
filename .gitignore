@@ -17,6 +17,11 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local tooling / editor state (keep out of the repo)
+.impeccable/
+.opencode/
+.vscode/
+
 # macOS-specific files
 .DS_Store
 package-lock.json
