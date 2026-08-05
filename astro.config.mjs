@@ -1,3 +1,4 @@
+import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -135,7 +136,6 @@ export default defineConfig({
         // Stale i18n-era URLs (the old site served an /en/ locale prefix).
         // Exact paths only — rest-param redirects do not work in a static build.
         '/en': '/',
-        '/en/': '/',
         '/en/blog': '/blog',
         '/en/projects': '/#projects',
         '/en/experience': '/#experience',
@@ -145,6 +145,7 @@ export default defineConfig({
         '/en/rss.xml': '/rss.xml'
     },
     integrations: [
+        react(),
         mdx({
             remarkPlugins: [remarkMath],
             rehypePlugins: [rehypeKatex],

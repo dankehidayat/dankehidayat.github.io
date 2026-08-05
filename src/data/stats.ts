@@ -16,8 +16,6 @@ export const stats: Stat[] = [
     { value: '2+', label: 'Years as a developer' },
     // Verifiable: 6 curated project entries in src/content/projects/.
     { value: '6', label: 'Projects built' },
-    // TODO: confirm from CV — add a publications count once real entries exist.
-    { value: '0', label: 'Publications' },
     // Verifiable: 11 certification records in src/data/certifications.ts.
     { value: '11', label: 'Certifications' }
 ];

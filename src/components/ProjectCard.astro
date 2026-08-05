@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { projectMeta } from '../data/projects';
+import BrandIcon from './BrandIcon.astro';
 import Icon from './Icon.astro';
 
 type Props = {
@@ -10,6 +11,32 @@ type Props = {
 const { project } = Astro.props;
 const meta = projectMeta[project.id];
 const featuredTech = meta?.tech.slice(0, 4) ?? [];
+
+const iconForTech: Record<string, string> = {
+    TypeScript: 'typescript',
+    JavaScript: 'javascript',
+    React: 'react',
+    'Next.js': 'nextdotjs',
+    Fastify: 'fastify',
+    Prisma: 'prisma',
+    PostgreSQL: 'postgresql',
+    TimescaleDB: 'timescale',
+    WebSocket: 'websocket',
+    Docker: 'docker',
+    Caddy: 'caddy',
+    ESP32: 'espressif',
+    Arduino: 'arduino',
+    Blynk: 'blynk',
+    'Fuzzy Logic': 'fuzzy-logic',
+    'Sensor Fusion': 'sensor-fusion',
+    Laravel: 'laravel',
+    Flutter: 'flutter',
+    Dart: 'dart',
+    'REST APIs': 'rest-api',
+    MQTT: 'mqtt',
+    Sensors: 'sensor-fusion',
+    IoT: 'iot',
+};
 ---
 
 <article class="project-plate" data-plate>
@@ -18,7 +45,10 @@ const featuredTech = meta?.tech.slice(0, 4) ?? [];
     {featuredTech.length > 0 && (
         <ul class="project-tech">
             {featuredTech.map((tech) => (
-                <li class="tag-chip">{tech}</li>
+                <li class="tag-chip">
+                    <BrandIcon name={iconForTech[tech] ?? 'bolt'} size="0.85rem" />
+                    {tech}
+                </li>
             ))}
         </ul>
     )}

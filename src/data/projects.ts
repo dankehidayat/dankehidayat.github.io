@@ -20,7 +20,7 @@ export type ProjectMeta = {
 export const projectMeta: Record<string, ProjectMeta> = {
     selene: {
         id: 'selene',
-        tech: ['React', 'TypeScript', 'Fastify', 'PostgreSQL', 'TimescaleDB', 'Docker', 'Caddy'],
+        tech: ['React', 'TypeScript', 'Fastify', 'PostgreSQL', 'TimescaleDB', 'MQTT', 'EMQX', 'Docker', 'Caddy'],
         links: [
             { label: 'GitHub', href: 'https://github.com/dankehidayat/Selene' },
             { label: 'Live', href: 'https://selene.dankehidayat.my.id/' }
@@ -56,5 +56,10 @@ export const projectMeta: Record<string, ProjectMeta> = {
         id: 'hydrolevi',
         tech: ['ESP32', 'Arduino', 'Laravel', 'Blynk'],
         links: [{ label: 'GitHub', href: 'https://github.com/dankehidayat/HydroleVI' }]
+    },
+    trenvm: {
+        id: 'trenvm',
+        tech: ['Flutter', 'Dart', 'REST APIs', 'IoT'],
+        links: []
     }
 };

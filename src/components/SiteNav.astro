@@ -1,21 +1,21 @@
 ---
+import { getCollection } from 'astro:content';
 import Icon from './Icon.astro';
+import { sortItemsByDateDesc } from '../utils/data-utils';
+
+const blogPosts = (await getCollection('blog')).sort(sortItemsByDateDesc).slice(0, 5);
 
 const links = [
     { text: 'About', href: '#about' },
     { text: 'Experience', href: '#experience' },
     { text: 'Stack', href: '#stack' },
     { text: 'Projects', href: '#projects' },
-    { text: 'Notes', href: '#blog' },
+    { text: 'Notes', href: '/blog', dropdown: true },
     { text: 'Fun', href: '/fun' }
 ];
 
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isHome = pathname === '/';
-// On any non-home route the section links must navigate home first,
-// otherwise clicking a nav link on a blog post only appends the hash
-// to the current post URL (e.g. /blog/slug/#experience).
-// Absolute routes (e.g. /fun) pass through unchanged.
 const anchor = (hash: string) => (!isHome && hash.startsWith('#')) ? `/${hash}` : hash;
 const activeId = isHome ? pathname.split('#')[0] : null;
 ---
@@ -30,12 +30,38 @@ const activeId = isHome ? pathname.split('#')[0] : null;
             <nav class="site-links" aria-label="Primary">
                 {
                     links.map((link) => (
-                        <a
-                            href={anchor(link.href)}
-                            class:list={['site-link', isHome && activeId === link.href.slice(1) && 'is-active']}
-                        >
-                            {link.text}
-                        </a>
+                        link.dropdown ? (
+                            <div class="site-dropdown">
+                                <a
+                                    href={anchor(link.href)}
+                                    class:list={['site-link', isHome && activeId === link.href.slice(1) && 'is-active']}
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    {link.text}
+                                </a>
+                                <div class="site-dropdown-panel" role="menu">
+                                    <p class="site-dropdown-heading">Recent Notes</p>
+                                    {blogPosts.map((post) => (
+                                        <a
+                                            href={`/blog/${post.id}/`}
+                                            class="site-dropdown-item"
+                                            role="menuitem"
+                                            tabindex="-1"
+                                        >
+                                            <span class="site-dropdown-item-name">{post.data.title}</span>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <a
+                                href={anchor(link.href)}
+                                class:list={['site-link', isHome && activeId === link.href.slice(1) && 'is-active']}
+                            >
+                                {link.text}
+                            </a>
+                        )
                     ))
                 }
             </nav>
@@ -64,10 +90,25 @@ const activeId = isHome ? pathname.split('#')[0] : null;
         <div id="site-mobile" class="site-mobile">
             {
                 links.map((link) => (
-                    <a href={anchor(link.href)} class="site-mobile-link">
-                        {link.text}
-                        <Icon name="arrow-right" />
-                    </a>
+                    link.dropdown ? (
+                        <details class="site-mobile-group">
+                            <summary class="site-mobile-link">
+                                {link.text}
+                            </summary>
+                            <div class="site-mobile-sub">
+                                {blogPosts.map((post) => (
+                                    <a href={`/blog/${post.id}/`} class="site-mobile-sub-link">
+                                        {post.data.title}
+                                    </a>
+                                ))}
+                            </div>
+                        </details>
+                    ) : (
+                        <a href={anchor(link.href)} class="site-mobile-link">
+                            {link.text}
+                            <Icon name="arrow-right" />
+                        </a>
+                    )
                 ))
             }
             <a href={anchor('#contact')} class="btn btn-tangerine">
@@ -117,7 +158,58 @@ const activeId = isHome ? pathname.split('#')[0] : null;
             }
         });
 
-        // Mark the nav link for the section currently in view (home page only).
+        // ── Desktop dropdown hover/focus ──
+        const dropdowns = document.querySelectorAll<HTMLElement>('.site-dropdown');
+        dropdowns.forEach((dd) => {
+            let timer: ReturnType<typeof setTimeout> | null = null;
+            const toggle = (open: boolean) => {
+                dd.classList.toggle('is-open', open);
+                const link = dd.querySelector<HTMLAnchorElement>('.site-link');
+                if (link) link.setAttribute('aria-expanded', open ? 'true' : 'false');
+            };
+            dd.addEventListener('mouseenter', () => {
+                if (timer) { clearTimeout(timer); timer = null; }
+                toggle(true);
+            });
+            dd.addEventListener('mouseleave', () => {
+                timer = setTimeout(() => toggle(false), 120);
+            });
+            const link = dd.querySelector<HTMLAnchorElement>('.site-link');
+            const panel = dd.querySelector<HTMLElement>('.site-dropdown-panel');
+            if (link && panel) {
+                link.addEventListener('focus', () => toggle(true));
+                link.addEventListener('blur', (e) => {
+                    // Keep open if focus moved inside the panel
+                    if (panel.contains(e.relatedTarget as Node)) return;
+                    toggle(false);
+                });
+                panel.addEventListener('focusin', () => toggle(true));
+                panel.addEventListener('focusout', (e) => {
+                    if (dd.contains(e.relatedTarget as Node)) return;
+                    toggle(false);
+                });
+                // Keyboard navigation inside panel
+                const items = panel.querySelectorAll<HTMLAnchorElement>('.site-dropdown-item');
+                panel.addEventListener('keydown', (e) => {
+                    const current = document.activeElement as HTMLElement;
+                    const idx = Array.from(items).indexOf(current as HTMLAnchorElement);
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const next = items[(idx + 1) % items.length];
+                        next.focus();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prev = items[(idx - 1 + items.length) % items.length];
+                        prev.focus();
+                    } else if (e.key === 'Escape') {
+                        toggle(false);
+                        link.focus();
+                    }
+                });
+            }
+        });
+
+        // ── Active section observer ──
         const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.site-link'));
         const sections = links
             .map((link) => link.hash && document.getElementById(link.hash.slice(1)))

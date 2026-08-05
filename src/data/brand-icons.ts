@@ -51,5 +51,6 @@ export const brandIcons: Record<string, BrandIconDef> = {
     emqx: { kind: 'glyph', glyph: 'hexagon' },
     'sensor-fusion': { kind: 'glyph', glyph: 'circuit' },
     'fuzzy-logic': { kind: 'glyph', glyph: 'wave' },
-    'labdha-design-system': { kind: 'glyph', glyph: 'diamond' }
+    'labdha-design-system': { kind: 'glyph', glyph: 'diamond' },
+    iot: { kind: 'glyph', glyph: 'iot' }
 };

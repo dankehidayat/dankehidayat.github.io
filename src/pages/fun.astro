@@ -72,58 +72,80 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
 
         <section class="fun-section fun-music" id="music">
             <h2 class="fun-heading">Music</h2>
-            <p class="fun-intro">
-                What's on repeat right now, grouped by who's making it.
-            </p>
+            <p class="fun-intro">What's on right now and the tracks on repeat.</p>
 
-            <!-- Live now-playing, filled by the client from /api/now-playing (Vercel fn) -->
+            <!-- Live now-playing, polled from /api/now-playing every 30s -->
             <div class="now-playing" id="now-playing" hidden>
                 <div class="now-playing-card">
                     <img id="now-playing-art" class="now-playing-art" alt="" width="96" height="96" hidden />
                     <div class="now-playing-body">
                         <p class="now-playing-label" id="now-playing-label">
                             <span class="now-playing-dot" id="now-playing-dot" aria-hidden="true"></span>
-                            <span id="now-playing-label-text">Now playing</span>
+                            <span id="now-playing-label-text">Listening now</span>
                         </p>
-                        <p class="now-playing-track" id="now-playing-track"></p>
+                        <p class="now-playing-track" id="now-playing-track" aria-live="polite"></p>
                         <p class="now-playing-artist" id="now-playing-artist"></p>
+                        <p class="now-playing-album" id="now-playing-album" hidden></p>
                     </div>
                     <a class="now-playing-link" id="now-playing-link" href="#" target="_blank" rel="noopener">
                         <span>on last.fm</span>
                         <Icon name="external" aria-hidden="true" />
                     </a>
                 </div>
+                <p class="now-playing-refresh">Refreshes every 30 seconds</p>
             </div>
 
-            {
-                musicGroups.map((group) => (
-                    <div class="fun-group">
-                        <h3 class="fun-group-artist">{group.artist}</h3>
-                        <div class="fun-tracks">
-                            {
-                                group.tracks.map((track) => (
-                                    <div class="fun-track">
-                                        <p class="fun-track-name">
-                                            {track.title}
-                                            <span class="fun-track-meta">{track.meta}</span>
-                                        </p>
-                                        <iframe
-                                            title={`${track.title} on Spotify`}
-                                            src={`https://open.spotify.com/embed/track/${track.spotifyId}?utm_source=generator&theme=1`}
-                                            width="100%"
-                                            height="152"
-                                            frameBorder="0"
-                                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                            loading="lazy"
-                                            class="fun-embed"
-                                        ></iframe>
+            <!-- Favourite groups: flat on desktop, accordion on mobile -->
+            <h3 class="fun-subheading">On repeat</h3>
+            <div class="fun-music-accordion" id="fun-music">
+                {musicGroups.map((group, gi) => (
+                    <details class="fun-group-card" open data-accent={gi % 2}>
+                        <summary class="fun-group-header">
+                            <span class="fun-group-id" aria-hidden="true">{group.artist.slice(0, 2)}</span>
+                            <span class="fun-group-heading">
+                                <span class="fun-group-header-name">{group.artist}</span>
+                                <span class="fun-group-header-meta">
+                                    <span class="fun-group-header-count">{group.tracks.length} tracks</span>
+                                </span>
+                            </span>
+                            <svg
+                                class="fun-group-header-chevron"
+                                viewBox="0 0 24 24"
+                                width="16"
+                                height="16"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m9 6 6 6-6 6" />
+                            </svg>
+                        </summary>
+                        <div class="fun-group-tracks">
+                            {group.tracks.map((track, ti) => (
+                                <div class="fun-track-row">
+                                    <span class="fun-track-no" aria-hidden="true">{String(ti + 1).padStart(2, '0')}</span>
+                                    <div class="fun-track-row-info">
+                                        <span class="fun-track-row-name">{track.title}</span>
+                                        <span class="fun-track-row-meta">{track.meta}</span>
                                     </div>
-                                ))
-                            }
+                                    <iframe
+                                        class="fun-embed"
+                                        data-src={`https://open.spotify.com/embed/track/${track.spotifyId}?utm_source=generator&theme=1`}
+                                        width="100%"
+                                        height="80"
+                                        title={`${track.title} on Spotify`}
+                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                        loading="lazy"
+                                    ></iframe>
+                                </div>
+                            ))}
                         </div>
-                    </div>
-                ))
-            }
+                    </details>
+                ))}
+            </div>
 
             <h3 class="fun-subheading">Also on rotation</h3>
             <ul class="fun-artists">
@@ -145,6 +167,14 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
                     </li>
                 ))}
             </ul>
+
+            <p class="fun-music-actions">
+                <a class="fun-stats-btn" href="/stats">
+                    <span class="fun-stats-btn-mark" aria-hidden="true">LF</span>
+                    <span>Listening stats</span>
+                    <Icon name="arrow-right" class="fun-stats-btn-arrow" aria-hidden="true" />
+                </a>
+            </p>
         </section>
     </div>
 
@@ -164,6 +194,7 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
                 </p>
                 <h3 class="fun-dialog-title" id="fun-dialog-title"></h3>
                 <p class="fun-dialog-english" id="fun-dialog-english" hidden></p>
+                <p class="fun-dialog-desc" id="fun-dialog-desc" hidden></p>
                 <p class="fun-dialog-creator" id="fun-dialog-creator"></p>
                 <p class="fun-dialog-note" id="fun-dialog-note" hidden></p>
                 <div class="fun-dialog-links" id="fun-dialog-links"></div>
@@ -171,23 +202,28 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         </div>
     </dialog>
 
-    <script type="application/json" id="fun-data" set:html={JSON.stringify(allEntries)}></script>
+    <script type="application/json" id="fun-data" set:html={JSON.stringify({ entries: allEntries })}></script>
 
     <script>
-        const data = JSON.parse(document.getElementById('fun-data').textContent);
+        const raw = JSON.parse(document.getElementById('fun-data').textContent);
+        const data = raw.entries;
         const dialog = document.getElementById('fun-dialog') as HTMLDialogElement;
         const bySlug = new Map(data.map((e: any) => [e.slug, e]));
 
         const cover = document.getElementById('fun-dialog-cover') as HTMLImageElement;
         const title = document.getElementById('fun-dialog-title') as HTMLElement;
         const english = document.getElementById('fun-dialog-english') as HTMLElement;
+        const desc = document.getElementById('fun-dialog-desc') as HTMLElement;
         const creator = document.getElementById('fun-dialog-creator') as HTMLElement;
         const note = document.getElementById('fun-dialog-note') as HTMLElement;
         const badge = document.getElementById('fun-dialog-badge') as HTMLElement;
         const badgeText = document.getElementById('fun-dialog-badge-text') as HTMLElement;
         const links = document.getElementById('fun-dialog-links') as HTMLElement;
 
+        let closing = false;
+
         const openEntry = (slug: string) => {
+            if (closing) return;
             const e = bySlug.get(slug);
             if (!e) return;
             cover.src = `/fun/covers/${e.cover ?? e.slug}.jpg`;
@@ -195,6 +231,8 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
             title.textContent = e.title;
             english.textContent = e.english ?? '';
             english.hidden = !e.english;
+            desc.textContent = e.description ?? '';
+            desc.hidden = !e.description;
             creator.textContent = e.creator;
             note.textContent = e.note ?? '';
             note.hidden = !e.note;
@@ -210,14 +248,44 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
                         `</a>`
                 )
                 .join('');
-            dialog.showModal();
+            if (!dialog.open) dialog.showModal();
             document.body.style.overflow = 'hidden';
         };
 
         const close = () => {
-            dialog.close();
-            document.body.style.overflow = '';
+            if (!dialog.hasAttribute('open') || closing) return;
+            closing = true;
+            dialog.classList.add('is-closing');
+            let done = false;
+            const finish = () => {
+                if (done) return;
+                done = true;
+                dialog.removeEventListener('animationend', handler);
+                dialog.classList.remove('is-closing');
+                dialog.close();
+                document.body.style.overflow = '';
+                closing = false;
+            };
+            const handler = (ev: AnimationEvent) => {
+                if (ev.animationName === 'fun-dialog-out') finish();
+            };
+            dialog.addEventListener('animationend', handler);
+            // Fallback so a missing animationend (reduced motion, etc.) never
+            // leaves the dialog stuck open and blocks future clicks.
+            window.setTimeout(finish, 240);
         };
+
+        // Reset state on ANY close path (ESC, backdrop click, close()) so the
+        // next cover click always works.
+        dialog.addEventListener('close', () => {
+            closing = false;
+            dialog.classList.remove('is-closing');
+            document.body.style.overflow = '';
+        });
+        dialog.addEventListener('cancel', (ev) => {
+            // Let the native ESC close happen; the close listener resets state.
+            dialog.classList.add('is-closing');
+        });
 
         document.querySelectorAll('.fun-grid').forEach((grid) => {
             grid.addEventListener('click', (ev) => {
@@ -230,38 +298,89 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         dialog.addEventListener('click', (ev) => {
             if (ev.target === dialog) close();
         });
-        dialog.addEventListener('close', () => {
-            document.body.style.overflow = '';
-        });
 
-        // ── now playing (last.fm via the Vercel serverless function) ──
+
+        // ── now playing (last.fm, polled every 30s) ──
+        // Fetched from /api/now-playing (an Astro endpoint reading
+        // LASTFM_API_KEY / LASTFM_USERNAME from .env server-side). The card
+        // refreshes on a 30-second timer instead of only on page load.
         const nowPlaying = document.getElementById('now-playing');
+        const POLL_MS = 30000;
+
+        // ── music groups: flat on desktop, exclusive accordion on mobile ──
+        const musicAccordion = document.getElementById('fun-music');
+        if (musicAccordion) {
+            const cards = Array.from(musicAccordion.querySelectorAll('.fun-group-card'));
+            const mq = window.matchMedia('(min-width: 720px)');
+            const loadEmbeds = (card) => {
+                card.querySelectorAll('iframe[data-src]').forEach((f) => {
+                    if (!f.getAttribute('src')) f.setAttribute('src', f.dataset.src || '');
+                });
+            };
+            const applyLayout = () => {
+                if (mq.matches) {
+                    musicAccordion.classList.add('is-flat');
+                    cards.forEach((c) => {
+                        c.open = true;
+                        loadEmbeds(c);
+                    });
+                } else {
+                    musicAccordion.classList.remove('is-flat');
+                    cards.forEach((c, i) => {
+                        c.open = i === 0;
+                    });
+                    if (cards[0]) loadEmbeds(cards[0]);
+                }
+            };
+            cards.forEach((card) => {
+                card.addEventListener('toggle', () => {
+                    if (!card.open) return;
+                    loadEmbeds(card);
+                    if (!mq.matches) {
+                        cards.forEach((other) => {
+                            if (other !== card) other.open = false;
+                        });
+                    }
+                });
+            });
+            if (mq.addEventListener) mq.addEventListener('change', applyLayout);
+            applyLayout();
+        }
+
         if (nowPlaying) {
-            fetch('/api/now-playing')
-                .then((res) => res.json())
-                .then((data) => {
+            async function refreshNowPlaying() {
+                try {
+                    const res = await fetch('/api/now-playing');
+                    const data = await res.json();
                     if (!data || !data.ok) return;
                     const art = document.getElementById('now-playing-art') as HTMLImageElement;
                     const label = document.getElementById('now-playing-label-text');
                     const dot = document.getElementById('now-playing-dot');
-                    const track = document.getElementById('now-playing-track');
-                    const artist = document.getElementById('now-playing-artist');
+                    const trackEl = document.getElementById('now-playing-track');
+                    const artistEl = document.getElementById('now-playing-artist');
+                    const albumEl = document.getElementById('now-playing-album');
                     const link = document.getElementById('now-playing-link') as HTMLAnchorElement;
-                    if (data.image) {
+                    if (data.image && art) {
                         art.src = data.image;
                         art.alt = `${data.album || data.track} cover`;
                         art.hidden = false;
                     }
                     if (label) label.textContent = data.nowPlaying ? 'Listening now' : 'Last played';
                     if (dot) dot.classList.toggle('now-playing-dot-idle', !data.nowPlaying);
-                    if (track) track.textContent = data.track;
-                    if (artist) artist.textContent = data.artist;
+                    if (trackEl) trackEl.textContent = data.track ?? '';
+                    if (artistEl) artistEl.textContent = data.artist ?? '';
+                    if (albumEl) {
+                        albumEl.textContent = data.album ?? '';
+                        albumEl.hidden = !data.album;
+                    }
                     if (link) link.href = data.url || '#';
                     nowPlaying.hidden = false;
-                })
-                .catch(() => {
-                    // No serverless function (local dev, or non-Vercel hosting): stay hidden.
-                });
+                } catch {
+                    /* keep the card in its previous state */
+                }
+            }
+            refreshNowPlaying();
+            window.setInterval(refreshNowPlaying, POLL_MS);
         }
     </script>
 </BaseLayout>
@@ -322,53 +441,8 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         gap: 1.6rem 1.15rem;
     }
 
-    /* ── music ────────────────────────────────────────────── */
-    .fun-tracks {
-        display: grid;
-        gap: 1.5rem;
-        max-width: 30rem;
-    }
-
-    .fun-track-name {
-        display: flex;
-        flex-direction: column;
-        margin: 0 0 0.55rem;
-        font-family: var(--font-display);
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: var(--color-ink);
-    }
-
-    .fun-track-meta {
-        margin-top: 0.1rem;
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        font-weight: 400;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--color-tangerine-deep);
-    }
-
-    .fun-embed {
-        display: block;
-        border-radius: var(--radius);
-        background: var(--color-surface);
-    }
-
     .fun-subheading {
         margin: 2.5rem 0 0.9rem;
-        font-family: var(--font-display);
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--color-ink);
-    }
-
-    .fun-group {
-        margin-top: 2rem;
-    }
-
-    .fun-group-artist {
-        margin: 0 0 0.9rem;
         font-family: var(--font-display);
         font-size: 1.2rem;
         font-weight: 700;
@@ -394,9 +468,9 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
 
     .now-playing-art {
         flex: none;
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 8px;
+        width: 4.25rem;
+        height: 4.25rem;
+        border-radius: 10px;
         object-fit: cover;
         border: 1px solid var(--color-border);
     }
@@ -436,7 +510,7 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: var(--font-display);
-        font-size: 1.05rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: var(--color-ink);
     }
@@ -450,6 +524,24 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         font-size: 0.72rem;
         letter-spacing: 0.06em;
         color: var(--color-tangerine-deep);
+    }
+
+    .now-playing-album {
+        margin: 0.05rem 0 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--color-ink-muted);
+    }
+
+    .now-playing-refresh {
+        margin: 0.6rem 0 0;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        color: var(--color-ink-muted);
     }
 
     .now-playing-link {
@@ -472,6 +564,250 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
     .now-playing-link svg {
         width: 0.85rem;
         height: 0.85rem;
+    }
+
+    /* ── music groups: flat on desktop, accordion on mobile ─────────── */
+    .fun-music-accordion {
+        display: grid;
+        gap: 1rem;
+        max-width: 38rem;
+    }
+
+    @media (min-width: 720px) {
+        .fun-music-accordion {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+            max-width: none;
+        }
+    }
+
+    .fun-group-card {
+        border: 1px solid var(--color-border);
+        border-radius: 14px;
+        background: var(--color-surface);
+        overflow: hidden;
+    }
+
+    .fun-group-card summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.85rem;
+        padding: 1rem 1.25rem;
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .fun-group-card summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .fun-group-id {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 10px;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .fun-group-card[data-accent='0'] .fun-group-id {
+        background: var(--color-tangerine);
+        color: var(--color-ink-on-tangerine);
+    }
+
+    .fun-group-card[data-accent='1'] .fun-group-id {
+        background: var(--color-green);
+        color: var(--color-ink-on-green);
+    }
+
+    .fun-group-heading {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+
+    .fun-group-header-name {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--color-ink);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    .fun-group-header-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .fun-group-header-count {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 999px;
+        color: var(--color-ink-muted);
+    }
+
+    .fun-group-card[open] .fun-group-header-count {
+        border-color: var(--color-tangerine);
+        background: var(--color-tangerine);
+        color: var(--color-ink-on-tangerine);
+    }
+
+    .fun-group-header-chevron {
+        flex: none;
+        color: var(--color-ink-muted);
+        transition: transform 0.25s var(--ease);
+    }
+
+    .fun-group-card[open] .fun-group-header-chevron {
+        transform: rotate(90deg);
+    }
+
+    .fun-group-tracks {
+        display: grid;
+        gap: 0.85rem;
+        padding: 0.1rem 1.25rem 1.25rem;
+    }
+
+    .fun-track-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.6rem 0.7rem;
+        padding: 0.85rem 0.9rem;
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        background: var(--color-surface);
+    }
+
+    .fun-track-row:first-child {
+        border-color: color-mix(in oklab, var(--color-tangerine) 45%, var(--color-border));
+        background: color-mix(in oklab, var(--color-tangerine) 4%, var(--color-surface));
+    }
+
+    .fun-track-no {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--color-ink-muted);
+        padding-top: 0.1rem;
+    }
+
+    .fun-track-row-info {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.6rem;
+        min-width: 0;
+    }
+
+    .fun-track-row-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--color-ink);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .fun-track-row-meta {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        color: var(--color-ink-muted);
+        white-space: nowrap;
+    }
+
+    .fun-embed {
+        grid-column: 1 / -1;
+        width: 100%;
+        height: 80px;
+        border: 0;
+        border-radius: 8px;
+    }
+
+    /* desktop: everything open, summary inert, no chevron */
+    .fun-music-accordion.is-flat .fun-group-card summary {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .fun-music-accordion.is-flat .fun-group-header-chevron {
+        display: none;
+    }
+
+    .fun-music-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin: 1.75rem 0 0;
+    }
+
+    /* Listening stats — a ticket-style pill: monogram mark, label, sliding arrow */
+    .fun-stats-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.4rem 1.15rem 0.4rem 0.45rem;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-strong);
+        background: var(--color-surface);
+        color: var(--color-ink);
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 10px 22px -16px rgb(37 31 22 / 0.35);
+        transition:
+            border-color 0.22s var(--ease),
+            transform 0.22s var(--ease),
+            box-shadow 0.22s var(--ease);
+    }
+
+    .fun-stats-btn-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.1rem;
+        height: 2.1rem;
+        border-radius: 999px;
+        background: var(--color-tangerine);
+        color: var(--color-ink-on-tangerine);
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .fun-stats-btn-arrow {
+        width: 1rem;
+        height: 1rem;
+        color: var(--color-tangerine-deep);
+        transition: transform 0.22s var(--ease);
+    }
+
+    .fun-stats-btn:hover {
+        border-color: var(--color-tangerine);
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px -16px rgb(37 31 22 / 0.4);
+    }
+
+    .fun-stats-btn:hover .fun-stats-btn-arrow {
+        transform: translateX(3px);
+    }
+
+    .fun-stats-btn:focus-visible {
+        outline: 2px solid var(--color-tangerine);
+        outline-offset: 3px;
     }
 
     .fun-artists {
@@ -618,6 +954,13 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
         color: var(--color-ink-muted);
     }
 
+    .fun-dialog-desc {
+        margin: 0.75rem 0 0;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: var(--color-ink-body);
+    }
+
     .fun-dialog-creator {
         margin: 0.9rem 0 0;
         font-family: var(--font-mono);
@@ -688,6 +1031,64 @@ const allEntries = [...funManga, ...funAnime, ...funNovels];
 
         .fun-dialog-body {
             text-align: left;
+        }
+    }
+
+    /* ── dialog animation ───────────────────────────────────── */
+    .fun-dialog[open] {
+        animation: fun-dialog-in 0.2s ease-out;
+    }
+
+    .fun-dialog[open]::backdrop {
+        animation: fun-dialog-backdrop 0.2s ease-out;
+    }
+
+    .fun-dialog.is-closing {
+        animation: fun-dialog-out 0.18s ease-in forwards;
+        pointer-events: none;
+    }
+
+    .fun-dialog.is-closing::backdrop {
+        animation: fun-dialog-backdrop-out 0.18s ease-in forwards;
+    }
+
+    @keyframes fun-dialog-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.96);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes fun-dialog-out {
+        from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(12px) scale(0.97);
+        }
+    }
+
+    @keyframes fun-dialog-backdrop {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fun-dialog-backdrop-out {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
         }
     }
 </style>
