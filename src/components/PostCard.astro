@@ -11,7 +11,7 @@ type Props = {
 
 const { post, class: className, headingLevel = 'h3', showExcerpt = true } = Astro.props;
 const Tag = headingLevel;
-const href = `/blog/${post.id}/`;
+const href = `/notes/${post.id}/`;
 ---
 
 <article class:list={['post-row', className]} data-row>

@@ -94,7 +94,7 @@ seo:
 
 - Posts support `$math$` / `$$math$$` via KaTeX.
 - Code blocks get a language label and a copy button automatically.
-- Posts appear in reverse chronological order on `/blog` and in the RSS feed.
+- Posts appear in reverse chronological order on `/notes` and in the RSS feed.
 
 ### Projects
 

@@ -41,7 +41,7 @@ const readingMinutes = Math.max(1, Math.round(words / 200));
     pageType="article"
 >
     <article class="content-page reading-column">
-        <a href="/blog" class="post-back">
+        <a href="/notes" class="post-back">
             <Icon name="arrow-left" aria-hidden="true" />
             All notes
         </a>
@@ -86,7 +86,7 @@ const readingMinutes = Math.max(1, Math.round(words / 200));
         (prevPost || nextPost) && (
             <nav class="post-nav reading-column" aria-label="More notes">
                 {nextPost ? (
-                    <a href={`/blog/${nextPost.id}/`} class="post-nav-link">
+                    <a href={`/notes/${nextPost.id}/`} class="post-nav-link">
                         <span class="post-nav-label">Next</span>
                         <span class="post-nav-title">{nextPost.data.title}</span>
                     </a>
@@ -94,7 +94,7 @@ const readingMinutes = Math.max(1, Math.round(words / 200));
                     <span class="post-nav-link post-nav-link-empty" aria-hidden="true" />
                 )}
                 {prevPost ? (
-                    <a href={`/blog/${prevPost.id}/`} class="post-nav-link">
+                    <a href={`/notes/${prevPost.id}/`} class="post-nav-link">
                         <span class="post-nav-label">Previous</span>
                         <span class="post-nav-title">{prevPost.data.title}</span>
                     </a>

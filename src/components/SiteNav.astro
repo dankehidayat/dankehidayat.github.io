@@ -10,7 +10,7 @@ const links = [
     { text: 'Experience', href: '#experience' },
     { text: 'Stack', href: '#stack' },
     { text: 'Projects', href: '#projects' },
-    { text: 'Notes', href: '/blog', dropdown: true },
+    { text: 'Notes', href: '/notes', dropdown: true },
     { text: 'Fun', href: '/fun' }
 ];
 
@@ -44,7 +44,7 @@ const activeId = isHome ? pathname.split('#')[0] : null;
                                     <p class="site-dropdown-heading">Recent Notes</p>
                                     {blogPosts.map((post) => (
                                         <a
-                                            href={`/blog/${post.id}/`}
+                                            href={`/notes/${post.id}/`}
                                             class="site-dropdown-item"
                                             role="menuitem"
                                             tabindex="-1"

@@ -131,17 +131,17 @@ export default defineConfig({
         '/experience': '/#experience',
         '/about': '/#about',
         '/contact': '/#contact',
-        '/tags': '/blog',
+        '/tags': '/notes',
         '/id': '/',
         // Stale i18n-era URLs (the old site served an /en/ locale prefix).
         // Exact paths only — rest-param redirects do not work in a static build.
         '/en': '/',
-        '/en/blog': '/blog',
+        '/en/blog': '/notes',
         '/en/projects': '/#projects',
         '/en/experience': '/#experience',
         '/en/about': '/#about',
         '/en/contact': '/#contact',
-        '/en/tags': '/blog',
+        '/en/tags': '/notes',
         '/en/rss.xml': '/rss.xml'
     },
     integrations: [

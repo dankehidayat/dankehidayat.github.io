@@ -22,7 +22,7 @@ export async function GET(context) {
                 title: post.data.title,
                 description: post.data.excerpt,
                 content,
-                link: `/blog/${post.id}/`,
+                link: `/notes/${post.id}/`,
                 pubDate: new Date(post.data.publishDate)
             };
         })
