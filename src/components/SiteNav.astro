@@ -90,25 +90,10 @@ const activeId = isHome ? pathname.split('#')[0] : null;
         <div id="site-mobile" class="site-mobile">
             {
                 links.map((link) => (
-                    link.dropdown ? (
-                        <details class="site-mobile-group">
-                            <summary class="site-mobile-link">
-                                {link.text}
-                            </summary>
-                            <div class="site-mobile-sub">
-                                {blogPosts.map((post) => (
-                                    <a href={`/blog/${post.id}/`} class="site-mobile-sub-link">
-                                        {post.data.title}
-                                    </a>
-                                ))}
-                            </div>
-                        </details>
-                    ) : (
-                        <a href={anchor(link.href)} class="site-mobile-link">
-                            {link.text}
-                            <Icon name="arrow-right" />
-                        </a>
-                    )
+                    <a href={anchor(link.href)} class="site-mobile-link">
+                        {link.text}
+                        <Icon name="arrow-right" />
+                    </a>
                 ))
             }
             <a href={anchor('#contact')} class="btn btn-tangerine">

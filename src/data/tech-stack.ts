@@ -21,6 +21,7 @@ export const stackGroups: StackGroup[] = [
             { name: 'JavaScript', icon: 'javascript' },
             { name: 'Dart', icon: 'dart' },
             { name: 'C / C++', icon: 'cplusplus' },
+            { name: 'Python', icon: 'python' },
             { name: 'SQL', icon: 'sql' }
         ]
     },
@@ -42,20 +43,25 @@ export const stackGroups: StackGroup[] = [
         items: [
             { name: 'PostgreSQL', icon: 'postgresql' },
             { name: 'TimescaleDB', icon: 'timescale' },
-            { name: 'WebSocket', icon: 'websocket' },
-            { name: 'REST APIs', icon: 'rest-api' }
+            { name: 'MongoDB', icon: 'mongodb' }
         ]
     },
     {
         label: 'DevOps & Infrastructure',
         items: [
             { name: 'Docker', icon: 'docker' },
-            { name: 'Docker Compose', icon: 'docker-compose' },
             { name: 'Ansible', icon: 'ansible' },
             { name: 'Caddy', icon: 'caddy' },
             { name: 'Linux', icon: 'linux' },
-            { name: 'Git', icon: 'git' },
-            { name: 'CI/CD', icon: 'ci-cd' }
+            { name: 'macOS', icon: 'apple' },
+            { name: 'Git', icon: 'git' }
+        ]
+    },
+    {
+        label: 'Networking',
+        items: [
+            { name: 'Cisco', icon: 'cisco' },
+            { name: 'MikroTik', icon: 'mikrotik' }
         ]
     },
     {
@@ -63,18 +69,15 @@ export const stackGroups: StackGroup[] = [
         items: [
             { name: 'ESP32', icon: 'espressif' },
             { name: 'Arduino', icon: 'arduino' },
-            { name: 'Blynk', icon: 'blynk' },
-            { name: 'MQTT', icon: 'mqtt' },
-            { name: 'EMQX', icon: 'emqx' },
-            { name: 'Sensor Fusion', icon: 'sensor-fusion' },
-            { name: 'Fuzzy Logic', icon: 'fuzzy-logic' }
+            { name: 'MQTT', icon: 'mqtt' }
         ]
     },
     {
         label: 'Design & Tools',
         items: [
             { name: 'Figma', icon: 'figma' },
-            { name: 'Labdha Design System', icon: 'labdha-design-system' }
+            { name: 'Proteus', icon: 'proteus' },
+            { name: 'KiCAD', icon: 'kicad' }
         ]
     }
 ];

@@ -2,8 +2,19 @@
 /**
  * Brand marks + generic glyphs for the tech stack and certification lists.
  * Brand marks are filled paths from simple-icons (each vendor's official hex);
- * generic glyphs are hand-drawn strokes matching the site's 1.7px icon set.
+ * generic glyphs are stroke icons from @hugeicons/core-free-icons.
  */
+import Database01Icon from '@hugeicons/core-free-icons/Database01Icon';
+import Plug01Icon from '@hugeicons/core-free-icons/Plug01Icon';
+import BracketsIcon from '@hugeicons/core-free-icons/BracketsIcon';
+import Layers01Icon from '@hugeicons/core-free-icons/Layers01Icon';
+import BoltIcon from '@hugeicons/core-free-icons/BoltIcon';
+import Hexagon01Icon from '@hugeicons/core-free-icons/Hexagon01Icon';
+import CircuitBoardIcon from '@hugeicons/core-free-icons/CircuitBoardIcon';
+import WaveIcon from '@hugeicons/core-free-icons/WaveIcon';
+import Diamond01Icon from '@hugeicons/core-free-icons/Diamond01Icon';
+import Wifi01Icon from '@hugeicons/core-free-icons/Wifi01Icon';
+import { renderIconSvg } from '../lib/huge-icons';
 import { brandIcons } from '../data/brand-icons';
 
 type Props = { name: string; size?: string; class?: string };
@@ -12,20 +23,17 @@ const { name, size = '1rem', class: className } = Astro.props;
 
 const def = brandIcons[name];
 
-const strokeGlyphs: Record<string, string> = {
-    database:
-        '<ellipse cx="12" cy="5" rx="7.5" ry="3"/><path d="M4.5 5v7c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V5"/><path d="M4.5 12v7c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-7"/>',
-    plug: '<path d="M9 4v5M15 4v5"/><path d="M7 9h10v3a5 5 0 0 1-10 0z"/><path d="M12 17v3"/>',
-    brackets:
-        '<path d="M10 4.5c-2.5 0-2.5 3-2.5 4 0 1.5-.5 3-2 3 1.5 0 2 1.5 2 3 0 1 .25 4 2.75 4M14 4.5c2.5 0 2.5 3 2.5 4 0 1.5.5 3 2 3-1.5 0-2 1.5-2 3 0 1-.25 4-2.75 4"/>',
-    layers: '<path d="M12 3.5l8 4.5-8 4.5-8-4.5z"/><path d="M4 12.5l8 4.5 8-4.5"/><path d="M4 16.5l8 4.5 8-4.5"/>',
-    bolt: '<path d="M13 3L5.5 13.5H11L10 21l7.5-10.5H12z"/>',
-    hexagon: '<path d="M12 2.5l8.1 4.7v9.4L12 21.5l-8.1-4.7V7.2z"/>',
-    circuit:
-        '<rect x="8" y="8" width="8" height="8" rx="1.5"/><path d="M8 10.5H5M8 13.5H5M19 10.5h-3M19 13.5h-3M10.5 8V5M13.5 8V5M10.5 19v-3M13.5 19v-3"/>',
-    wave: '<path d="M4 13c2-4 4-4 6 0s4 4 6 0 2-3 4-2"/>',
-    diamond: '<path d="M12 4l6 8-6 8-6-8z"/>',
-    iot: '<path d="M12 4a8 8 0 0 0-8 8"/><path d="M12 8a4 4 0 0 0-4 4"/><circle cx="12" cy="16" r="1.5"/><path d="M19 12a7 7 0 0 0-7-7"/><path d="M19 12a3 3 0 0 0-3-3"/><circle cx="19" cy="12" r="1"/>'
+const glyphIcons: Record<string, string> = {
+    database: renderIconSvg(Database01Icon),
+    plug: renderIconSvg(Plug01Icon),
+    brackets: renderIconSvg(BracketsIcon),
+    layers: renderIconSvg(Layers01Icon),
+    bolt: renderIconSvg(BoltIcon),
+    hexagon: renderIconSvg(Hexagon01Icon),
+    circuit: renderIconSvg(CircuitBoardIcon),
+    wave: renderIconSvg(WaveIcon),
+    diamond: renderIconSvg(Diamond01Icon),
+    iot: renderIconSvg(Wifi01Icon)
 };
 ---
 
@@ -44,7 +52,7 @@ const strokeGlyphs: Record<string, string> = {
     )
 }
 {
-    def?.kind === 'glyph' && def.glyph && strokeGlyphs[def.glyph] && (
+    def?.kind === 'glyph' && def.glyph && glyphIcons[def.glyph] && (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -53,12 +61,8 @@ const strokeGlyphs: Record<string, string> = {
             class={className}
             aria-hidden="true"
             fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
         >
-            <Fragment set:html={strokeGlyphs[def.glyph]} />
+            <Fragment set:html={glyphIcons[def.glyph]} />
         </svg>
     )
 }

@@ -35,6 +35,7 @@ const brandIcons = {
     javascript: { type: 'brand', slug: 'javascript' },
     dart: { type: 'brand', slug: 'dart' },
     cplusplus: { type: 'brand', slug: 'cplusplus' },
+    python: { type: 'brand', slug: 'python' },
     // Frameworks & Libraries
     react: { type: 'brand', slug: 'react' },
     nextdotjs: { type: 'brand', slug: 'nextdotjs' },
@@ -47,11 +48,13 @@ const brandIcons = {
     // Data & Backend
     postgresql: { type: 'brand', slug: 'postgresql' },
     timescale: { type: 'brand', slug: 'timescale' },
+    mongodb: { type: 'brand', slug: 'mongodb' },
     // DevOps & Infrastructure
     docker: { type: 'brand', slug: 'docker' },
     ansible: { type: 'brand', slug: 'ansible' },
     caddy: { type: 'brand', slug: 'caddy' },
-    linux: { type: 'brand', slug: 'linux' },
+    // Tux renders black on the warm paper, not simple-icons' brand yellow.
+    linux: { type: 'path', path: readPath('linux'), hex: '#000000' },
     git: { type: 'brand', slug: 'git' },
     // Embedded & IoT
     espressif: { type: 'brand', slug: 'espressif' },
@@ -59,6 +62,11 @@ const brandIcons = {
     mqtt: { type: 'brand', slug: 'mqtt' },
     // Design & Tools
     figma: { type: 'brand', slug: 'figma' },
+    proteus: { type: 'brand', slug: 'proteus' },
+    kicad: { type: 'brand', slug: 'kicad' },
+    apple: { type: 'brand', slug: 'apple' },
+    // Networking
+    mikrotik: { type: 'brand', slug: 'mikrotik' },
     // Cert issuers
     ibm: { type: 'path', path: ibmPath, hex: '#052FAD' },
     cisco: { type: 'brand', slug: 'cisco' },

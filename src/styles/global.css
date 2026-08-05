@@ -526,54 +526,7 @@ li {
     pointer-events: none;
 }
 
-/* ── mobile accordion sub-menus ─────────────────────────────── */
-.site-mobile-group {
-    border-bottom: 1px solid var(--color-border);
-}
-
-.site-mobile-group:last-of-type {
-    border-bottom: 0;
-}
-
-.site-mobile-group summary {
-    list-style: none;
-}
-
-.site-mobile-group summary::-webkit-details-marker {
-    display: none;
-}
-
-.site-mobile-group .site-mobile-link {
-    cursor: pointer;
-}
-
-.site-mobile-group[open] .site-mobile-link svg {
-    transform: rotate(180deg);
-}
-
-.site-mobile-sub {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0 0.75rem 0.75rem;
-}
-
-.site-mobile-sub-link {
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-ink-body);
-    text-decoration: none;
-    transition:
-        background 0.15s var(--ease),
-        color 0.15s var(--ease);
-}
-
-.site-mobile-sub-link:hover {
-    background: color-mix(in oklab, var(--color-green) 8%, transparent);
-    color: var(--color-green-deep);
-}
+/* ── mobile accordion sub-menus (removed: nav links now navigate directly) */
 
 .site-menu-btn {
     display: inline-flex;
@@ -2571,6 +2524,13 @@ li {
     font-size: 0.64rem;
     color: color-mix(in oklab, var(--color-ink-on-green) 78%, transparent);
     text-shadow: 0 1px 2px rgb(37 31 22 / 0.5);
+}
+
+/* Mobile: cover-only tiles — hide the label overlay so the art leads. */
+@media (max-width: 639px) {
+    .collage-overlay {
+        display: none;
+    }
 }
 
 /* ── ranked top lists (cards, no bars) ───────────────────────────── */

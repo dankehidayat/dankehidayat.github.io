@@ -145,7 +145,7 @@ function ListeningClock({ clock, sample }: { clock: number[]; sample: number }) 
     );
 }
 
-// ── Top tags: this month vs past month (area bump) ─────────────────────
+// ── Top tags: last month vs this month (area bump) ─────────────────────
 
 function TagBump({ topTags }: { topTags: NonNullable<Payload['topTags']> }) {
     if (!topTags.series.length) return null;
@@ -153,7 +153,7 @@ function TagBump({ topTags }: { topTags: NonNullable<Payload['topTags']> }) {
         <section className="chart-card">
             <header className="chart-head">
                 <h2 className="chart-title">Top tags</h2>
-                <span className="chart-tag">{topTags.series.length} tags · this vs last month</span>
+                <span className="chart-tag">{topTags.series.length} tags · last vs this month</span>
             </header>
             <div className="chart-body bump-body" style={{ height: 300 }}>
                 <ResponsiveBump
@@ -184,7 +184,7 @@ function TagBump({ topTags }: { topTags: NonNullable<Payload['topTags']> }) {
                     animate
                     motionConfig="gentle"
                     role="img"
-                    ariaLabel="Top tags ranked this month versus last month"
+                    ariaLabel="Top tags ranked last month versus this month"
                     tooltip={({ serie, data }: any) => (
                         <div className="chart-tip">
                             <span className="chart-tip-title">#{data.y} · {serie.id}</span>

@@ -28,7 +28,7 @@ export const projectMeta: Record<string, ProjectMeta> = {
     },
     'flowpoint-next': {
         id: 'flowpoint-next',
-        tech: ['Next.js', 'Prisma', 'PostgreSQL', 'WebSocket'],
+        tech: ['Next.js', 'Prisma', 'PostgreSQL'],
         links: [
             { label: 'GitHub', href: 'https://github.com/dankehidayat/FlowPoint-Next' },
             { label: 'Live', href: 'https://flowpoint.dankehidayat.my.id/' }
@@ -44,12 +44,12 @@ export const projectMeta: Record<string, ProjectMeta> = {
     },
     'eco-office': {
         id: 'eco-office',
-        tech: ['ESP32', 'Arduino', 'Fuzzy Logic', 'Blynk'],
+        tech: ['ESP32', 'Arduino', 'Blynk'],
         links: [{ label: 'GitHub', href: 'https://github.com/dankehidayat/Eco-Office' }]
     },
     'ecobin-sorter': {
         id: 'ecobin-sorter',
-        tech: ['ESP32', 'Arduino', 'Sensor Fusion', 'Blynk'],
+        tech: ['ESP32', 'Arduino', 'Blynk'],
         links: [{ label: 'GitHub', href: 'https://github.com/dankehidayat/EcoBin-Sorter' }]
     },
     hydrolevi: {
@@ -59,7 +59,7 @@ export const projectMeta: Record<string, ProjectMeta> = {
     },
     trenvm: {
         id: 'trenvm',
-        tech: ['Flutter', 'Dart', 'REST APIs', 'IoT'],
+        tech: ['Flutter', 'Dart'],
         links: []
     }
 };

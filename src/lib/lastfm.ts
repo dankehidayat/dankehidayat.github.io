@@ -172,7 +172,7 @@ async function fetchWeekTotal(apiKey: string, user: string) {
     return { plays, from: Number(week.from), to: Number(week.to) };
 }
 
-// ── Top tags: THIS month vs PAST month (area bump chart) ───────────────
+// ── Top tags: LAST month vs THIS month (area bump chart) ───────────────
 
 export type TagBumpPoint = { x: string; y: number };
 export type TagBumpSeries = { id: string; data: TagBumpPoint[] };
@@ -225,7 +225,7 @@ export async function fetchTagBump(apiKey: string, user: string): Promise<TagBum
     const { startLast, startThis } = monthBoundaries();
     const scrobbles = await fetchWindowScrobbles(apiKey, user, startLast);
     if (scrobbles.length === 0) {
-        return { periods: ['This month', 'Last month'], monthIndex: 0, series: [] };
+        return { periods: ['Last month', 'This month'], monthIndex: 0, series: [] };
     }
 
     // Plays per artist per window.
@@ -276,12 +276,12 @@ export async function fetchTagBump(apiKey: string, user: string): Promise<TagBum
     );
     const top = [...totalScore.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name]) => name);
 
-    const periods = ['This month', 'Last month'];
+    const periods = ['Last month', 'This month'];
     const series = top.map((name) => ({
         id: name,
         data: [
-            { x: periods[0], y: rankThis(name) },
-            { x: periods[1], y: rankLast(name) },
+            { x: periods[0], y: rankLast(name) },
+            { x: periods[1], y: rankThis(name) },
         ],
     }));
 
