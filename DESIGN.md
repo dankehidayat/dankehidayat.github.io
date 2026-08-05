@@ -55,10 +55,43 @@ typography:
     fontWeight: 500
     lineHeight: 1.5
     letterSpacing: "0.08em"
+  scale:
+    mono-2xs: "0.6rem"
+    mono-1: "0.62rem"
+    mono-2: "0.66rem"
+    mono-3: "0.68rem"
+    mono-4: "0.7rem"
+    mono-5: "0.72rem"
+    mono-6: "0.74rem"
+    mono-7: "0.75rem"
+    mono-8: "0.8rem"
+    mono-9: "0.88rem"
+    card-title: "0.92rem"
+    body-sm: "0.95rem"
+    group-header: "1.15rem"
+    subheading: "1.2rem"
+  fun-heading:
+    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
+    fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)"
+    fontWeight: 700
+  fun-dialog-title:
+    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
+    fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)"
+    fontWeight: 700
+  fun-cover-mono:
+    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
+    fontSize: "clamp(2.5rem, 9vw, 4rem)"
+    fontWeight: 700
+  fun-dialog-mono:
+    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
+    fontSize: "clamp(2.75rem, 12vw, 4.5rem)"
+    fontWeight: 700
 rounded:
   sm: "6px"
   md: "10px"
+  mdx: "12px"
   lg: "14px"
+  xl: "18px"
   pill: "999px"
 spacing:
   xs: "0.4rem"
@@ -297,9 +330,10 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 
 ### Fun page (the leisure corner)
 - **Ledger.** The page opens with a short, human lede ("This page corner is where we stop with all the work life for a while..."), then three sections — manga / anime & light novels / music — each with a count chip beside the section heading (mono 0.72rem, ink-muted, a white hairline pill with 999px radius showing the bare number).
-- **Cards (FunCard).** A responsive cover grid (`repeat(auto-fill, minmax(166px, 1fr))`, 5 columns on desktop, 2 on mobile). Each card is a `<button>`: the 2:3 cover art with a 4px radius and a hairline border, a heart chip in the top-right corner (tangerine field, ink heart icon) for favorites, and the title in two clamped lines below. Hover lifts the cover, shows a small "Details" ink pill over the art (bottom-left), and tints the title green.
+- **Cards (FunCard).** A responsive cover grid (`repeat(auto-fill, minmax(166px, 1fr))`, 5 columns on desktop, 2 on mobile). Each card is a `<button>`: the 2:3 cover art with a 10px radius and a hairline border, a heart chip in the top-right corner (tangerine field, ink heart icon) for favorites, and the title in two clamped lines below. Hover lifts the cover, shows a small "Details" ink pill over the art (bottom-left), and tints the title green. A missing cover file degrades to a monogram tile (the title's first initial in Bricolage on the tangerine ramp) instead of a broken-image icon.
 - **Detail dialog.** Clicking a card opens a native `<dialog>` (backdrop dim, ESC / backdrop / close-button dismiss, body scroll lock). Desktop is a two-column panel (cover column `minmax(136px,168px)` + details): title, badge for favorites ("Favorite" / "All-time favorite"), creator line, note, and a list of links — "Details" (MAL / AniList) plus "Buy" or "Read online" per entry. Mobile turns into a bottom sheet (cover 9rem, radius 18px 18px 0 0). JS reads a JSON blob embedded in the page (`#fun-data`) keyed by card slug.
-- **Music section.** A live "now playing" card at the top, fed by a Vercel serverless function (`api/now-playing.mjs`) that reads `LASTFM_API_KEY` / `LASTFM_USERNAME` from the environment — a green pulsing dot with "Listening now", or a muted dot with "Last played", plus the track, artist, cover, and a link to the last.fm page. Below it the on-repeat tracks are grouped by artist (CHiCO with HoneyWorks, 初星学園 · Gakuen iDOLM@STER), each track keeping its Spotify embed under its artist heading. The section closes with "Also on rotation": a grid of artist chips, each linking out to the artist's Spotify page. If the serverless function is missing or unconfigured (local dev, GitHub Pages), the now-playing card stays hidden and the rest of the section is unaffected.
+- **Music section.** A live "now playing" card at the top, polled from the prerendered `/api/now-playing` endpoint every 30s (a green pulsing dot with "Listening now", or a muted dot with "Last played", plus the track, artist, cover, and a link to the last.fm page). If the feed fails two polls in a row the card shows a muted "last.fm unavailable" state rather than hiding or silently keeping stale data. Below it the on-repeat tracks are grouped by artist (CHiCO with HoneyWorks, 初星学園 · Gakuen iDOLM@STER); each track row keeps a light link-out "Listen on Spotify" action instead of a heavy embedded player. The section closes with "Also on rotation": a grid of artist chips, each linking out to the artist's Spotify page. If the endpoint is unconfigured (local dev, GitHub Pages) the now-playing card stays hidden and the rest of the section is unaffected.
+- **Fun-page type & radius ramp.** This corner deliberately runs its own smaller instrument ramp and looser radii than the rest of the site, so don't "fix" them as drift. Mono labels step 0.62 / 0.66 / 0.68 / 0.7 / 0.72 / 0.74 / 0.8 / 0.88rem (count chips, now-playing meta, group counts, dialog creator/badge, artist chips, stats-ticket mark); display sizes are the card title 0.92rem, group headers 1.15rem, dialog title clamp(1.15, 2.5vw, 1.4rem), and section headings clamp(1.4, 2.6vw, 1.9rem). Radii: cards and tiles 6–12px, group cards / now-playing / fun-track rows / dialog panel 14–18px, chips and pills 999px. The 18px radii belong to the dialog and group surfaces; 999px belongs to count / artist / badge / stats chips. (Mono at the low end stays above a 4.5:1 contrast on its warm surface.)
 
 ## Do's and Don'ts
 

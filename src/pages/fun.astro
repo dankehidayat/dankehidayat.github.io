@@ -1,4 +1,5 @@
 ---
+import fs from 'node:fs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FunCard from '../components/FunCard.astro';
 import Icon from '../components/Icon.astro';
@@ -8,6 +9,19 @@ import { renderIconSvg } from '../lib/huge-icons';
 import { funManga, funAnime, funNovels, musicGroups, musicArtists } from '../data/fun';
 
 const allEntries = [...funManga, ...funAnime, ...funNovels];
+
+// Which cover files actually exist, so a missing image degrades to a
+// monogram tile instead of a broken-image icon.
+const coversUrl = new URL('../../public/fun/covers/', import.meta.url);
+const availableCovers = new Set(
+    fs.existsSync(coversUrl)
+        ? fs.readdirSync(coversUrl).map((f) => f.replace(/\.jpe?g$/i, ''))
+        : []
+);
+const hasCover = (entry: (typeof allEntries)[number]) =>
+    availableCovers.has(entry.cover ?? entry.slug);
+const withCover = allEntries.map((entry) => ({ ...entry, hasCover: hasCover(entry) }));
+
 const chevronMarkup = renderIconSvg(ChevronDownIcon);
 const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
 ---
@@ -39,7 +53,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                 <span class="fun-count">{funManga.length}</span>
             </div>
             <div class="fun-grid">
-                {funManga.map((entry) => <FunCard entry={entry} />)}
+                {funManga.map((entry) => <FunCard entry={entry} hasCover={hasCover(entry)} />)}
             </div>
         </section>
 
@@ -55,7 +69,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                 <span class="fun-count">{funAnime.length}</span>
             </div>
             <div class="fun-grid">
-                {funAnime.map((entry) => <FunCard entry={entry} />)}
+                {funAnime.map((entry) => <FunCard entry={entry} hasCover={hasCover(entry)} />)}
             </div>
         </section>
 
@@ -71,7 +85,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                 <span class="fun-count">{funNovels.length}</span>
             </div>
             <div class="fun-grid">
-                {funNovels.map((entry) => <FunCard entry={entry} />)}
+                {funNovels.map((entry) => <FunCard entry={entry} hasCover={hasCover(entry)} />)}
             </div>
         </section>
 
@@ -82,6 +96,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
             <!-- Live now-playing, polled from /api/now-playing every 30s -->
             <div class="now-playing" id="now-playing" hidden>
                 <div class="now-playing-card">
+                    <!-- impeccable-disable-next-line broken-image -- populated from /api/now-playing at runtime -->
                     <img id="now-playing-art" class="now-playing-art" alt="" width="96" height="96" hidden />
                     <div class="now-playing-body">
                         <p class="now-playing-label" id="now-playing-label">
@@ -125,6 +140,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                             </svg>
                         </summary>
                         <div class="fun-group-tracks">
+                            <div class="fun-group-tracks-inner">
                             {group.tracks.map((track, ti) => (
                                 <div class="fun-track-row">
                                     <span class="fun-track-no" aria-hidden="true">{String(ti + 1).padStart(2, '0')}</span>
@@ -132,17 +148,18 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                                         <span class="fun-track-row-name">{track.title}</span>
                                         <span class="fun-track-row-meta">{track.meta}</span>
                                     </div>
-                                    <iframe
-                                        class="fun-embed"
-                                        data-src={`https://open.spotify.com/embed/track/${track.spotifyId}?utm_source=generator&theme=1`}
-                                        width="100%"
-                                        height="80"
-                                        title={`${track.title} on Spotify`}
-                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                        loading="lazy"
-                                    ></iframe>
+                                    <a
+                                        class="fun-track-listen"
+                                        href={`https://open.spotify.com/track/${track.spotifyId}`}
+                                        target="_blank"
+                                        rel="noopener"
+                                    >
+                                        <span>Listen on Spotify</span>
+                                        <Icon name="external" aria-hidden="true" />
+                                    </a>
                                 </div>
                             ))}
+                            </div>
                         </div>
                     </details>
                 ))}
@@ -186,7 +203,9 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                 <Icon name="close" />
             </button>
             <div class="fun-dialog-cover">
+                <!-- impeccable-disable-next-line broken-image -- src is set from the #fun-data JSON when a cover opens -->
                 <img id="fun-dialog-cover" src="" alt="" width="460" height="690" />
+                <span class="fun-dialog-cover-mono" id="fun-dialog-cover-mono" aria-hidden="true" hidden></span>
             </div>
             <div class="fun-dialog-body">
                 <p class="fun-dialog-badge" id="fun-dialog-badge" hidden>
@@ -203,7 +222,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         </div>
     </dialog>
 
-    <script type="application/json" id="fun-data" set:html={JSON.stringify({ entries: allEntries, externalIcon: externalLinkMarkup })}></script>
+    <script type="application/json" id="fun-data" set:html={JSON.stringify({ entries: withCover, externalIcon: externalLinkMarkup })}></script>
 
     <script>
         const raw = JSON.parse(document.getElementById('fun-data').textContent);
@@ -213,6 +232,7 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         const bySlug = new Map(data.map((e: any) => [e.slug, e]));
 
         const cover = document.getElementById('fun-dialog-cover') as HTMLImageElement;
+        const coverMono = document.getElementById('fun-dialog-cover-mono') as HTMLElement;
         const title = document.getElementById('fun-dialog-title') as HTMLElement;
         const english = document.getElementById('fun-dialog-english') as HTMLElement;
         const desc = document.getElementById('fun-dialog-desc') as HTMLElement;
@@ -228,8 +248,17 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
             if (closing) return;
             const e = bySlug.get(slug);
             if (!e) return;
-            cover.src = `/fun/covers/${e.cover ?? e.slug}.jpg`;
-            cover.alt = `Cover of ${e.title}`;
+            if (!e.hasCover) {
+                cover.hidden = true;
+                cover.removeAttribute('src');
+                coverMono.textContent = e.title.charAt(0).toUpperCase();
+                coverMono.hidden = false;
+            } else {
+                cover.hidden = false;
+                cover.src = `/fun/covers/${e.cover ?? e.slug}.jpg`;
+                cover.alt = `Cover of ${e.title}`;
+                coverMono.hidden = true;
+            }
             title.textContent = e.title;
             english.textContent = e.english ?? '';
             english.hidden = !e.english;
@@ -314,30 +343,22 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         if (musicAccordion) {
             const cards = Array.from(musicAccordion.querySelectorAll('.fun-group-card'));
             const mq = window.matchMedia('(min-width: 720px)');
-            const loadEmbeds = (card) => {
-                card.querySelectorAll('iframe[data-src]').forEach((f) => {
-                    if (!f.getAttribute('src')) f.setAttribute('src', f.dataset.src || '');
-                });
-            };
             const applyLayout = () => {
                 if (mq.matches) {
                     musicAccordion.classList.add('is-flat');
                     cards.forEach((c) => {
                         c.open = true;
-                        loadEmbeds(c);
                     });
                 } else {
                     musicAccordion.classList.remove('is-flat');
                     cards.forEach((c, i) => {
                         c.open = i === 0;
                     });
-                    if (cards[0]) loadEmbeds(cards[0]);
                 }
             };
             cards.forEach((card) => {
                 card.addEventListener('toggle', () => {
                     if (!card.open) return;
-                    loadEmbeds(card);
                     if (!mq.matches) {
                         cards.forEach((other) => {
                             if (other !== card) other.open = false;
@@ -350,22 +371,53 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         }
 
         if (nowPlaying) {
+            const art = document.getElementById('now-playing-art') as HTMLImageElement;
+            const label = document.getElementById('now-playing-label-text');
+            const dot = document.getElementById('now-playing-dot');
+            const trackEl = document.getElementById('now-playing-track');
+            const artistEl = document.getElementById('now-playing-artist');
+            const albumEl = document.getElementById('now-playing-album');
+            const link = document.getElementById('now-playing-link') as HTMLAnchorElement;
+            let consecutiveFailures = 0;
+            const FAILURE_THRESHOLD = 2;
+
+            // Only tap out to the "unavailable" state after a few consecutive
+            // misses, so one transient blip doesn't erase good data.
+            const showUnavailable = () => {
+                nowPlaying.classList.add('is-unavailable');
+                nowPlaying.hidden = false;
+                if (art) {
+                    art.hidden = true;
+                    art.removeAttribute('src');
+                }
+                if (label) label.textContent = 'last.fm unavailable';
+                if (dot) dot.classList.add('now-playing-dot-idle');
+                if (trackEl) trackEl.textContent = "Can't reach the last.fm feed right now.";
+                if (artistEl) artistEl.textContent = '';
+                if (albumEl) {
+                    albumEl.textContent = '';
+                    albumEl.hidden = true;
+                }
+                if (link) link.hidden = true;
+            };
+
             async function refreshNowPlaying() {
                 try {
                     const res = await fetch('/api/now-playing');
                     const data = await res.json();
-                    if (!data || !data.ok) return;
-                    const art = document.getElementById('now-playing-art') as HTMLImageElement;
-                    const label = document.getElementById('now-playing-label-text');
-                    const dot = document.getElementById('now-playing-dot');
-                    const trackEl = document.getElementById('now-playing-track');
-                    const artistEl = document.getElementById('now-playing-artist');
-                    const albumEl = document.getElementById('now-playing-album');
-                    const link = document.getElementById('now-playing-link') as HTMLAnchorElement;
+                    if (!data || !data.ok) {
+                        if (++consecutiveFailures >= FAILURE_THRESHOLD) showUnavailable();
+                        return;
+                    }
+                    consecutiveFailures = 0;
+                    nowPlaying.classList.remove('is-unavailable');
                     if (data.image && art) {
                         art.src = data.image;
                         art.alt = `${data.album || data.track} cover`;
                         art.hidden = false;
+                    } else if (art) {
+                        art.hidden = true;
+                        art.removeAttribute('src');
                     }
                     if (label) label.textContent = data.nowPlaying ? 'Listening now' : 'Last played';
                     if (dot) dot.classList.toggle('now-playing-dot-idle', !data.nowPlaying);
@@ -375,11 +427,20 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
                         albumEl.textContent = data.album ?? '';
                         albumEl.hidden = !data.album;
                     }
-                    if (link) link.href = data.url || '#';
+                    if (link) {
+                        link.hidden = false;
+                        link.href = data.url || '#';
+                    }
                     nowPlaying.hidden = false;
                 } catch {
-                    /* keep the card in its previous state */
+                    if (++consecutiveFailures >= FAILURE_THRESHOLD) showUnavailable();
                 }
+            }
+            // Guard the idle href="#" so it never navigates when there's no URL.
+            if (link) {
+                link.addEventListener('click', (ev) => {
+                    if (link.getAttribute('href') === '#') ev.preventDefault();
+                });
             }
             refreshNowPlaying();
             window.setInterval(refreshNowPlaying, POLL_MS);
@@ -559,6 +620,26 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         transition: color 0.2s var(--ease);
     }
 
+    .now-playing-link[hidden] {
+        display: none;
+    }
+
+    .now-playing.is-unavailable .now-playing-card {
+        border-color: var(--color-border-strong);
+        box-shadow: none;
+    }
+
+    .now-playing.is-unavailable .now-playing-track {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        letter-spacing: 0.03em;
+        color: var(--color-ink-muted);
+    }
+
+    .now-playing.is-unavailable .now-playing-label {
+        color: var(--color-ink-muted);
+    }
+
     .now-playing-link:hover {
         color: var(--color-green-deep);
     }
@@ -674,14 +755,35 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         transition: transform 0.25s var(--ease);
     }
 
-    .fun-group-card[open] .fun-group-header-chevron {
-        transform: rotate(90deg);
+    /* closed = points right (tap to expand), open = points down.
+       The base glyph is a down-chevron, so -90deg spins it to the right. */
+    .fun-group-card .fun-group-header-chevron {
+        transform: rotate(-90deg);
     }
 
+    .fun-group-card[open] .fun-group-header-chevron {
+        transform: rotate(0deg);
+    }
+
+    /* The inner wrapper carries the padding and gap; the outer grid row
+       collapses to 0fr when closed, clipping everything (only the row is
+       animated, so the height transitions without layout thrash). */
     .fun-group-tracks {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.35s var(--ease);
+    }
+
+    .fun-group-tracks-inner {
+        min-height: 0;
+        overflow: hidden;
         display: grid;
         gap: 0.85rem;
         padding: 0.1rem 1.25rem 1.25rem;
+    }
+
+    .fun-group-card[open] .fun-group-tracks {
+        grid-template-rows: 1fr;
     }
 
     .fun-track-row {
@@ -730,12 +832,27 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         white-space: nowrap;
     }
 
-    .fun-embed {
+    .fun-track-listen {
         grid-column: 1 / -1;
-        width: 100%;
-        height: 80px;
-        border: 0;
-        border-radius: 8px;
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.03em;
+        color: var(--color-ink-muted);
+        text-decoration: none;
+        transition: color 0.2s var(--ease);
+    }
+
+    .fun-track-listen:hover {
+        color: var(--color-green-deep);
+    }
+
+    .fun-track-listen svg {
+        width: 0.85rem;
+        height: 0.85rem;
     }
 
     /* desktop: everything open, summary inert, no chevron */
@@ -908,11 +1025,33 @@ const externalLinkMarkup = renderIconSvg(ExternalLinkIcon);
         box-shadow: 0 18px 32px -20px rgb(37 31 22 / 0.5);
     }
 
+    .fun-dialog-cover img[hidden],
+    .fun-dialog-cover-mono[hidden] {
+        display: none;
+    }
+
     .fun-dialog-cover img {
         display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+
+    .fun-dialog-cover-mono {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            160deg,
+            var(--color-tangerine) 0%,
+            var(--color-tangerine-deep) 100%
+        );
+        color: var(--color-ink-on-tangerine);
+        font-family: var(--font-display);
+        font-size: clamp(2.75rem, 12vw, 4.5rem);
+        font-weight: 700;
     }
 
     .fun-dialog-body {

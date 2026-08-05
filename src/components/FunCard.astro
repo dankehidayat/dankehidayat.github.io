@@ -4,23 +4,29 @@ import type { FunEntry } from '../data/fun';
 
 type Props = {
     entry: FunEntry;
+    hasCover?: boolean;
 };
 
-const { entry } = Astro.props;
+const { entry, hasCover = true } = Astro.props;
 const src = `/fun/covers/${entry.cover ?? entry.slug}.jpg`;
 const label = entry.english ? `${entry.title} (${entry.english})` : entry.title;
+const monogram = entry.title.charAt(0).toUpperCase();
 ---
 
 <button type="button" class="fun-card" data-slug={entry.slug} aria-label={`Open details for ${label}`}>
     <span class="fun-cover">
-        <img
-            src={src}
-            alt={`Cover of ${entry.title}`}
-            width="460"
-            height="690"
-            loading="lazy"
-            decoding="async"
-        />
+        {hasCover ? (
+            <img
+                src={src}
+                alt={`Cover of ${entry.title}`}
+                width="460"
+                height="690"
+                loading="lazy"
+                decoding="async"
+            />
+        ) : (
+            <span class="fun-cover-mono" aria-hidden="true">{monogram}</span>
+        )}
         {entry.badge && (
             <span class:list={['fun-heart', entry.badge === 'all-time' && 'fun-heart-all']}>
                 <Icon name="heart-filled" />
@@ -72,6 +78,28 @@ const label = entry.english ? `${entry.title} (${entry.english})` : entry.title;
         height: 100%;
         object-fit: cover;
         transition: transform 0.4s var(--ease);
+    }
+
+    .fun-cover-mono {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            160deg,
+            var(--color-tangerine) 0%,
+            var(--color-tangerine-deep) 100%
+        );
+        color: var(--color-ink-on-tangerine);
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 9vw, 4rem);
+        font-weight: 700;
+        transition: transform 0.4s var(--ease);
+    }
+
+    .fun-card:hover .fun-cover-mono {
+        transform: scale(1.045);
     }
 
     .fun-card:hover .fun-cover,
