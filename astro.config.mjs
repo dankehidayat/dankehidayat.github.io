@@ -1,4 +1,3 @@
-import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -133,6 +132,9 @@ export default defineConfig({
         '/contact': '/#contact',
         '/tags': '/notes',
         '/id': '/',
+        // Retired surfaces: music/stats removed, fun folded into the Shelf.
+        '/stats': '/',
+        '/fun': '/shelf',
         // Stale i18n-era URLs (the old site served an /en/ locale prefix).
         // Exact paths only — rest-param redirects do not work in a static build.
         '/en': '/',
@@ -145,7 +147,6 @@ export default defineConfig({
         '/en/rss.xml': '/rss.xml'
     },
     integrations: [
-        react(),
         mdx({
             remarkPlugins: [remarkMath],
             rehypePlugins: [rehypeKatex],

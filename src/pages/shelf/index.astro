@@ -1,0 +1,667 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import {
+    getShelf,
+    withShelfmarks,
+    categoryLabels,
+    shelfCategoryOrder,
+    coverPathFor
+} from '../../lib/shelf';
+
+const entries = await getShelf();
+const marked = withShelfmarks(entries);
+
+const desk = marked.filter(({ entry }) => entry.data.status === 'reading');
+const drawerCategories = shelfCategoryOrder.filter((category) =>
+    entries.some((entry) => entry.data.category === category)
+);
+const countFor = (category: string) =>
+    entries.filter((entry) => entry.data.category === category).length;
+---
+
+<BaseLayout
+    title="Shelf"
+    description="The catalogued leisure corner of Danke Hidayat's site: manga, anime, light novels, and the occasional serious book, filed as cards in a drawer."
+>
+    <div class="content-page site-shell shelf">
+        <header class="page-header">
+            <h1 class="page-title">Shelf</h1>
+            <p class="page-lede">
+                The leisure corner, filed properly. Manga, anime, and light novels — plus the
+                occasional serious book — each one a card in the drawer. Pull any card for the
+                full record, and fair warning: I reread and rewatch things a lot.
+            </p>
+        </header>
+
+        <section class="shelf-desk" aria-labelledby="shelf-desk-heading">
+            <div class="shelf-desk-head">
+                <h2 class="shelf-heading" id="shelf-desk-heading">On the desk</h2>
+                <p class="shelf-desk-note">What I am reading right now.</p>
+            </div>
+            <div class="shelf-desk-row">
+                {
+                    desk.map(({ entry }) => {
+                        const cover = coverPathFor(entry);
+                        const monogram = entry.data.title.charAt(0).toUpperCase();
+                        return (
+                            <a class="desk-item" href={`/shelf/${entry.id}/`}>
+                                <span class="desk-cover">
+                                    {cover ? (
+                                        <img
+                                            src={cover}
+                                            alt={`Cover of ${entry.data.title}`}
+                                            width="460"
+                                            height="690"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <span class="shelf-cover-mono" aria-hidden="true">
+                                            {monogram}
+                                        </span>
+                                    )}
+                                </span>
+                                <span class="desk-body">
+                                    <span class="shelf-stamp shelf-stamp-desk">On the desk</span>
+                                    <span class="desk-title">{entry.data.title}</span>
+                                    <span class="desk-creator">{entry.data.creator}</span>
+                                    <span class="desk-category">
+                                        {categoryLabels[entry.data.category]}
+                                    </span>
+                                </span>
+                            </a>
+                        );
+                    })
+                }
+            </div>
+        </section>
+
+        <section class="shelf-drawer" aria-labelledby="shelf-drawer-heading">
+            <div class="shelf-drawer-head">
+                <div>
+                    <h2 class="shelf-heading" id="shelf-drawer-heading">The drawer</h2>
+                    <p class="shelf-count" id="shelf-count" aria-live="polite">
+                        {entries.length} cards filed.
+                    </p>
+                </div>
+                <div class="shelf-chips" role="group" aria-label="Filter the drawer by category">
+                    <button type="button" class="shelf-chip is-active" data-filter="all" aria-pressed="true">
+                        All <span class="shelf-chip-count">{entries.length}</span>
+                    </button>
+                    {
+                        drawerCategories.map((category) => (
+                            <button
+                                type="button"
+                                class="shelf-chip"
+                                data-filter={category}
+                                aria-pressed="false"
+                            >
+                                {categoryLabels[category]}{' '}
+                                <span class="shelf-chip-count">{countFor(category)}</span>
+                            </button>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div class="shelf-grid" id="shelf-grid">
+                {
+                    marked.map(({ entry, shelfmark }, index) => {
+                        const cover = coverPathFor(entry);
+                        const monogram = entry.data.title.charAt(0).toUpperCase();
+                        const data = entry.data;
+                        return (
+                            <a
+                                class="shelf-card shelf-enter"
+                                href={`/shelf/${entry.id}/`}
+                                data-category={data.category}
+                                style={`--shelf-i:${Math.min(index, 14)}`}
+                            >
+                                <span class="shelf-cover">
+                                    {cover ? (
+                                        <img
+                                            src={cover}
+                                            alt={`Cover of ${data.title}`}
+                                            width="460"
+                                            height="690"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <span class="shelf-cover-mono" aria-hidden="true">
+                                            {monogram}
+                                        </span>
+                                    )}
+                                    {data.badge && (
+                                        <span
+                                            class:list={[
+                                                'shelf-heart',
+                                                data.badge === 'all-time' && 'shelf-heart-all'
+                                            ]}
+                                        >
+                                            <Icon name="heart-filled" />
+                                            <span class="sr-only">
+                                                {data.badge === 'all-time'
+                                                    ? 'All-time favorite'
+                                                    : 'Favorite'}
+                                            </span>
+                                        </span>
+                                    )}
+                                    {data.status === 'reading' && (
+                                        <span class="shelf-desk-flag" aria-hidden="true" />
+                                    )}
+                                    <span class="shelf-pull" aria-hidden="true">
+                                        <Icon name="arrow-right" />
+                                        Pull card
+                                    </span>
+                                </span>
+                                <span class="shelf-catalog">
+                                    <span class="shelf-catalog-row">
+                                        <span class="shelf-mark">{shelfmark}</span>
+                                        <span class="shelf-stamp">
+                                            {categoryLabels[data.category]}
+                                        </span>
+                                    </span>
+                                    <span class="shelf-card-title">{data.title}</span>
+                                    <span class="shelf-card-creator">{data.creator}</span>
+                                    {data.rating !== undefined && (
+                                        <span class="shelf-score">
+                                            {data.rating.toFixed(1)} / 10
+                                        </span>
+                                    )}
+                                </span>
+                            </a>
+                        );
+                    })
+                }
+            </div>
+
+            <div class="shelf-empty" id="shelf-empty" hidden>
+                <p>Nothing filed under this label yet.</p>
+                <button type="button" class="shelf-chip" id="shelf-empty-reset">
+                    Show everything
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function bindShelf() {
+            const grid = document.getElementById('shelf-grid');
+            const count = document.getElementById('shelf-count');
+            const empty = document.getElementById('shelf-empty');
+            const reset = document.getElementById('shelf-empty-reset');
+            if (!grid || !count || !empty) return;
+
+            const cards = Array.from(grid.querySelectorAll<HTMLElement>('.shelf-card'));
+            const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.shelf-chip[data-filter]'));
+            const total = cards.length;
+            let active = 'all';
+
+            const applyFilter = (filter: string) => {
+                active = filter;
+                let visible = 0;
+                for (const card of cards) {
+                    const show = filter === 'all' || card.dataset.category === filter;
+                    card.hidden = !show;
+                    if (show) {
+                        // Re-run the settle with a fresh, capped stagger.
+                        card.style.setProperty('--shelf-i', String(Math.min(visible, 14)));
+                        card.classList.remove('shelf-enter');
+                        void card.offsetWidth;
+                        card.classList.add('shelf-enter');
+                        visible++;
+                    }
+                }
+                for (const chip of chips) {
+                    const isActive = chip.dataset.filter === filter;
+                    chip.classList.toggle('is-active', isActive);
+                    chip.setAttribute('aria-pressed', String(isActive));
+                }
+                empty.hidden = visible > 0;
+                count.textContent =
+                    filter === 'all'
+                        ? `${total} cards filed.`
+                        : `Showing ${visible} of ${total} cards.`;
+            };
+
+            for (const chip of chips) {
+                chip.addEventListener('click', () => {
+                    const filter = chip.dataset.filter ?? 'all';
+                    if (filter !== active) applyFilter(filter);
+                });
+            }
+            reset?.addEventListener('click', () => applyFilter('all'));
+        }
+
+        // astro:page-load fires on the initial load and after every view-transition navigation.
+        document.addEventListener('astro:page-load', bindShelf);
+    </script>
+
+    <style>
+        /* ── Desk: the books currently out of the drawer ─────────────── */
+        .shelf-desk {
+            background: var(--color-surface-tint);
+            border: 1px solid var(--color-border);
+            border-bottom: 2px solid var(--color-border-strong);
+            border-radius: var(--radius-lg);
+            padding: clamp(1.1rem, 2.5vw, 1.6rem);
+            margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+        }
+
+        .shelf-desk-head {
+            display: flex;
+            align-items: baseline;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.1rem;
+        }
+
+        .shelf-desk-note {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-desk-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+            gap: clamp(1rem, 2.5vw, 1.5rem);
+        }
+
+        .desk-item {
+            display: flex;
+            gap: 0.95rem;
+            align-items: flex-start;
+            text-decoration: none;
+            color: inherit;
+            min-width: 0;
+        }
+
+        .desk-cover {
+            position: relative;
+            flex-shrink: 0;
+            width: 5.4rem;
+            aspect-ratio: 2 / 3;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 14px 24px -18px rgb(37 31 22 / 0.55);
+            background: var(--color-surface);
+            transition: transform 0.25s var(--ease);
+        }
+
+        .desk-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .desk-item:hover .desk-cover,
+        .desk-item:focus-visible .desk-cover {
+            transform: translateY(-3px) rotate(-1deg);
+        }
+
+        .desk-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.35rem;
+            min-width: 0;
+        }
+
+        .desk-title {
+            font-family: var(--font-display);
+            font-size: 1.02rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            color: var(--color-ink);
+        }
+
+        .desk-creator {
+            font-size: 0.88rem;
+            color: var(--color-ink-body);
+        }
+
+        .desk-category {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        /* ── Shared card furniture ────────────────────────────────────── */
+        .shelf-cover-mono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                160deg,
+                var(--color-tangerine) 0%,
+                var(--color-tangerine-deep) 100%
+            );
+            color: var(--color-ink-on-tangerine);
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        .desk-cover .shelf-cover-mono {
+            font-size: 2rem;
+        }
+
+        .shelf-heading {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--color-ink);
+        }
+
+        .shelf-stamp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.22rem 0.55rem;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+            background: var(--color-bg);
+            white-space: nowrap;
+        }
+
+        .shelf-stamp-desk {
+            background: var(--color-saffron);
+            border-color: var(--color-saffron);
+            color: var(--color-ink);
+        }
+
+        /* ── Drawer head: label pulls ─────────────────────────────────── */
+        .shelf-drawer-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.6rem;
+        }
+
+        .shelf-count {
+            margin: 0.3rem 0 0;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .shelf-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.42rem 0.85rem;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            background: var(--color-surface);
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+            cursor: pointer;
+            transition:
+                background 0.2s var(--ease),
+                border-color 0.2s var(--ease),
+                color 0.2s var(--ease),
+                transform 0.2s var(--ease);
+        }
+
+        .shelf-chip:hover {
+            border-color: var(--color-green);
+            color: var(--color-green-deep);
+            transform: translateY(-1px);
+        }
+
+        .shelf-chip.is-active {
+            background: var(--color-green);
+            border-color: var(--color-green);
+            color: var(--color-ink-on-green);
+        }
+
+        .shelf-chip-count {
+            opacity: 0.72;
+        }
+
+        /* ── The catalog grid ─────────────────────────────────────────── */
+        .shelf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+            gap: clamp(1rem, 2.5vw, 1.4rem);
+        }
+
+        .shelf-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 12px 26px -22px rgb(37 31 22 / 0.5);
+            transition:
+                transform 0.25s var(--ease),
+                box-shadow 0.25s var(--ease);
+        }
+
+        .shelf-card:hover,
+        .shelf-card:focus-visible {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 40px -24px rgb(37 31 22 / 0.55);
+        }
+
+        .shelf-card[hidden] {
+            display: none;
+        }
+
+        @keyframes shelf-card-in {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shelf-enter {
+            animation: shelf-card-in 0.5s var(--ease) both;
+            animation-delay: min(calc(var(--shelf-i, 0) * 28ms), 480ms);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .shelf-enter {
+                animation: none;
+            }
+        }
+
+        .shelf-cover {
+            position: relative;
+            display: block;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            background: var(--color-surface-tint);
+        }
+
+        .shelf-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s var(--ease);
+        }
+
+        .shelf-card:hover .shelf-cover img,
+        .shelf-card:hover .shelf-cover-mono {
+            transform: scale(1.045);
+        }
+
+        .shelf-cover-mono {
+            transition: transform 0.4s var(--ease);
+        }
+
+        /* favorites: tangerine heart, all-time: ink heart */
+        .shelf-heart {
+            position: absolute;
+            top: 0.55rem;
+            right: 0.55rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.9rem;
+            height: 1.9rem;
+            border-radius: 50%;
+            background: var(--color-tangerine);
+            color: var(--color-ink-on-tangerine);
+            box-shadow: 0 8px 16px -8px rgb(46 22 8 / 0.5);
+            z-index: 1;
+        }
+
+        .shelf-heart-all {
+            background: var(--color-ink);
+            color: var(--color-bg);
+        }
+
+        /* reading flag: a saffron corner tab, like a sticky flag on a card */
+        .shelf-desk-flag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 1.7rem solid var(--color-saffron);
+            border-right: 1.7rem solid transparent;
+            z-index: 1;
+        }
+
+        /* hover affordance */
+        .shelf-pull {
+            position: absolute;
+            left: 0.6rem;
+            bottom: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            background: var(--color-ink);
+            color: var(--color-bg);
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(4px);
+            transition:
+                opacity 0.25s var(--ease),
+                transform 0.25s var(--ease);
+        }
+
+        .shelf-card:hover .shelf-pull,
+        .shelf-card:focus-visible .shelf-pull {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* index-card region: hairline rules bound to the catalog fields */
+        .shelf-catalog {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.45rem;
+            padding: 0.7rem 0.8rem 0.85rem;
+        }
+
+        .shelf-catalog-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
+            padding-bottom: 0.45rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .shelf-mark {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-card-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: var(--color-ink);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .shelf-card-creator {
+            font-size: 0.82rem;
+            line-height: 1.35;
+            color: var(--color-ink-body);
+            padding-bottom: 0.45rem;
+            border-bottom: 1px solid var(--color-border);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .shelf-score {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            color: var(--color-green-deep);
+        }
+
+        .shelf-empty {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: var(--color-ink-muted);
+            border: 1px dashed var(--color-border-strong);
+            border-radius: var(--radius);
+        }
+
+        .shelf-empty p {
+            margin: 0 0 1rem;
+        }
+    </style>
+</BaseLayout>

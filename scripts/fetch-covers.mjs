@@ -1,7 +1,7 @@
-// Fetch cover images for the FUN page from the AniList API.
+// Fetch cover images for the SHELF from the AniList API.
 // Usage: node scripts/fetch-covers.mjs <manifest.json> [outDir]
 // manifest.json: [{ "slug": "kebab-case", "title": "search string", "type": "MANGA"|"ANIME" }]
-// Writes public/fun/covers/<slug>.<ext> (or custom outDir), plus a results
+// Writes public/shelf/covers/<slug>.<ext> (or custom outDir), plus a results
 // manifest to scripts/covers-manifest.json (not shipped to the site).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,7 +37,7 @@ async function download(url, filePath) {
 }
 
 const manifestPath = process.argv[2];
-const outDir = process.argv[3] ?? path.join(process.cwd(), 'public/fun/covers');
+const outDir = process.argv[3] ?? path.join(process.cwd(), 'public/shelf/covers');
 fs.mkdirSync(outDir, { recursive: true });
 
 const items = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));

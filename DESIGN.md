@@ -70,22 +70,6 @@ typography:
     body-sm: "0.95rem"
     group-header: "1.15rem"
     subheading: "1.2rem"
-  fun-heading:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)"
-    fontWeight: 700
-  fun-dialog-title:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(1.15rem, 2.5vw, 1.4rem)"
-    fontWeight: 700
-  fun-cover-mono:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(2.5rem, 9vw, 4rem)"
-    fontWeight: 700
-  fun-dialog-mono:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(2.75rem, 12vw, 4.5rem)"
-    fontWeight: 700
 rounded:
   sm: "6px"
   md: "10px"
@@ -296,9 +280,9 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 ### Navigation
 - A floating frosted pill: the whole bar is a single 999px-radius capsule, sticky at `top: 0.75rem`, `max-width: 66rem`, `rgb(251 245 234 / 0.82)` fill with `blur(16px) saturate(1.3)`, a `1px` Hairline Strong border at ~70%, and a soft shadow. The page shows through as warm paper tint, so the pill reads as frosted, not solid. On the tangerine hero it floats over the orange field with clear air below it.
 - Logo: the wordmark "Danke Hidayat" in Bricolage 700 1.15rem. No icon or square mark beside it — the name alone is the mark.
-- Links: 7 items — About, Experience, Stack, Projects, Notes, Fun, Contact — Source Sans 3 0.95rem weight 500, ink-body, each a full-height pill (`border-radius: 999px`) with an 8% green wash on hover. The active section is a soft green pill-tab (green 14% field, Deep Green text, weight 600, radius 999px) instead of an underline — the selected state is a filled tab, not a line.
+- Links: 8 items — About, Experience, Stack, Projects, Notes, Shelf, Setup, Contact — Source Sans 3 0.95rem weight 500, ink-body, each a full-height pill (`border-radius: 999px`) with an 8% green wash on hover. The active section is a soft green pill-tab (green 14% field, Deep Green text, weight 600, radius 999px) instead of an underline — the selected state is a filled tab, not a line.
 - Contact CTA: a tangerine button (`.btn-tangerine`, bg `#e05d1e`, text `#2e1608`, `border-radius: 999px` to match the pill, tighter `0.5rem 1.15rem` padding so it sits level with the links). Its hover stays seated inside the pill: it darkens to Deep Tangerine but keeps `transform: none` — no lift, no shadow bloom — so it reads as part of the capsule rather than a floating button. The mobile menu CTA is the same tangerine pill.
-- ≤899px: a line-morph toggle (2.5rem square, Hairline Strong stroke) whose three bars animate into an X when open (bars 2px, gap 5px; open: rotate ±45° with the middle bar fading) — no raw glyph. The open button flips to a tangerine fill with ink-on-tangerine icon. It opens an accessible `aria-expanded` floating card panel anchored to the pill (left/right 0, `max-width: 24rem`, centered): white surface, Hairline Strong border, 14px radius, soft shadow, link rows at 1.05rem weight-600 with 6px-radius hover tiles, Fun linking to `/fun`.
+- ≤899px: a line-morph toggle (2.5rem square, Hairline Strong stroke) whose three bars animate into an X when open (bars 2px, gap 5px; open: rotate ±45° with the middle bar fading) — no raw glyph. The open button flips to a tangerine fill with ink-on-tangerine icon. It opens an accessible `aria-expanded` floating card panel anchored to the pill (left/right 0, `max-width: 24rem`, centered): white surface, Hairline Strong border, 14px radius, soft shadow, link rows at 1.05rem weight-600 with 6px-radius hover tiles, Shelf linking to `/shelf`.
 
 ### Cards (project plates)
 - **Corner:** 10px. **Background:** white. **Border:** 1px hairline.
@@ -315,6 +299,17 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 ### Tech Stack ledger
 - Six ledger rows (Languages / Frameworks & Libraries / Data & Backend / DevOps & Infrastructure / Embedded & IoT / Design & Tools) on the warm-tint band: a mono uppercase label column (0.78rem, letter-spacing 0.1em, ink-muted) beside a tag-chip row. Each row is hairline-bordered with a 2px saffron signal line that draws in on scroll (`--line`).
 
+### Shelf catalog card
+- Every entry is a card in a drawer: a 2:3 cover (or a Deep-Tangerine-gradient monogram tile when the jacket is missing) above an index-card region ruled by content-bound 1px Hairlines — one under the shelfmark/category-stamp head row, one under the creator line; no rule ever floats free of its row. The head row carries the shelfmark (JetBrains Mono 0.62rem, ink-muted, e.g. `MNG·01`) beside a category stamp; title Bricolage 700 0.95rem, creator Source Sans 0.82rem, optional score in Deep Green mono.
+- Stamps are mono pills (0.58–0.6rem, 0.08em tracking, uppercase, 1px Hairline Strong border, paper fill); the "On the desk" stamp is Saffron with ink text. A favorite is a Tangerine heart roundel, an all-time favorite an ink roundel; a reading copy carries a saffron corner flag on its cover.
+- The "On the desk" panel is a warm-tint field (`--color-surface-tint`, 2px Hairline Strong bottom border) of horizontal media rows — the only place entries lie down.
+- Filter chips are mono pills with counts; the active chip is a Leaf Green fill with ink-on-green text. The count line is `aria-live`. Cards settle in a staggered translateY entrance (28ms steps, capped at 480ms) on load and replayed on every filter change; reduced motion disables it.
+
+### Setup ledger (hardware and tools)
+- One typographic ledger per group — no photos yet. Rows are a `2.4rem / minmax(8rem, 14rem) / 1fr / 2rem` grid: mono index (01–15 running across both ledgers), Bricolage 600 name, Source Sans role, optional external-link icon — hairline bottom border, warm-tint hover with the index turning Deep Green. Rows slide in from the index column (translateX, 24ms stagger): the shelf settles vertically, the ledger reads left to right.
+- The desk photo slot ships as an honest empty state — dashed Hairline Strong border, tint field, "Photo pending" — and a photo drops into the same slot later without redesign.
+- A "Previously" section is a hairline-top archive note with secondary buttons to the retired Hyprland dotfiles; the page names what it no longer runs.
+
 ### Section Heading (signature)
 - The signal tick (0.85rem green square + saffron corner), then a Bricolage headline with a one-line intro (max 46rem, 1.05rem). No kicker, ever.
 
@@ -328,13 +323,6 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 - Dark band (`#1f1910`), text `#d9cfba`. Name is Bricolage 700 (`1.6rem`) — no script; role line "Software developer & DevOps engineer" in saffron.
 - A quote block closes the identity column — "I was born to be the star." with a mono saffron attribution, "Saijou Claudine · Revue Starlight". The sections column now includes Stack.
 
-### Fun page (the leisure corner)
-- **Ledger.** The page opens with a short, human lede ("This page corner is where we stop with all the work life for a while..."), then three sections — manga / anime & light novels / music — each with a count chip beside the section heading (mono 0.72rem, ink-muted, a white hairline pill with 999px radius showing the bare number).
-- **Cards (FunCard).** A responsive cover grid (`repeat(auto-fill, minmax(166px, 1fr))`, 5 columns on desktop, 2 on mobile). Each card is a `<button>`: the 2:3 cover art with a 10px radius and a hairline border, a heart chip in the top-right corner (tangerine field, ink heart icon) for favorites, and the title in two clamped lines below. Hover lifts the cover, shows a small "Details" ink pill over the art (bottom-left), and tints the title green. A missing cover file degrades to a monogram tile (the title's first initial in Bricolage on the tangerine ramp) instead of a broken-image icon.
-- **Detail dialog.** Clicking a card opens a native `<dialog>` (backdrop dim, ESC / backdrop / close-button dismiss, body scroll lock). Desktop is a two-column panel (cover column `minmax(136px,168px)` + details): title, badge for favorites ("Favorite" / "All-time favorite"), creator line, note, and a list of links — "Details" (MAL / AniList) plus "Buy" or "Read online" per entry. Mobile turns into a bottom sheet (cover 9rem, radius 18px 18px 0 0). JS reads a JSON blob embedded in the page (`#fun-data`) keyed by card slug.
-- **Music section.** A live "now playing" card at the top, polled from the prerendered `/api/now-playing` endpoint every 30s (a green pulsing dot with "Listening now", or a muted dot with "Last played", plus the track, artist, cover, and a link to the last.fm page). If the feed fails two polls in a row the card shows a muted "last.fm unavailable" state rather than hiding or silently keeping stale data. Below it the on-repeat tracks are grouped by artist (CHiCO with HoneyWorks, 初星学園 · Gakuen iDOLM@STER); each track row keeps a light link-out "Listen on Spotify" action instead of a heavy embedded player. The section closes with "Also on rotation": a grid of artist chips, each linking out to the artist's Spotify page. If the endpoint is unconfigured (local dev, GitHub Pages) the now-playing card stays hidden and the rest of the section is unaffected.
-- **Fun-page type & radius ramp.** This corner deliberately runs its own smaller instrument ramp and looser radii than the rest of the site, so don't "fix" them as drift. Mono labels step 0.62 / 0.66 / 0.68 / 0.7 / 0.72 / 0.74 / 0.8 / 0.88rem (count chips, now-playing meta, group counts, dialog creator/badge, artist chips, stats-ticket mark); display sizes are the card title 0.92rem, group headers 1.15rem, dialog title clamp(1.15, 2.5vw, 1.4rem), and section headings clamp(1.4, 2.6vw, 1.9rem). Radii: cards and tiles 6–12px, group cards / now-playing / fun-track rows / dialog panel 14–18px, chips and pills 999px. The 18px radii belong to the dialog and group surfaces; 999px belongs to count / artist / badge / stats chips. (Mono at the low end stays above a 4.5:1 contrast on its warm surface.)
-
 ## Do's and Don'ts
 
 ### Do:
@@ -342,6 +330,7 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 - **Do** draw structure with 1px hairlines and 2px signal lines — the ledger is the world's skeleton.
 - **Do** use Bricolage Grotesque for display, headings, and the hero name lockup; Source Sans 3 for body; JetBrains Mono for data/labels/code.
 - **Do** keep the hero name lockup in Bricolage only — no cursive anywhere.
+- **Do** degrade a missing jacket or asset into a world tile (tangerine monogram) or a labeled empty state — never a broken image, never a fabricated placeholder.
 - **Do** alternate white and warm-tint sections, keep the hero and the contact band in the tangerine family (hero graded and grained so the two never read flat-identical), and give blog content pages enough bottom padding (`clamp(3.5rem, 7vw, 5rem)`; post nav `clamp(3rem, 6vw, 4.5rem)`) to clear the dark footer.
 
 ### Don't:

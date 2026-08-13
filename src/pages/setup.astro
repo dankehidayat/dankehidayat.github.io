@@ -1,0 +1,351 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { setupHardware, setupTools, setupRepos } from '../data/setup';
+
+const ledgers = [
+    {
+        id: 'setup-hardware-heading',
+        title: 'The hardware',
+        intro: 'Everything within reach — the machine, the board, the audio, and the switch stash.',
+        items: setupHardware
+    },
+    {
+        id: 'setup-tools-heading',
+        title: 'The tools',
+        intro: 'Nothing special, and that\u2019s the point — everything here gets out of the way.',
+        items: setupTools
+    }
+];
+let runningIndex = 0;
+---
+
+<BaseLayout
+    title="Setup"
+    description="The setup Danke Hidayat works on now — a MacBook Pro M1, the hardware on the desk, and four tools — plus the archived Arch + Hyprland build it replaced."
+>
+    <div class="content-page site-shell setup">
+        <header class="page-header">
+            <h1 class="page-title">Setup</h1>
+            <p class="page-lede">
+                The machine, the hardware within reach, and the four tools that stay out of the
+                way. The Arch + Hyprland build I kept two years ago is archived further down.
+            </p>
+        </header>
+
+        <section class="setup-section" aria-labelledby="setup-desk-heading">
+            <div class="setup-heading-row">
+                <h2 class="setup-heading" id="setup-desk-heading">The desk</h2>
+            </div>
+            <div class="setup-desk-slot" role="img" aria-label="Photo of the desk, pending">
+                <p class="setup-desk-slot-title">Photo pending</p>
+                <p class="setup-desk-slot-note">
+                    The desk gets photographed someday. When it does, it hangs here — same page,
+                    no redesign.
+                </p>
+            </div>
+        </section>
+
+        {
+            ledgers.map((ledger) => (
+                <section class="setup-section" aria-labelledby={ledger.id}>
+                    <div class="setup-heading-row">
+                        <div>
+                            <h2 class="setup-heading" id={ledger.id}>
+                                {ledger.title}
+                            </h2>
+                            <p class="setup-intro">{ledger.intro}</p>
+                        </div>
+                        <span class="setup-count">{ledger.items.length} rows</span>
+                    </div>
+
+                    <ul class="setup-ledger">
+                        {ledger.items.map((item) => {
+                            runningIndex += 1;
+                            const indexLabel = String(runningIndex).padStart(2, '0');
+                            return (
+                                <li class="setup-row">
+                                    <span class="setup-row-index" aria-hidden="true">
+                                        {indexLabel}
+                                    </span>
+                                    <span class="setup-row-name">{item.name}</span>
+                                    <span class="setup-row-role">{item.role}</span>
+                                    {item.href ? (
+                                        <a
+                                            class="setup-row-link"
+                                            href={item.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={`${item.name} — official site`}
+                                        >
+                                            <Icon name="external" />
+                                            <span class="sr-only">opens in a new tab</span>
+                                        </a>
+                                    ) : (
+                                        <span
+                                            class="setup-row-link is-empty"
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </section>
+            ))
+        }
+
+        <section class="setup-section setup-previously" aria-labelledby="setup-previously-heading">
+            <div class="setup-heading-row">
+                <h2 class="setup-heading" id="setup-previously-heading">Previously</h2>
+            </div>
+            <p class="setup-previously-note">
+                Two years ago this page would have been a lot longer: Arch, Hyprland, and every
+                tool themed to match. That setup is parked now, dotfiles and all.
+            </p>
+            <div class="setup-repos">
+                {
+                    setupRepos.map((repo) => (
+                        <a
+                            class="btn btn-secondary setup-repo"
+                            href={repo.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Icon name="github" aria-hidden="true" />
+                            {repo.label}
+                            <Icon name="external" aria-hidden="true" />
+                        </a>
+                    ))
+                }
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function bindSetup() {
+            const rows = document.querySelectorAll<HTMLElement>('.setup-row');
+            rows.forEach((row, i) => {
+                row.style.setProperty('--setup-i', String(Math.min(i, 18)));
+                row.classList.add('setup-enter');
+            });
+        }
+        // astro:page-load fires on the initial load and after every view-transition navigation.
+        document.addEventListener('astro:page-load', bindSetup);
+    </script>
+
+    <style>
+        .setup-section {
+            margin-bottom: clamp(2.8rem, 6vw, 4rem);
+        }
+
+        .setup-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .setup-heading-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.4rem;
+        }
+
+        .setup-heading {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            color: var(--color-ink);
+        }
+
+        .setup-intro {
+            margin: 0.5rem 0 0;
+            max-width: 38rem;
+            color: var(--color-ink-body);
+        }
+
+        .setup-count {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+            padding-top: 0.5rem;
+        }
+
+        /* ── Desk: the reserved photo slot ───────────────────────────── */
+        .setup-desk-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 14rem;
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-surface-tint);
+            border: 1px dashed var(--color-border-strong);
+            border-radius: var(--radius-lg);
+        }
+
+        .setup-desk-slot-title {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-green-deep);
+        }
+
+        .setup-desk-slot-note {
+            margin: 0;
+            max-width: 26rem;
+            font-size: 0.95rem;
+            color: var(--color-ink-muted);
+        }
+
+        /* ── Ledger ───────────────────────────────────────────────────── */
+        .setup-ledger {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .setup-row {
+            display: grid;
+            grid-template-columns: 2.4rem minmax(8rem, 14rem) 1fr 2rem;
+            align-items: baseline;
+            gap: 0.9rem;
+            padding: 0.8rem 0.4rem;
+            border-bottom: 1px solid var(--color-border);
+            transition: background 0.2s var(--ease);
+        }
+
+        .setup-row:hover {
+            background: color-mix(in srgb, var(--color-surface-tint) 55%, transparent);
+        }
+
+        /* Rows slide in from the index column — the shelf's cards settle
+           vertically; the ledger reads itself left to right instead. */
+        @keyframes setup-row-in {
+            from {
+                opacity: 0;
+                transform: translateX(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .setup-enter {
+            animation: setup-row-in 0.45s var(--ease) both;
+            animation-delay: min(calc(var(--setup-i, 0) * 24ms), 420ms);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .setup-enter {
+                animation: none;
+            }
+        }
+
+        .setup-row-index {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
+            color: var(--color-ink-muted);
+            transition: color 0.2s var(--ease);
+        }
+
+        .setup-row:hover .setup-row-index {
+            color: var(--color-green-deep);
+        }
+
+        .setup-row-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.98rem;
+            color: var(--color-ink);
+        }
+
+        .setup-row-role {
+            font-size: 0.9rem;
+            color: var(--color-ink-body);
+        }
+
+        .setup-row-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: var(--color-ink-muted);
+            transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+        }
+
+        .setup-row-link:hover {
+            color: var(--color-tangerine-deep);
+            transform: translateY(-1px);
+        }
+
+        .setup-row-link.is-empty {
+            visibility: hidden;
+        }
+
+        .setup-row-link svg {
+            width: 0.95rem;
+            height: 0.95rem;
+        }
+
+        /* ── Previously ───────────────────────────────────────────────── */
+        .setup-previously {
+            padding-top: clamp(2rem, 5vw, 2.8rem);
+            border-top: 2px solid var(--color-ink);
+        }
+
+        .setup-previously-note {
+            margin: 0 0 1.3rem;
+            max-width: 40rem;
+            color: var(--color-ink-body);
+        }
+
+        .setup-repos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .setup-repo svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        @media (max-width: 560px) {
+            .setup-row {
+                grid-template-columns: 1.8rem 1fr 1.6rem;
+                grid-template-areas:
+                    'index name link'
+                    '. role link';
+                row-gap: 0.2rem;
+            }
+
+            .setup-row-index {
+                grid-area: index;
+            }
+
+            .setup-row-name {
+                grid-area: name;
+            }
+
+            .setup-row-role {
+                grid-area: role;
+            }
+
+            .setup-row-link {
+                grid-area: link;
+                align-self: center;
+            }
+        }
+    </style>
+</BaseLayout>

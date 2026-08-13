@@ -1,6 +1,6 @@
 # dankehidayat.my.id — Personal Portfolio
 
-The personal website of **Danke Hidayat**, a junior software developer and DevOps engineer in Bandung, Indonesia. A single-page portfolio with a technical blog, built with [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com) v4, deployed statically to GitHub Pages.
+The personal website of **Danke Hidayat**, a junior software developer and DevOps engineer in Bandung, Indonesia. A single-page portfolio with a technical blog, a reading shelf, and a setup ledger — built with [Astro](https://astro.build) and deployed statically to GitHub Pages.
 
 Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 
@@ -12,12 +12,11 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 - **Typography.** **Bricolage Grotesque** for display and the hero name lockup, **Source Sans 3** for body copy, **JetBrains Mono** for metadata, dates, code, and technical labels. No cursive anywhere.
 - **Structure.** Ledger rows with 1px hairlines and 2px signal lines; an arch portrait in a paper frame with a green signal-arch backing and a saffron keystone.
 - **Motion.** GSAP + ScrollTrigger with Lenis smooth scrolling on the home page only: a hero entrance, scroll-triggered reveals, row hairline draws, and section-head reveals. Everything respects `prefers-reduced-motion`. Blog pages are static.
-- **Content-first.** A one-page home with eight sections (Hero, About, Experience, Tech Stack, Projects, Notes, Certifications, Contact), a Notes blog, and a Fun page for the leisurely stuff: a cover grid of yuri manga, anime, and light novels that opens a detail dialog (creator, note, buy/read links) on tap, plus a music corner with a live last.fm now-playing card, Spotify embeds grouped by artist, and artist links. Professional, measured tone throughout.
+- **Content-first.** A one-page home with eight sections (Hero, About, Experience, Tech Stack, Projects, Notes, Certifications, Contact), a Notes blog, a **Shelf** — a catalog-drawer of manga, anime, light novels, fiction, and non-fiction with category filters, shelfmarks, and one page per entry — and a **Setup** ledger of the desk, tools, and dotfiles. Professional, measured tone throughout.
 
 ## Stack
 
 - [Astro](https://astro.build) 5 — static output, content collections, view transitions
-- [Tailwind CSS](https://tailwindcss.com) 4 — via `@tailwindcss/vite`
 - [MDX](https://mdxjs.com) + [KaTeX](https://katex.org) — math in blog posts
 - [Shiki](https://shiki.style) with a custom `warm-signal` theme — syntax highlighting
 - [GSAP](https://gsap.com) + [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) + [Lenis](https://lenis.darkroom.engineering) — motion, home page only
@@ -27,32 +26,33 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 
 ```text
 ├── public/
-│   ├── fun/covers/             # locally stored cover images for the Fun page
+│   ├── shelf/covers/            # cover images for the Shelf
 │   ├── favicon.svg
 │   └── Resume_Danke_Hidayat.pdf
-├── api/
-│   └── now-playing.mjs         # Vercel serverless fn: last.fm now-playing (reads .env)
-├── scripts/                    # dev tools: fetch-covers.mjs, serve-local.mjs, ...
-├── .env.example                # LASTFM_API_KEY / LASTFM_USERNAME template
+├── scripts/                    # dev tools: fetch-covers.mjs, generate-brand-icons.mjs, ...
 ├── src/
 │   ├── assets/images/           # avatar, hero, social image
 │   ├── components/              # Hero, About, ExperienceTimeline, Projects,
 │   │                            # ProjectCard, BlogPreview, PostCard,
 │   │                            # Certifications, Publications, ContactPanel,
-│   │                            # FunCard, SectionHeading, SiteNav, SiteFooter, Icon, ...
+│   │                            # SectionHeading, SiteNav, SiteFooter, Icon, ...
 │   ├── content/
 │   │   ├── blog/                # MDX posts (title, excerpt, date, tags, math)
-│   │   └── projects/            # project entries (title, description, date, seo)
+│   │   ├── projects/            # project entries (title, description, date, seo)
+│   │   └── shelf/               # MDX entries (title, creator, category, rating, links)
 │   ├── data/                    # site-config, experience, about, certifications,
 │   │                            # projects (tech + links), publications, stats,
-│   │                            # fun (manga/anime/LN + music), brand-icons
+│   │                            # setup (tools ledger + dotfiles), brand-icons
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/
 │   │   ├── index.astro          # the single-page home
-│   │   ├── blog/index.astro     # notes index
-│   │   ├── blog/[id].astro      # post layout (680px reading column, KaTeX, code copy)
-│   │   ├── fun.astro            # the leisure corner: manga/anime/LN grid + dialog + music
+│   │   ├── notes/index.astro    # notes index
+│   │   ├── notes/[id].astro     # post layout (680px reading column, KaTeX, code copy)
+│   │   ├── shelf/index.astro    # the shelf drawer: filters + cover grid + catalog rows
+│   │   ├── shelf/[slug].astro   # one catalog card per entry
+│   │   ├── setup.astro          # the desk + software ledger
 │   │   └── rss.xml.js
+│   ├── lib/shelf.ts             # shelf sorting + shelfmarks (MNG·01, ANM·02, ...)
 │   ├── scripts/                 # motion.ts (home), code-blocks.ts (copy buttons)
 │   ├── styles/global.css        # design tokens + component styles
 │   ├── content.config.ts        # collection schemas
@@ -71,7 +71,6 @@ All commands run from the project root:
 | `pnpm dev`          | Start the dev server at `localhost:4321`      |
 | `pnpm build`        | Build the production site to `./dist/`        |
 | `pnpm preview`      | Preview the production build locally          |
-| `pnpm preview:api`  | Local preview that also serves `/api/now-playing` (reads `.env`) |
 | `pnpm astro ...`    | Run Astro CLI commands                        |
 
 ## Writing content
@@ -108,35 +107,38 @@ Add a `.md` file to `src/content/projects/`. The tech stack and links shown on t
 - `src/data/certifications.ts` — certification list with verify links
 - `src/data/stats.ts` — the stats bar (years, projects, publications, certifications)
 - `src/data/publications.ts` — publications list (rendered only when non-empty)
-- `src/data/fun.ts` — Fun page entries: manga / anime & light novels (title, creator, note, cover path, buy/read links, favorite flag) plus music tracks grouped by artist and artist links
+- `src/data/setup.ts` — Setup page: the hardware and tools ledgers and the archived Hyprland dotfile repos
 - `src/data/brand-icons.ts` — brand logo paths for the tech stack
 
-The Fun page grid and its detail dialog are driven by `src/data/fun.ts`; cover art lives in `public/fun/covers/` and is fetched/added with `scripts/fetch-covers.mjs`.
+### Shelf entries
 
-## last.fm now-playing
+Add an `.mdx` file to `src/content/shelf/` with frontmatter:
 
-The Fun page shows what's currently playing via [last.fm](https://www.last.fm/api). On Vercel, `api/now-playing.mjs` runs as a serverless function and reads two environment variables (never shipped to the client):
-
-```env
-LASTFM_API_KEY=your_lastfm_api_key
-LASTFM_USERNAME=your_lastfm_username
+```yaml
+---
+title: 'A book title'
+english: 'An optional English title'
+creator: 'Author name'
+category: 'fiction'        # manga | anime | light-novel | fiction | non-fiction | romance
+status: 'done'             # reading | done
+rating: 8.5                # optional, 0–10
+description: 'One paragraph that appears on the entry page.'
+badge: 'favorite'          # optional: favorite | all-time
+links:
+  - label: 'Publisher'
+    href: 'https://example.com'
+---
 ```
 
-Get a key at https://www.last.fm/api/account/create.
-
-**On Vercel:** add both variables in Vercel → Project → Settings → Environment Variables (Production and Preview), commit `api/now-playing.mjs`, and redeploy. A local `.env` is gitignored and never uploaded, so it alone does not make the card appear in production.
-
-**Locally:** `astro dev` and `astro preview` do not serve the `api/` folder, so the card stays hidden under those commands. To preview with the live card, run `pnpm build` then `pnpm preview:api` — it serves the built site plus the function and reads `.env`.
-
-The client fetches `/api/now-playing`; if the function is absent (GitHub Pages) or unconfigured, the card simply stays hidden.
+Anything written below the frontmatter renders as the entry's field notes (a full review). Cover art lives in `public/shelf/covers/` as `{slug}.jpg` and is fetched/added with `scripts/fetch-covers.mjs`; entries without a cover render a monogram tile. Shelfmarks (`MNG·01`, `ANM·02`, ...) are assigned per category by `src/lib/shelf.ts`.
 
 ## Configuration
 
-`astro.config.mjs` holds the site URL, MDX/KaTeX integration, the custom `salmon-light` Shiki theme, and redirects for the old portfolio routes (e.g. `/projects` → `/#projects`, `/id/...` → `/`).
+`astro.config.mjs` holds the site URL, MDX/KaTeX integration, the custom `warm-signal` Shiki theme, and redirects for the old portfolio routes (e.g. `/projects` → `/#projects`, `/id/...` → `/`, plus the retired `/fun` → `/shelf` and `/stats` → `/`).
 
 ## Deployment
 
-Deployed to **Vercel** (which serves the static build and runs `api/now-playing.mjs` as a serverless function). The repo also includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that publishes to **GitHub Pages** via the `withastro/action` workflow, with the `CNAME` file pointing at `dankehidayat.my.id`; on that host the now-playing card simply stays hidden since there is no serverless function.
+Published to **GitHub Pages** by a GitHub Actions workflow (`.github/workflows/deploy.yml`) using the `withastro/action` workflow, with the `CNAME` file pointing at `dankehidayat.my.id`. The site is a fully static build and needs no server functions.
 
 ## License
 

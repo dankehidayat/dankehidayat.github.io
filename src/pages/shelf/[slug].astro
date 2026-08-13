@@ -1,0 +1,392 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { render } from 'astro:content';
+import { getShelf, withShelfmarks, categoryLabels, coverPathFor, type MarkedEntry } from '../../lib/shelf';
+
+export async function getStaticPaths() {
+    const marked = withShelfmarks(await getShelf());
+    return marked.map(({ entry, shelfmark }, index) => ({
+        params: { slug: entry.id },
+        props: {
+            entry,
+            shelfmark,
+            prev: marked[index - 1] ?? null,
+            next: marked[index + 1] ?? null
+        }
+    }));
+}
+
+interface Props {
+    entry: MarkedEntry['entry'];
+    shelfmark: string;
+    prev: MarkedEntry | null;
+    next: MarkedEntry | null;
+}
+
+const { entry, shelfmark, prev, next } = Astro.props;
+const data = entry.data;
+
+const cover = coverPathFor(entry);
+const monogram = data.title.charAt(0).toUpperCase();
+
+const hasReview = Boolean(entry.body?.trim());
+const { Content } = hasReview ? await render(entry) : { Content: null };
+
+const description = data.seo?.description ?? data.description;
+---
+
+<BaseLayout title={`${data.title} · Shelf`} description={description}>
+    <div class="content-page site-shell shelf-record-page">
+        <a href="/shelf" class="post-back shelf-back">
+            <Icon name="arrow-left" />
+            Back to the drawer
+        </a>
+
+        <article class="shelf-record">
+            <div class="shelf-record-cover">
+                {cover ? (
+                    <img
+                        src={cover}
+                        alt={`Cover of ${data.title}`}
+                        width="460"
+                        height="690"
+                        decoding="async"
+                    />
+                ) : (
+                    <span class="shelf-record-mono" aria-hidden="true">{monogram}</span>
+                )}
+                {data.badge && (
+                    <span
+                        class:list={['shelf-record-heart', data.badge === 'all-time' && 'shelf-heart-all']}
+                    >
+                        <Icon name="heart-filled" />
+                        <span class="sr-only">
+                            {data.badge === 'all-time' ? 'All-time favorite' : 'Favorite'}
+                        </span>
+                    </span>
+                )}
+            </div>
+
+            <div class="shelf-record-body">
+                <p class="shelf-record-meta">
+                    <span class="shelf-record-mark">{shelfmark}</span>
+                    <span class="shelf-record-stamp">{categoryLabels[data.category]}</span>
+                    {data.status === 'reading' && (
+                        <span class="shelf-record-stamp shelf-record-stamp-desk">On the desk</span>
+                    )}
+                    {data.badge && (
+                        <span class="shelf-record-stamp">
+                            {data.badge === 'all-time' ? 'All-time favorite' : 'Favorite'}
+                        </span>
+                    )}
+                </p>
+
+                <h1 class="page-title">{data.title}</h1>
+                {data.english && <p class="shelf-record-english">{data.english}</p>}
+                <p class="shelf-record-creator">{data.creator}</p>
+
+                {data.rating !== undefined && (
+                    <p class="shelf-record-score">
+                        <span class="shelf-record-score-num">{data.rating.toFixed(1)}</span>
+                        <span class="shelf-record-score-of">/ 10</span>
+                    </p>
+                )}
+
+                <p class="shelf-record-desc">{data.description}</p>
+
+                {data.note && (
+                    <p class="shelf-record-note">{data.note}</p>
+                )}
+
+                {data.links.length > 0 && (
+                    <div class="shelf-record-links">
+                        {data.links.map((link) => (
+                            <a
+                                class="btn btn-secondary shelf-record-link"
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {link.label}
+                                <Icon name="external" aria-hidden="true" />
+                            </a>
+                        ))}
+                    </div>
+                )}
+
+                {Content && (
+                    <div class="shelf-record-review">
+                        <h2 class="shelf-record-review-heading">Field notes</h2>
+                        <div class="prose">
+                            <Content />
+                        </div>
+                    </div>
+                )}
+            </div>
+        </article>
+
+        <nav class="shelf-record-nav" aria-label="Adjacent cards in the drawer">
+            {prev ? (
+                <a class="shelf-record-nav-link" href={`/shelf/${prev.entry.id}/`}>
+                    <Icon name="arrow-left" aria-hidden="true" />
+                    <span>
+                        <span class="shelf-record-nav-label">Previous card</span>
+                        <span class="shelf-record-nav-title">{prev.entry.data.title}</span>
+                    </span>
+                </a>
+            ) : <span />}
+            {next && (
+                <a class="shelf-record-nav-link shelf-record-nav-next" href={`/shelf/${next.entry.id}/`}>
+                    <span>
+                        <span class="shelf-record-nav-label">Next card</span>
+                        <span class="shelf-record-nav-title">{next.entry.data.title}</span>
+                    </span>
+                    <Icon name="arrow-right" aria-hidden="true" />
+                </a>
+            )}
+        </nav>
+    </div>
+
+    <style>
+        .shelf-record-page {
+            max-width: 64rem;
+        }
+
+        .shelf-back {
+            margin-bottom: 2rem;
+        }
+
+        .shelf-record {
+            display: grid;
+            grid-template-columns: minmax(12rem, 19rem) 1fr;
+            gap: clamp(1.5rem, 4vw, 3rem);
+            align-items: start;
+        }
+
+        @media (max-width: 640px) {
+            .shelf-record {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .shelf-record-cover {
+            position: relative;
+            aspect-ratio: 2 / 3;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            background: var(--color-surface-tint);
+            box-shadow: var(--shadow-md);
+        }
+
+        .shelf-record-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shelf-record-mono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                160deg,
+                var(--color-tangerine) 0%,
+                var(--color-tangerine-deep) 100%
+            );
+            color: var(--color-ink-on-tangerine);
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 4.5rem);
+            font-weight: 700;
+        }
+
+        .shelf-record-heart {
+            position: absolute;
+            top: 0.7rem;
+            right: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 50%;
+            background: var(--color-tangerine);
+            color: var(--color-ink-on-tangerine);
+            box-shadow: 0 8px 16px -8px rgb(46 22 8 / 0.5);
+        }
+
+        .shelf-heart-all {
+            background: var(--color-ink);
+            color: var(--color-bg);
+        }
+
+        .shelf-record-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            margin: 0 0 1rem;
+        }
+
+        .shelf-record-mark {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-record-stamp {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.26rem 0.65rem;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+            background: var(--color-surface);
+        }
+
+        .shelf-record-stamp-desk {
+            background: var(--color-saffron);
+            border-color: var(--color-saffron);
+            color: var(--color-ink);
+        }
+
+        .shelf-record-english {
+            margin: 0.55rem 0 0;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-record-creator {
+            margin: 0.7rem 0 0;
+            font-size: 0.95rem;
+            color: var(--color-ink-body);
+        }
+
+        .shelf-record-score {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            margin: 1.1rem 0 0;
+        }
+
+        .shelf-record-score-num {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-green-deep);
+        }
+
+        .shelf-record-score-of {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-record-desc {
+            margin: 1.2rem 0 0;
+            max-width: 38rem;
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: var(--color-ink-body);
+        }
+
+        .shelf-record-note {
+            margin: 1rem 0 0;
+            padding: 0.6rem 0;
+            max-width: 38rem;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-record-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.4rem;
+        }
+
+        .shelf-record-review {
+            margin-top: 2.4rem;
+            max-width: 42rem;
+        }
+
+        .shelf-record-review-heading {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--color-ink);
+            margin: 0 0 0.9rem;
+        }
+
+        .shelf-record-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: clamp(2.5rem, 6vw, 4rem);
+            padding-top: 1.4rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .shelf-record-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            max-width: 46%;
+            text-decoration: none;
+            color: var(--color-ink-body);
+            transition: color 0.2s var(--ease);
+        }
+
+        .shelf-record-nav-link:hover {
+            color: var(--color-green-deep);
+        }
+
+        .shelf-record-nav-next {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .shelf-record-nav-label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-record-nav-title {
+            display: block;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.3;
+            margin-top: 0.15rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .shelf-record-nav svg {
+            flex-shrink: 0;
+        }
+    </style>
+</BaseLayout>

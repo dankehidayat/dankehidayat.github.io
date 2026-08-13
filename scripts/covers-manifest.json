@@ -22,5 +22,32 @@
     "bytes": 89429,
     "color": "#f15093",
     "title": "Lycoris Recoil: Ordinary days"
+  },
+  "max-havelaar": {
+    "slug": "max-havelaar",
+    "ok": true,
+    "file": "max-havelaar.jpg",
+    "bytes": 106926,
+    "color": "#e8b8a8",
+    "title": "Max Havelaar",
+    "source": "https://penerbitkakatua.com/product/multatuli-max-havelaar/"
+  },
+  "pembelaan-hak-perempuan": {
+    "slug": "pembelaan-hak-perempuan",
+    "ok": true,
+    "file": "pembelaan-hak-perempuan.jpg",
+    "bytes": 72383,
+    "color": "#c8b8b8",
+    "title": "Pembelaan Hak Perempuan",
+    "source": "https://penerbitkakatua.com/product/mary-wollstonecraft-pembelaan-hak-hak-perempuan/"
+  },
+  "letters-to-a-young-poet": {
+    "slug": "letters-to-a-young-poet",
+    "ok": true,
+    "file": "letters-to-a-young-poet.jpg",
+    "bytes": 12412,
+    "color": "#080808",
+    "title": "Letters to a Young Poet",
+    "source": "https://openlibrary.org/b/isbn/9780241252055"
   }
 }

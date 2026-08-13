@@ -42,4 +42,24 @@ const projects = defineCollection({
         })
 });
 
-export const collections = { blog, projects };
+const shelf = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/shelf' }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            english: z.string().optional(),
+            creator: z.string(),
+            category: z.enum(['manga', 'anime', 'light-novel', 'fiction', 'non-fiction', 'romance']),
+            status: z.enum(['reading', 'done']).default('done'),
+            rating: z.number().min(0).max(10).optional(),
+            description: z.string(),
+            note: z.string().optional(),
+            badge: z.enum(['favorite', 'all-time']).optional(),
+            /** Cover file slug when it differs from the entry id (reused key visuals). */
+            cover: z.string().optional(),
+            links: z.array(z.object({ label: z.string(), href: z.string().url() })).default([]),
+            seo: seoSchema(image).optional()
+        })
+});
+
+export const collections = { blog, projects, shelf };
