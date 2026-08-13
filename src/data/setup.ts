@@ -99,11 +99,23 @@ export const setupTools: SetupItem[] = [
 /** Where the old setup lives, for the curious. */
 export const setupRepos = [
     {
+        label: 'Archrice (2019)',
+        href: 'https://github.com/nishimi-ya/Archrice'
+    },
+    {
+        label: 'BSPWM dotfiles',
+        href: 'https://github.com/nishimi-ya/dotfiles'
+    },
+    {
+        label: 'Openbox dotfiles',
+        href: 'https://github.com/nishimi-ya/dotfiles/tree/openbox'
+    },
+    {
         label: 'Hyprland dotfiles',
         href: 'https://github.com/nishimi-ya/hyprland-dotfiles'
     },
     {
-        label: 'Bootstrap script',
+        label: 'Hyprland bootstrap',
         href: 'https://github.com/nishimi-ya/hyprland-bootstrap'
     }
 ];

@@ -28,9 +28,28 @@ const countFor = (category: string) =>
         <header class="page-header">
             <h1 class="page-title">Shelf</h1>
             <p class="page-lede">
-                The leisure corner, filed properly. Manga, anime, and light novels — plus the
-                occasional serious book — each one a card in the drawer. Pull any card for the
-                full record, and fair warning: I reread and rewatch things a lot.
+                The leisure corner, filed properly. Manga, anime, and light novels.
+            </p>
+            <p class="shelf-profiles">
+                <span class="shelf-profiles-label">Profiles</span>
+                <a
+                    class="shelf-profile-link"
+                    href="https://anilist.co/user/Nishihime/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    AniList
+                    <Icon name="external" />
+                </a>
+                <a
+                    class="shelf-profile-link"
+                    href="https://www.last.fm/user/nishi-miya"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Last.fm
+                    <Icon name="external" />
+                </a>
             </p>
         </header>
 
@@ -662,6 +681,47 @@ const countFor = (category: string) =>
 
         .shelf-empty p {
             margin: 0 0 1rem;
+        }
+
+        .shelf-profiles {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.55rem;
+            margin-top: 1.2rem;
+        }
+
+        .shelf-profiles-label {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-profile-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.65rem;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.04em;
+            color: var(--color-ink-body);
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            transition:
+                color 0.18s var(--ease),
+                border-color 0.18s var(--ease),
+                background-color 0.18s var(--ease);
+        }
+
+        .shelf-profile-link:hover,
+        .shelf-profile-link:focus-visible {
+            color: var(--color-green-deep);
+            border-color: var(--color-green);
+            background-color: var(--color-surface-tint);
         }
     </style>
 </BaseLayout>

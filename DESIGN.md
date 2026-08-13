@@ -308,7 +308,7 @@ The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, pad
 ### Setup ledger (hardware and tools)
 - One typographic ledger per group — no photos yet. Rows are a `2.4rem / minmax(8rem, 14rem) / 1fr / 2rem` grid: mono index (01–15 running across both ledgers), Bricolage 600 name, Source Sans role, optional external-link icon — hairline bottom border, warm-tint hover with the index turning Deep Green. Rows slide in from the index column (translateX, 24ms stagger): the shelf settles vertically, the ledger reads left to right.
 - The desk photo slot ships as an honest empty state — dashed Hairline Strong border, tint field, "Photo pending" — and a photo drops into the same slot later without redesign.
-- A "Previously" section is a hairline-top archive note with secondary buttons to the retired Hyprland dotfiles; the page names what it no longer runs.
+- A "Previously" section is a hairline-top archive: secondary buttons to the retired dotfile repos (Archrice 2019, BSPWM, Openbox, Hyprland + bootstrap), then dated archive media — the 2020 desk photo as a full-width bordered figure with a mono caption, and a 2-column grid of 2019–2022 desktop-ricing screenshots (16:9 crops, mono label; single column on mobile). Thumbnails open an in-page gallery dialog (native `<dialog>`: contained image, mono label + n/total caption row with a source-dotfiles link when the shot has one, prev/next buttons, arrow keys, Esc or backdrop click to close) — never a navigation to the raw file.
 
 ### Section Heading (signature)
 - The signal tick (0.85rem green square + saffron corner), then a Bricolage headline with a one-line intro (max 46rem, 1.05rem). No kicker, ever.
