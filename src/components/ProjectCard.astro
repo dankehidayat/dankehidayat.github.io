@@ -36,6 +36,18 @@ const iconForTech: Record<string, string> = {
 ---
 
 <article class="project-plate" data-plate>
+    {meta?.image && (
+        <div class="project-screenshot">
+            <img
+                src={meta.image}
+                alt={`Screenshot of ${project.data.title}`}
+                width="640"
+                height="360"
+                loading="lazy"
+                decoding="async"
+            />
+        </div>
+    )}
     <h3 class="project-title">{project.data.title}</h3>
     {project.data.description && <p class="project-desc">{project.data.description}</p>}
     {featuredTech.length > 0 && (

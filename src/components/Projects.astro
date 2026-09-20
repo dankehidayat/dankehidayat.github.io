@@ -4,13 +4,13 @@ import ProjectCard from './ProjectCard.astro';
 import SectionHeading from './SectionHeading.astro';
 import { sortItemsByDateDesc } from '../utils/data-utils';
 
-const projects = (await getCollection('projects')).sort(sortItemsByDateDesc).slice(0, 6);
+const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
 ---
 
 <SectionHeading
     id="projects"
     title="Projects"
-    intro="Selected systems I've designed and shipped, from embedded firmware to full-stack dashboards."
+    intro="Things I've built and shipped."
 >
     <div class="project-grid">
         {projects.map((project) => <ProjectCard project={project} />)}
