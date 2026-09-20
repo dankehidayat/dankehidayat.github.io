@@ -725,41 +725,126 @@ li {
 
 /* ────────────────────────────── hero ────────────────────────────── */
 
+/*
+ * Signal Bloom — two soft luminous orbs drift on independent Lissajous
+ * paths across the tangerine field. The orbs are larger than the viewport,
+ * blurred heavily, and move slowly (25 s / 38 s) so the pattern never
+ * repeats identically. The dot grid and grain sit on top as texture.
+ *
+ * prefers-reduced-motion: all animation disabled, static gradient fallback.
+ */
+
 .hero {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    /* tangerine signal field — a radial light bloom over deep tangerine,
-       with a warm depth falloff toward the bottom of the frame */
+    /* deep tangerine base — the orbs paint light on top */
     background:
-        linear-gradient(180deg, transparent 55%, rgb(92 36 6 / 0.32) 100%),
-        radial-gradient(135% 115% at 12% -8%, #f68b4a 0%, var(--color-tangerine-field) 44%, var(--color-tangerine-deep) 100%);
+        radial-gradient(120% 100% at 50% 0%, var(--color-tangerine-field) 0%, var(--color-tangerine-deep) 100%);
     color: var(--color-ink-on-tangerine);
 }
 
-/* faint dot grid — the ledger/signal field */
+/* dot grid — the ledger/signal field texture, sits above the orbs */
 .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: 1;
     background-image: radial-gradient(color-mix(in oklab, var(--color-ink-on-tangerine) 16%, transparent) 1px, transparent 1.5px);
     background-size: 26px 26px;
     opacity: 0.5;
     pointer-events: none;
+    animation: dot-breathe 8s ease-in-out infinite;
 }
 
-/* fine film grain over the whole field — keeps the flat orange from feeling empty */
+/* film grain — topmost texture layer */
 .hero::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: 2;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 140px 140px;
     opacity: 0.5;
     mix-blend-mode: overlay;
     pointer-events: none;
+}
+
+/* ── Signal Bloom orbs ─────────────────────────────────────────── */
+
+.hero-bloom {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* warm orb — the primary light source */
+.hero-bloom::before {
+    content: '';
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    top: -10vw;
+    left: -8vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f68b4a 0%, var(--color-tangerine-field) 40%, transparent 70%);
+    filter: blur(60px);
+    opacity: 0.8;
+    will-change: transform;
+    animation: bloom-drift-1 25s ease-in-out infinite;
+}
+
+/* deep orb — the secondary shadow source */
+.hero-bloom::after {
+    content: '';
+    position: absolute;
+    width: 50vw;
+    height: 50vw;
+    bottom: -15vw;
+    right: -10vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-tangerine-field) 0%, var(--color-tangerine-deep) 45%, transparent 70%);
+    filter: blur(70px);
+    opacity: 0.7;
+    will-change: transform;
+    animation: bloom-drift-2 38s ease-in-out infinite;
+}
+
+/* ── Bloom keyframes ───────────────────────────────────────────── */
+
+@keyframes bloom-drift-1 {
+    0%   { transform: translate(0, 0) }
+    20%  { transform: translate(12vw, 10vh) }
+    40%  { transform: translate(-4vw, 18vh) }
+    60%  { transform: translate(8vw, -4vh) }
+    80%  { transform: translate(-6vw, 6vh) }
+    100% { transform: translate(0, 0) }
+}
+
+@keyframes bloom-drift-2 {
+    0%   { transform: translate(0, 0) }
+    25%  { transform: translate(-10vw, -8vh) }
+    50%  { transform: translate(6vw, 12vh) }
+    75%  { transform: translate(-8vw, -4vh) }
+    100% { transform: translate(0, 0) }
+}
+
+@keyframes dot-breathe {
+    0%, 100% { opacity: 0.45 }
+    50%      { opacity: 0.55 }
+}
+
+/* respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .hero-bloom::before,
+    .hero-bloom::after {
+        animation: none;
+    }
+    .hero::before {
+        animation: none;
+    }
 }
 
 .hero-inner {
@@ -1277,6 +1362,25 @@ li {
         border-color 0.25s var(--ease);
 }
 
+.project-screenshot {
+    margin: -1.7rem -1.7rem 0;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.project-screenshot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.4s var(--ease);
+}
+
+.project-plate:hover .project-screenshot img {
+    transform: scale(1.03);
+}
+
 .project-plate::after {
     content: '';
     position: absolute;
@@ -1589,6 +1693,108 @@ li {
         justify-self: end;
         text-align: right;
     }
+}
+
+/* ────────────────────────── carousel ────────────────────────── */
+
+.carousel-wrap {
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 1.5rem);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-card {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.25s var(--ease);
+}
+
+.carousel-card:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.carousel-img {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-surface-tint);
+}
+
+.carousel-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s var(--ease);
+}
+
+.carousel-card:hover .carousel-img img {
+    transform: scale(1.04);
+}
+
+.carousel-caption {
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.carousel-caption-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+}
+
+.carousel-caption-sub {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+    line-height: 1.5;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.carousel-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-border);
+    cursor: pointer;
+    transition: background 0.25s var(--ease);
+    padding: 0;
+}
+
+.carousel-dot.active {
+    background: var(--color-signal-green);
 }
 
 /* ───────────────────────────── contact ──────────────────────────── */
