@@ -22,13 +22,13 @@ const countFor = (category: string) =>
 
 <BaseLayout
     title="Shelf"
-    description="The catalogued leisure corner of Danke Hidayat's site: manga, anime, light novels, and the occasional serious book, filed as cards in a drawer."
+    description="Manga, anime, light novels, and the occasional serious book."
 >
     <div class="content-page site-shell shelf">
         <header class="page-header">
             <h1 class="page-title">Shelf</h1>
             <p class="page-lede">
-                The leisure corner, filed properly. Manga, anime, and light novels.
+                Filed properly. Manga, anime, light novels.
             </p>
             <p class="shelf-profiles">
                 <span class="shelf-profiles-label">Profiles</span>
@@ -722,6 +722,16 @@ const countFor = (category: string) =>
             color: var(--color-green-deep);
             border-color: var(--color-green);
             background-color: var(--color-surface-tint);
+        }
+
+        @media (max-width: 560px) {
+            .desk-cover {
+                width: 3.6rem;
+            }
+
+            .shelf-grid {
+                grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+            }
         }
     </style>
 </BaseLayout>
