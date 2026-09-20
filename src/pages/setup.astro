@@ -86,15 +86,14 @@ const archiveShots = [
 
 <BaseLayout
     title="Setup"
-    description="The setup Danke Hidayat works on now — a MacBook Pro M1, the hardware on the desk, and four tools — plus the archived Arch + Hyprland build it replaced."
+    description="My current setup: a MacBook Pro M1, the hardware on the desk, and the tools I use every day."
 >
     <div class="content-page site-shell setup">
         <header class="page-header">
             <h1 class="page-title">Setup</h1>
             <p class="page-lede">
-                The MacBook Pro I work on, the hardware around it, and the four tools I use
-                every day. The Arch + Hyprland setup from two years ago is archived further
-                down.
+                My current setup: the MacBook Pro I work on, the hardware around it, and the
+                tools I use every day. The old Arch + Hyprland build is archived further down.
             </p>
         </header>
 
@@ -160,13 +159,58 @@ const archiveShots = [
             ))
         }
 
+        <section class="setup-section" aria-labelledby="setup-neovim-heading">
+            <div class="setup-heading-row">
+                <div>
+                    <h2 class="setup-heading" id="setup-neovim-heading">Neovim</h2>
+                    <p class="setup-intro">My terminal editor setup, built on LazyVim.</p>
+                </div>
+            </div>
+            <div class="setup-neovim">
+                <div class="setup-neovim-grid">
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">Base</h3>
+                        <p class="setup-neovim-value">LazyVim distro with lazy.nvim plugin manager. Space as leader, relative line numbers, persistent undo.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">Theme</h3>
+                        <p class="setup-neovim-value">Rosé Pine (dark main variant). Dim inactive windows, bold + italic enabled, no transparency.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">UI</h3>
+                        <p class="setup-neovim-value">Bufferline with slant separators, Nerd Font icons, and LSP diagnostics inline. Snacks file explorer with sidebar offset.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">Languages</h3>
+                        <p class="setup-neovim-value">TypeScript, Python, Go, Dart/Flutter, Docker, YAML, JSON, Markdown, Tailwind CSS. ESLint + Prettier formatting.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">Flutter</h3>
+                        <p class="setup-neovim-value">flutter-tools.nvim with DAP debugging, widget guides, closing tags, dev log in a tab, and outline sidebar.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">AI</h3>
+                        <p class="setup-neovim-value">CodeCompanion.nvim routed through 9Router (local OpenAI-compatible gateway). Chat, inline edits, code review, all from the terminal.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">LSP</h3>
+                        <p class="setup-neovim-value">Auto-installed via Mason. HTML, CSS, Emmet, Bash, plus all LazyVim extras for the languages above.</p>
+                    </div>
+                    <div class="setup-neovim-item">
+                        <h3 class="setup-neovim-label">Key maps</h3>
+                        <p class="setup-neovim-value">Ctrl-S to save, Esc to clear search, Shift-H/L for buffer cycling. leader+bp to pin a buffer, leader+aa for AI chat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="setup-section setup-previously" aria-labelledby="setup-previously-heading">
             <div class="setup-heading-row">
                 <h2 class="setup-heading" id="setup-previously-heading">Previously</h2>
             </div>
             <p class="setup-previously-note">
-                Two years ago this page would have been a lot longer: Arch, Hyprland, and every
-                tool themed to match. That setup is parked now, dotfiles and all.
+                A couple years ago this page was a lot longer. Arch, Hyprland, and every tool
+                themed to match. I don't use that setup anymore, but the dotfiles are still up.
             </p>
             <div class="setup-repos">
                 {
@@ -187,14 +231,14 @@ const archiveShots = [
 
             <figure class="setup-archive-desk">
                 <img
-                    src="/setup/desk-2020.jpg"
-                    alt="The desk setup in 2020"
-                    width="1040"
-                    height="585"
+                    src="/setup/rice-flashbang.jpg"
+                    alt="BSPWM desktop rice from 2019"
+                    width="1920"
+                    height="1080"
                     loading="lazy"
                     decoding="async"
                 />
-                <figcaption class="setup-archive-caption">The desk in 2020.</figcaption>
+                <figcaption class="setup-archive-caption">BSPWM, 2019.</figcaption>
             </figure>
 
             <div class="setup-archive-rice">
@@ -516,6 +560,47 @@ const archiveShots = [
             height: 0.95rem;
         }
 
+        /* ── Neovim section ─────────────────────────────────────────── */
+        .setup-neovim {
+            margin-top: 0.5rem;
+        }
+
+        .setup-neovim-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .setup-neovim-item {
+            padding: 0.8rem 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+        }
+
+        .setup-neovim-label {
+            margin: 0 0 0.3rem;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-signal-green);
+        }
+
+        .setup-neovim-value {
+            margin: 0;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--color-ink-body);
+        }
+
+        @media (max-width: 560px) {
+            .setup-neovim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ── Previously ───────────────────────────────────────────────── */
         .setup-previously {
             padding-top: clamp(2rem, 5vw, 2.8rem);
@@ -534,9 +619,34 @@ const archiveShots = [
             gap: 0.6rem;
         }
 
+        .setup-repo {
+            font-size: 0.88rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: var(--radius-sm);
+            transition:
+                border-color 0.22s var(--ease),
+                color 0.22s var(--ease),
+                transform 0.22s var(--ease),
+                box-shadow 0.22s var(--ease);
+        }
+
+        .setup-repo:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px -8px rgb(37 31 22 / 0.18);
+        }
+
         .setup-repo svg {
             width: 1rem;
             height: 1rem;
+        }
+
+        @media (max-width: 560px) {
+            .setup-repo {
+                flex: 1 1 calc(50% - 0.3rem);
+                justify-content: center;
+                font-size: 0.82rem;
+                padding: 0.55rem 0.9rem;
+            }
         }
 
         /* ── Previously: the archive shelf ─────────────────────────────── */
@@ -550,6 +660,7 @@ const archiveShots = [
             height: auto;
             border: 1px solid var(--color-border-strong);
             border-radius: var(--radius);
+            box-shadow: 0 8px 24px -12px rgb(37 31 22 / 0.15);
         }
 
         .setup-archive-caption,
@@ -572,8 +683,8 @@ const archiveShots = [
 
         .setup-archive-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.8rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
         }
 
         .setup-archive-thumb {
@@ -581,12 +692,15 @@ const archiveShots = [
             overflow: hidden;
             border: 1px solid var(--color-border-strong);
             border-radius: var(--radius);
-            transition: border-color 0.2s var(--ease);
+            transition:
+                border-color 0.25s var(--ease),
+                box-shadow 0.25s var(--ease);
         }
 
         .setup-archive-thumb:hover,
         .setup-archive-thumb:focus-visible {
             border-color: var(--color-green);
+            box-shadow: 0 4px 16px -8px rgb(37 31 22 / 0.18);
         }
 
         .setup-archive-thumb img {
@@ -594,11 +708,11 @@ const archiveShots = [
             width: 100%;
             aspect-ratio: 16 / 9;
             object-fit: cover;
-            transition: transform 0.3s var(--ease);
+            transition: transform 0.35s var(--ease);
         }
 
         .setup-archive-thumb:hover img {
-            transform: scale(1.015);
+            transform: scale(1.03);
         }
 
         /* ── Archive gallery dialog ────────────────────────────────────── */
@@ -776,7 +890,8 @@ const archiveShots = [
             }
 
             .setup-archive-grid {
-                grid-template-columns: minmax(0, 1fr);
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.5rem;
             }
         }
     </style>

@@ -83,6 +83,12 @@ export const setupTools: SetupItem[] = [
         href: 'https://code.visualstudio.com'
     },
     {
+        slug: 'neovim',
+        name: 'Neovim',
+        role: 'Terminal editor — LazyVim, Rosé Pine, Flutter tools, CodeCompanion via 9Router.',
+        href: 'https://neovim.io'
+    },
+    {
         slug: 'opencode',
         name: 'opencode',
         role: 'AI coding agent, in the terminal.',
