@@ -1,6 +1,7 @@
 ---
 import About from '../components/About.astro';
 import BlogPreview from '../components/BlogPreview.astro';
+import Carousel from '../components/Carousel.astro';
 import Certifications from '../components/Certifications.astro';
 import ContactPanel from '../components/ContactPanel.astro';
 import ExperienceTimeline from '../components/ExperienceTimeline.astro';
@@ -21,6 +22,7 @@ const { title, description } = siteConfig;
     <TechStack />
     <Projects />
     <BlogPreview />
+    <Carousel />
     <Publications />
     <Certifications />
     <ContactPanel />
@@ -28,4 +30,63 @@ const { title, description } = siteConfig;
 
 <script>
     import '../scripts/motion.ts';
+</script>
+
+<script>
+    document.addEventListener('astro:page-load', () => {
+        const track = document.querySelector('[data-carousel-track]');
+        const dots = document.querySelectorAll('[data-carousel-dot]');
+        if (!track || !dots.length) return;
+
+        const cards = track.querySelectorAll('[data-carousel-card]');
+        let current = 0;
+        let timer: ReturnType<typeof setInterval>;
+        let autoAdvancing = false;
+
+        function goTo(index: number) {
+            autoAdvancing = true;
+            const card = cards[index] as HTMLElement | undefined;
+            if (card) {
+                const trackEl = track as HTMLElement;
+                const cardLeft = card.offsetLeft;
+                const cardWidth = card.offsetWidth;
+                const target = cardLeft - (trackEl.clientWidth - cardWidth) / 2;
+                trackEl.scrollTo({ left: target, behavior: 'smooth' });
+            }
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+            current = index;
+            setTimeout(() => { autoAdvancing = false; }, 600);
+        }
+
+        function next() {
+            goTo((current + 1) % cards.length);
+        }
+
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                const idx = Number((dot as HTMLElement).dataset.carouselDot);
+                goTo(idx);
+                resetTimer();
+            });
+        });
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = setInterval(next, 5000);
+        }
+
+        resetTimer();
+
+        track.addEventListener('scroll', () => {
+            if (autoAdvancing) return;
+            const scrollLeft = (track as HTMLElement).scrollLeft;
+            const trackWidth = (track as HTMLElement).scrollWidth;
+            const cardWidth = trackWidth / cards.length;
+            const nearest = Math.round(scrollLeft / cardWidth);
+            if (nearest !== current && nearest >= 0 && nearest < cards.length) {
+                dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
+                current = nearest;
+            }
+        }, { passive: true });
+    });
 </script>

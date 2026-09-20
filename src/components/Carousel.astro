@@ -1,0 +1,56 @@
+---
+import SectionHeading from './SectionHeading.astro';
+
+const photos = [
+    {
+        src: '/moments/UG-NADIA_RIKUB.jpeg',
+        alt: 'Evaluation Monitoring Consortium RIKUB',
+        caption: 'Evaluation Monitoring Consortium RIKUB',
+        subtitle: 'Pengembangan Infrastruktur Federated Data dan Chatbot Nutrition AI, September 2026',
+    },
+    {
+        src: '/moments/Ram_Prasad.jpeg',
+        alt: 'Ram Prasad Koirala',
+        caption: 'Ram Prasad Koirala',
+        subtitle: 'An evening with Mr. Ram Prasad Koirala on his life\'s journey from rural Nepal to a global UNICEF career',
+    },
+];
+---
+
+<SectionHeading
+    id="moments"
+    title="Moments"
+    intro="A few snapshots from outside the terminal."
+>
+    <div class="carousel-wrap" data-carousel>
+        <div class="carousel-track" data-carousel-track>
+            {photos.map((photo, i) => (
+                <figure class="carousel-card" data-carousel-card data-index={i}>
+                    <div class="carousel-img">
+                        <img
+                            src={photo.src}
+                            alt={photo.alt}
+                            width="640"
+                            height="480"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                    </div>
+                    <figcaption class="carousel-caption">
+                        <span class="carousel-caption-title">{photo.caption}</span>
+                        <span class="carousel-caption-sub">{photo.subtitle}</span>
+                    </figcaption>
+                </figure>
+            ))}
+        </div>
+        <div class="carousel-dots" data-carousel-dots>
+            {photos.map((_, i) => (
+                <button
+                    class={`carousel-dot${i === 0 ? ' active' : ''}`}
+                    data-carousel-dot={i}
+                    aria-label={`Go to slide ${i + 1}`}
+                />
+            ))}
+        </div>
+    </div>
+</SectionHeading>
