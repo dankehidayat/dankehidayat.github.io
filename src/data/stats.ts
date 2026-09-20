@@ -13,9 +13,9 @@ export type Stat = {
 export const stats: Stat[] = [
     // TODO: confirm from CV — software engineering roles started Oct 2025;
     // earlier roles (testing, data, IT) reach back to 2020. Pick the framing you want.
-    { value: '2+', label: 'Years as a developer' },
+    { value: '2+', label: 'Building things' },
     // Verifiable: 6 curated project entries in src/content/projects/.
-    { value: '6', label: 'Projects built' },
+    { value: '6', label: 'Projects shipped' },
     // Verifiable: 11 certification records in src/data/certifications.ts.
     { value: '11', label: 'Certifications' }
 ];

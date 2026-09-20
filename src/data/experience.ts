@@ -17,7 +17,7 @@ export const workTimeline: TimelineItem[] = [
         location: 'Bandung, Indonesia · On-site',
         type: 'work',
         summary:
-            'Operating the infrastructure behind the company\u2019s dashboards and APIs — deployment, automation, and reliability.',
+            'Keeping the infrastructure running so the team can focus on building. Dashboards, APIs, and the data pipelines in between.',
         points: [
             'Develop and maintain Ansible playbooks for provisioning, configuration, and patch management across the server fleet.',
             'Manage release cycles end to end — dependency audits, security patches, rolling deployments, and rollback strategies.',
@@ -34,11 +34,11 @@ export const workTimeline: TimelineItem[] = [
         location: 'Bandung, Indonesia · On-site',
         type: 'work',
         summary:
-            'Designing and building software across the stack — from user interface to backend — for connected products.',
+            'Building software for clients. Frontend, backend, and whatever else the project needs.',
         points: [
             'Design and build full-stack applications with the Labdha Design System, from user interface to backend API.',
             'Develop Trenvm, a trend-forecasting application built with Flutter for Android and iOS. The platform combines causal and generative modeling with natural-language understanding to give small businesses, designers, marketers, and entrepreneurs fast, reliable, and affordable market predictions.',
-            'Own features through the full development cycle — planning, implementation, testing, and release.'
+            'Own features through the full development cycle: planning, implementation, testing, and release.'
         ]
     },
     {
@@ -83,7 +83,7 @@ export const workTimeline: TimelineItem[] = [
             'Diagnosed hardware and software incidents across workstations, printers, and network gear.',
             'Installed and maintained Oracle POS for restaurant and front desk operations.',
             'Supported AV and network setup for bi-weekly corporate conferences.',
-            'Delivered front-line support and kept accurate IT asset inventory.'
+            'Delivered front-line support and maintained IT asset inventory.'
         ]
     }
 ];

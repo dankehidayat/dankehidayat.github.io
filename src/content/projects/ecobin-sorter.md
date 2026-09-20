@@ -1,6 +1,6 @@
 ---
 title: 'EcoBin-Sorter'
-description: IoT automatic trash bin sorting organic, inorganic, and metal waste with sensor fusion and Blynk reporting.
+description: "IoT automatic trash bin sorting organic, inorganic, and metal waste with sensor fusion."
 descriptionId: "Tempat sampah otomatis IoT yang memilah organik, anorganik, dan logam dengan fusi sensor dan laporan Blynk."
 publishDate: 'Feb 01 2024'
 isFeatured: false
@@ -12,6 +12,6 @@ Smart waste sorting bin classifying organic, inorganic, and metal waste with sen
 
 ## Highlights
 
-- Real-time volume reporting and remote monitoring via Blynk.
+- Real-time volume reporting and remote monitoring.
 - Electronics, Fusion 360 3D model, and dashboard design.
 - Ultrasonic fill-level detection plus capacitive/inductive classification sensors.
