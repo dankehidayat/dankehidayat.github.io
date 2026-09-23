@@ -329,7 +329,7 @@ li {
 .btn-dark-ghost {
     background: transparent;
     color: var(--color-ink-on-tangerine);
-    border-color: color-mix(in oklab, var(--color-ink-on-tangerine) 55%, transparent);
+    border-color: color-mix(in oklab, var(--color-ink-on-tangerine) 75%, transparent);
 }
 
 .btn-dark-ghost:hover {
@@ -1381,6 +1381,7 @@ li {
     transform: scale(1.03);
 }
 
+/* impeccable-disable-next-line side-tab -- DESIGN.md requires the 3px green→saffron line across every project plate */
 .project-plate::after {
     content: '';
     position: absolute;
@@ -1806,6 +1807,11 @@ li {
     scroll-margin-top: 4rem;
 }
 
+/* ink (#2e1608) focus ring — the global green ring only reaches ~1.9:1 on this field */
+.contact :focus-visible {
+    outline-color: var(--color-ink-on-tangerine);
+}
+
 .contact-inner {
     display: grid;
     gap: 3rem;
@@ -1820,12 +1826,18 @@ li {
     color: var(--color-ink-on-tangerine);
 }
 
+/* email hero block — top spacing is intentional (disclosed fix) */
+.contact-hero {
+    margin-top: 1.25rem;
+}
+
 .contact-email {
     display: inline-block;
     font-family: var(--font-display);
     font-size: clamp(1.35rem, 3.4vw, 2rem);
     font-weight: 700;
     line-height: 1.25;
+    overflow-wrap: anywhere;
     color: var(--color-ink-on-tangerine);
     text-decoration: underline;
     text-decoration-color: color-mix(in oklab, var(--color-ink-on-tangerine) 50%, transparent);
@@ -1839,38 +1851,80 @@ li {
 }
 
 .contact-lede {
-    margin-top: 1.1rem;
+    margin-top: 0.75rem;
     max-width: 40rem;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 88%, transparent);
+    font-size: 1rem;
+    color: color-mix(in oklab, var(--color-ink-on-tangerine) 92%, transparent);
+}
+
+/* channel readout — instrument-panel mono separates it from the lede body voice */
+.contact-telegram {
+    margin-top: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: color-mix(in oklab, var(--color-ink-on-tangerine) 92%, transparent);
+}
+
+/* the handle underlines like the email hero (50% → full ink on hover) */
+.contact-telegram-handle {
+    position: relative;
+    /* stacking context: keeps the marker stroke under the text, not under the band */
+    z-index: 0;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-ink-on-tangerine) 50%, transparent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    transition: text-decoration-color 0.2s var(--ease);
+}
+
+.contact-telegram-handle:hover {
+    text-decoration-color: var(--color-ink-on-tangerine);
+}
+
+/* saffron highlighter stroke — chisel-square ends, a hair off-axis like a
+   hand-drawn mark. Content is never hidden: the stroke is decoration only.
+   Static (visible) by default: touch and prefers-reduced-motion get this.
+   Hover-capable, motion-OK devices re-gate it to a left→right wipe below. */
+.contact-telegram-handle::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0.1em -0.28em 0.05em;
+    background: var(--color-saffron);
+    transform: rotate(-0.5deg);
+    clip-path: inset(0 0 0 0);
+    pointer-events: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .contact-telegram-handle::before {
+        clip-path: inset(0 100% 0 0);
+        transition: clip-path 0.36s var(--ease);
+    }
+
+    .contact-telegram-handle:hover::before,
+    .contact-telegram-handle:focus-visible::before {
+        clip-path: inset(0 0 0 0);
+    }
 }
 
 .contact-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1.8rem;
-}
-
-.contact-alt {
-    margin-top: 1.2rem;
-    font-size: 0.92rem;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 82%, transparent);
-}
-
-.contact-alt a {
-    font-weight: 700;
-    color: var(--color-ink-on-tangerine);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, var(--color-ink-on-tangerine) 45%, transparent);
-    text-underline-offset: 3px;
+    margin-top: 1.5rem;
 }
 
 .contact-side-title {
     font-family: var(--font-mono);
     font-size: 0.78rem;
+    /* h3 element: neutralize heading defaults to match the former <p> look */
+    font-weight: 400;
+    line-height: 1.7;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 75%, transparent);
+    color: color-mix(in oklab, var(--color-ink-on-tangerine) 95%, transparent);
     margin-bottom: 0.7rem;
 }
 

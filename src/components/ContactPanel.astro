@@ -4,7 +4,6 @@ import Button from './Button.astro';
 import Icon from './Icon.astro';
 
 const primaryEmail = 'contact@dankehidayat.my.id';
-const alternateEmail = 'dnk.hidayat@gmail.com';
 const resumeHref = '/Resume_Danke_Hidayat.pdf';
 
 const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('rss'));
@@ -20,21 +19,24 @@ const iconFor = (href: string) =>
                     <span class="section-tick" aria-hidden="true" />
                     <h2 class="section-title">Contact</h2>
                 </header>
-                <a class="contact-email" href={`mailto:${primaryEmail}`}>{primaryEmail}</a>
+                <div class="contact-hero">
+                    <a class="contact-email" href={`mailto:${primaryEmail}`}>{primaryEmail}</a>
+                </div>
                 <p class="contact-lede">
                     Open to opportunities. I usually reply within a few days.
                 </p>
+                <p class="contact-telegram">
+                    Telegram:
+                    <a class="contact-telegram-handle" href="https://t.me/dankehidayat" target="_blank" rel="noopener noreferrer">@dankehidayat<span class="sr-only"> (opens in new tab)</span></a>
+                </p>
                 <div class="contact-actions">
-                    <Button href={`mailto:${primaryEmail}`} variant="dark">Write me</Button>
+                    <Button href={`mailto:${primaryEmail}?subject=Hello%20from%20your%20site`} variant="dark">Write me</Button>
                     <Button href={resumeHref} variant="dark-ghost" download>Resume</Button>
                 </div>
-                <p class="contact-alt">
-                    Alternative address: <a href={`mailto:${alternateEmail}`}>{alternateEmail}</a>
-                </p>
             </div>
 
             <div class="contact-side" data-reveal>
-                <p class="contact-side-title">Elsewhere</p>
+                <h3 class="contact-side-title">Elsewhere</h3>
                 <ul class="contact-social-list">
                     {
                         socials.map((link) => (
@@ -45,6 +47,7 @@ const iconFor = (href: string) =>
                                         {link.text}
                                     </span>
                                     <Icon name="arrow-right" class="social-arrow" aria-hidden="true" />
+                                    <span class="sr-only">(opens in new tab)</span>
                                 </a>
                             </li>
                         ))

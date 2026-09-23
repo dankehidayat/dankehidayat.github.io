@@ -1,0 +1,5 @@
+# pnpm 12 migrated the package.json `pnpm.onlyBuiltDependencies` intent here;
+# the auto-generated placeholders must be resolved to booleans before install.
+allowBuilds:
+  esbuild: true
+  sharp: true
