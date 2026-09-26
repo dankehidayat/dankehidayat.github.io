@@ -126,25 +126,30 @@ export default defineConfig({
         }
     },
     redirects: {
-        '/projects': '/#projects',
+        '/projects': '/#folio',
         '/experience': '/#experience',
         '/about': '/#about',
         '/contact': '/#contact',
-        '/tags': '/notes',
+        // Works → Folio rename (2026-09-26): exact paths only — rest-param
+        // redirects do not work in a static build.
+        '/works': '/folio',
+        '/works/selene': '/folio/selene',
+        '/works/flowpoint-next': '/folio/flowpoint-next',
+        '/works/flora': '/folio/flora',
+        '/works/eco-office': '/folio/eco-office',
+        '/works/ecobin-sorter': '/folio/ecobin-sorter',
+        '/works/hydrolevi': '/folio/hydrolevi',
         '/id': '/',
-        // Retired surfaces: music/stats removed, fun folded into the Shelf.
+        // Retired surfaces: music/stats removed, fun folded into the Florilegium.
         '/stats': '/',
-        '/fun': '/shelf',
+        '/fun': '/florilegium',
         // Stale i18n-era URLs (the old site served an /en/ locale prefix).
         // Exact paths only — rest-param redirects do not work in a static build.
         '/en': '/',
-        '/en/blog': '/notes',
-        '/en/projects': '/#projects',
+        '/en/projects': '/#folio',
         '/en/experience': '/#experience',
         '/en/about': '/#about',
-        '/en/contact': '/#contact',
-        '/en/tags': '/notes',
-        '/en/rss.xml': '/rss.xml'
+        '/en/contact': '/#contact'
     },
     integrations: [
         mdx({
