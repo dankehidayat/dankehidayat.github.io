@@ -1824,15 +1824,39 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 
 /* Fig. NN — the documentation plate, framed like a plate figure: a hairline
    rule, an inset rule in the cream gap, and a print caption beneath. The
-   plate keeps its own aspect ratio (six masters, four of them landscape and
-   two portrait) so nothing is cropped to fit a box. */
+   plate keeps its own aspect ratio (the six masters run 0.75 to 1.86) so
+   nothing is ever cropped to fit a box.
+
+   The cap on the media is the whole sizing rule: because the aspect ratio is
+   preserved, a max-height on a tall source narrows its width instead of
+   letting a portrait become a full-bleed tower. Derived, not guessed —
+   at the full sheet measure (1056px of media) the six plates come out:
+
+     ecobin-sorter  0.75 → 1408px   hydrolevi  1.33 →  792px
+     selene         1.09 →  969px   eco-office 1.34 →  198px (frame-capped)
+     flowpoint-next 1.86 →  569px   flora      1.86 →  568px
+
+   37rem (592px) is the floor, and it is the largest natural height the two
+   1.86 dashboards reach (flowpoint 585px, flora 584px): a pure vh cap would
+   shrink plates the owner signed off as "alright" the moment the window got
+   short — 78vh is 546px on a 700px-tall window, under both. The floor clears
+   them at any height, and the vh half above it carries the actual intent,
+   which is that a plate should be readable in one look rather than scrolled
+   past. On a 900px window that is 702px; on a 1200px window, 936px.
+
+   Where the cap narrows a plate, the frame shrink-wraps to it and the caption
+   keeps the sheet's full measure beneath — a figure caption is set to the
+   page, not to the figure. */
 .doc-plate {
     --line: 1;
+    --doc-media-max-h: max(37rem, 78vh);
     margin: 0;
 }
 
 .doc-frame {
     position: relative;
+    width: fit-content;
+    max-width: 100%;
     padding: 7px;
     border: 1px solid var(--color-border-strong);
     background: var(--color-surface);
@@ -1848,8 +1872,10 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 
 .doc-frame img {
     display: block;
-    width: 100%;
+    width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: var(--doc-media-max-h);
     background: var(--color-surface-tint);
 }
 
@@ -1862,12 +1888,19 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     }
 }
 
-/* A master too small to fill the sheet (Eco Office is 255×191) is mounted at
-   its own size and centred rather than blown up to a soft plate. Only the
-   frame shrinks — the caption still runs the sheet's measure, so a long
-   project name never breaks into a narrow ribbon under a small plate. */
+/* A master too small to fill the sheet (Eco Office is 255×191) is capped and
+   centred rather than blown up to a soft plate. Only the frame narrows: the
+   caption still runs the sheet's measure, so a long project name never breaks
+   into a narrow ribbon under a small plate. The cap, not a fixed width, is
+   deliberate — the frame shrink-wraps, so on a master large enough to reach
+   it this rule simply does not apply. Note the plate still renders at 264px
+   rather than its 255px master: `sizes` describes the full sheet measure, so
+   the browser density-corrects the single 255w candidate and `max-width: 100%`
+   fills the frame. That 1.035× is the no-upscale rule yielding to a truthful
+   `sizes`; correcting it means narrowing `sizes` for this one plate, which is
+   a call for the build that owns the image ladder. */
 .doc-plate--small .doc-frame {
-    width: min(100%, 17.5rem);
+    max-width: min(100%, 17.5rem);
     margin-inline: auto;
 }
 

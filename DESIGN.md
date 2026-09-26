@@ -216,6 +216,7 @@ A cream herbarium palette: green ink leads, lilac blooms as the only heat, sepia
 - **Headline** (600, `clamp(2rem, 4.6vw, 3.3rem)`, 1.08): Chapter titles; italic green `<em>` on the key phrase.
 - **Title** (600, `clamp(1.4rem, 2.4vw, 1.75rem)`, 1.16): Plate names (italic for species), section heads, card titles.
 - **Body** (400, 1rem, 1.6): Chapter intros, prose; measure held ≤ ~72ch.
+- **Body — record account** (400, `clamp(1.06rem, 0.5vw + 0.98rem, 1.16rem)`, 1.72): the `/folio/[slug]` account only. **Off the ramp above, on purpose — see *The Account Ramp Addition* below.**
 - **Label** (600, 0.78rem, tracking 0.14em, uppercase): Buttons, stage labels, small-caps nav (Newsreader small-caps 0.95rem in the running head).
 - **Mono** (500, 0.72rem): Plate numbers, tag chips, ledger data.
 
@@ -223,6 +224,7 @@ A cream herbarium palette: green ink leads, lilac blooms as the only heat, sepia
 **The Italic Species Rule.** Botanical and project names set in italic Bodoni; roman for structure, italic for the specimen.
 **The Small-Caps Label Rule.** Uppercase labels carry tracking ≥ 0.14em in Source Sans 3 or JetBrains Mono — never the display face at label size.
 **The Weight-Axis Pin.** The display face loads as the **weight-only** variable build and no stylesheet may import an `opsz` build or hand-write `font-variation-settings: 'opsz'`. The optical-size axis is pinned off on purpose; shipping both builds regressed the display type once already, and `tests/contract.spec.ts` fails the build if it returns.
+**The Account Ramp Addition.** The record account's body step (`clamp(1.06rem, 0.5vw + 0.98rem, 1.16rem)` / 1.72, measure capped at `68ch`) is a documented addition to the Body step, not a deviation to be corrected. A feature passage held at a fixed 1rem cannot keep its measure as the fluid ramp moves underneath it — the character count collapses at the top of the range and stretches at the bottom — so the step is fluid and the cap is expressed in `ch` rather than `rem`. The sister surface already sets its record essay above the body step (`.record-desc`, `clamp(1.08rem, 1.7vw, 1.22rem)`), so this makes the precedent explicit rather than leaving two unexplained sizes. As rendered it lands near 63 characters, inside the 60–75ch reading band.
 
 ## Layout
 
@@ -256,10 +258,24 @@ Nearly square: radius scale is 2px / 3px / 4px / 6px (`--radius-xs` via chips / 
 ## Components
 
 ### Buttons
+Two treatments. Both are effective-radius 0 and both are built from hairlines; they differ in what they are imitating.
+
+**The ticket** — the site's action buttons.
 - **Shape:** Chamfered ticket (7px corner cut via clip-path); effective radius 0.
 - **Primary:** Lilac fill, on-heat cream text (`#fbf7ee`), Source Sans 3 600 / 0.82rem / 0.14em uppercase, padding `0.78rem 1.5rem`, drawn floret mask before the label.
 - **Hover / Focus:** Deep lilac (`#64497f`) + `translateY(-1px)`; focus uses the global green outline.
 - **Secondary:** Transparent, ink text, 1px strong-sepia border + registration-ring double hairline; sage floret mark; hover border → lilac.
+
+**The stamp** — the record page's outbound links only (`/folio/[slug]`, `.plate-link`): a repository and a live dashboard are references into an archive, not actions the visitor takes on this site, so they are pressed into the sheet rather than offered as a call to action.
+- **Shape:** Square-cut ticket, no clip-path; tinted-cream ground (`--color-surface-tint`).
+- **Type:** Source Sans 3 600 / 0.78rem / 0.14em uppercase, graphite (`--color-ink`).
+- **Border:** 1px `--color-ink-muted`. **This token is deliberate and must not be "corrected" to `--color-border-strong`** — see *The Stamp-Border Rule* below.
+- **Mark:** a hairline divider between label and outbound arrow, both drawn, never a unicode glyph.
+- **Hover / Focus:** ground lifts to `--color-surface`, rule and label warm to lilac (`--color-lilac` / `--color-lilac-deep`).
+- **Active:** ground to `--color-lilac-field`; the stamp presses 2px into the sheet (hover 1px). The press is declared only inside `prefers-reduced-motion: no-preference`.
+- **Target:** `min-height: 2.75rem` (44px), comfortably over the 24px floor, and two stamps sit on one row down to 375px.
+
+**The Stamp-Border Rule.** The stamp's hairline is `--color-ink-muted`, not `--color-border-strong`, because the stamp's boundary is carried by that line and the line must clear WCAG 1.4.11 non-text contrast (3:1) on its own. Measured: `--color-ink-muted` reads **5.20:1** on the page ground in light and **5.74:1** in dark; `--color-border-strong` reads **1.85:1** and **2.17:1** — it fails both themes. Do not "harmonise" this border back to the sepia hairline used for rules and dividers; a decorative hairline and a control boundary are not the same job, and the hairline rule in *Named Rules* governs the first, not the second.
 
 ### Chips
 - **Style:** Tinted cream fill, 1px sepia border, 2px radius, mono 0.72rem, padding `0.2rem 0.6rem`.
@@ -289,6 +305,13 @@ Nearly square: radius scale is 2px / 3px / 4px / 6px (`--radius-xs` via chips / 
 
 ### Signature: Specimen Plate
 - Arched 3:4 frame, double rule, engraving-hatch slot (sage floret) until image lands, italic species/project name, small-caps label, mono plate number, floret baseline. Hover warms the frame to lilac and eases the image forward (`transform 0.55s var(--ease)`).
+
+### Signature: Documentation Plate
+The record page's evidence: the project's own screenshot or photograph, framed as a figure in the folio (outer hairline, inset hairline in the cream gap, print caption beneath carrying `FIG. NN` in mono lilac, the record name in Bodoni italic, and a kind stamp that says *Screenshot* or *Photograph* truthfully). It is the one component whose size is set by a **height cap** rather than a width, and the cap must not be removed.
+- **The cap:** `max-height: max(37rem, 78vh)` on the media, with the frame `width: fit-content` so a tall plate narrows instead of becoming a full-bleed tower. Because the aspect ratio is always preserved, a `max-height` is the only lever needed — the six masters run 0.75 to 1.86 and nothing is ever cropped to a box.
+- **The floor is load-bearing.** 37rem (592px) is the largest height the two 1.86 dashboards reach at full measure (569px and 568px). A pure `vh` cap shrinks plates the owner signed off as correct the moment the window gets short — `78vh` is 546px on a 700px-tall window, under both. The `vh` half above the floor carries the actual intent: a plate should be readable in one look rather than scrolled past. On a 900px window the cap resolves to 702px; on 1200px, 936px.
+- **What a narrowed plate does:** the frame shrink-wraps and stays on the sheet's left margin; the caption keeps the sheet's full measure beneath it. A figure caption is set to the page, not to the figure — narrowing the caption with the plate turns a long record name into a wrapping ribbon.
+- A master too small to reach the sheet (Eco Office, 255×191) is capped at 17.5rem and centred, mounted rather than stretched.
 
 ### Signature: Perspective Plate (3D tilt + glare)
 - The freshly-cut treatment for the hero specimen on every page: pointer-driven `rotateX`/`rotateY` under a shared `perspective: 1150px` / `perspective-origin: 50% 45%`, with a `radial-gradient` glare at `mix-blend-mode: overlay` tracking the pointer, plus a shade pool that blooms from the same `--glare` value. The tilt layer carries a `scale(1.04)` overscan so the far edge of the arch never opens.
