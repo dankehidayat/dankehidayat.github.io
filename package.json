@@ -7,7 +7,10 @@
         "start": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
-        "astro": "astro"
+        "astro": "astro",
+        "test": "playwright test",
+        "test:ui": "playwright test --ui",
+        "test:report": "playwright show-report"
     },
     "dependencies": {
         "@astrojs/mdx": "^4.3.10",
@@ -35,6 +38,7 @@
     },
     "devDependencies": {
         "@astrojs/check": "^0.9.10",
+        "@playwright/test": "^1.63.0",
         "@tailwindcss/typography": "^0.5.19",
         "prettier": "^3.6.2",
         "prettier-plugin-astro": "^0.14.1",

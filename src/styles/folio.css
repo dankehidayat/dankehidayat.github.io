@@ -320,6 +320,9 @@
     gap: 0.5rem;
     color: var(--color-ink-muted);
     transition: color 0.2s var(--ease);
+    /* WCAG 2.2 SC 2.5.8: an inline-flex box without padding collapses to the
+       text line box, leaving the chapter jump targets under 24px tall. */
+    padding-block: 0.15rem;
 }
 
 .stage-item:hover {

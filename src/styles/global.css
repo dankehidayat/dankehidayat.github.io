@@ -514,6 +514,8 @@ li {
     color: var(--color-ink);
     justify-self: center;
     grid-column: 2;
+    /* WCAG 2.2 SC 2.5.8: keep the tap target at or above the 24px minimum. */
+    padding-block: 0.15rem;
 }
 
 .site-logo-name {
