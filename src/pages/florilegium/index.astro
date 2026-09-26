@@ -1,0 +1,902 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChapterRail from '../../components/ChapterRail.astro';
+import Icon from '../../components/Icon.astro';
+import PlateFigure from '../../components/PlateFigure.astro';
+import { FLORILEGIUM_PLATE_IMAGE } from '../../data/folio-plates';
+import { getShelf, categoryLabels, coverPathFor } from '../../lib/shelf';
+
+const entries = await getShelf();
+const desk = entries.filter((entry) => entry.data.status === 'reading');
+const categoryOrder = [
+    'manga',
+    'anime',
+    'light-novel',
+    'fiction',
+    'non-fiction',
+    'romance'
+] as const;
+const drawerCategories = [...new Set(entries.map((entry) => entry.data.category))].sort(
+    (a, b) => categoryOrder.indexOf(a) - categoryOrder.indexOf(b)
+);
+const countFor = (category: string) =>
+    entries.filter((entry) => entry.data.category === category).length;
+
+/** Fanned table offsets — scrubbed open by motion.ts initFanStage. */
+const fan = [
+    { rot: -5, x: -90, y: 10 },
+    { rot: 2.5, x: 0, y: -12 },
+    { rot: -3.5, x: 85, y: 5 }
+];
+
+const AniList = 'https://anilist.co/user/Nishihime/';
+
+const chapters = [
+    { num: '001', label: 'Intro', href: '#top' },
+    { num: '002', label: 'Freshly cut', href: '#fresh' },
+    { num: '003', label: 'Drawer', href: '#drawer' }
+];
+---
+
+<BaseLayout
+    title="Florilegium"
+    description="Every manga, anime, and light novel I've pressed into the florilegium — what I'm reading, what I've finished, and what's still open."
+>
+    <ChapterRail chapters={chapters} />
+
+    <!-- ═══ hero ═══ -->
+    <header class="folio-hero flor-hero" id="top" data-chapter="top" data-hero>
+        <div class="site-shell folio-hero-inner">
+            <div class="folio-hero-copy">
+                <h1 class="chapter-title flor-title">The <em>florilegium.</em></h1>
+                <p class="flor-lede" data-hero-item>
+                    Manga, anime, light novels, and the occasional serious book.
+                    {entries.length} cards, {desk.length} still open.
+                </p>
+                <p class="flor-profile" data-hero-item>
+                    <a
+                        class="folio-text-link"
+                        href={AniList}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        The raw list is on AniList
+                        <Icon name="external" aria-hidden="true" />
+                        <span class="sr-only">(opens in a new tab)</span>
+                    </a>
+                </p>
+            </div>
+
+            <figure class="folio-hero-plate" data-hero-plate>
+                <PlateFigure
+                    number="001"
+                    name="Lilium pomponium"
+                    label="Redouté · Les liliacées"
+                    id="lilium-pomponium"
+                    variant="featured"
+                    image={FLORILEGIUM_PLATE_IMAGE}
+                />
+            </figure>
+        </div>
+    </header>
+
+    <!-- ═══ chapter I · freshly cut — the fanned table stage ═══ -->
+    <section class="folio-chapter" id="fresh" data-chapter="fresh" aria-labelledby="fresh-title">
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head" data-head>
+                <h2 class="chapter-title" id="fresh-title">Freshly <em>cut.</em></h2>
+                <p class="chapter-intro">
+                    What I'm in the middle of right now.
+                </p>
+            </header>
+        </div>
+
+        <div class="cut-stage" data-fan>
+            {
+                desk.map((entry, i) => {
+                    const cover = coverPathFor(entry);
+                    const monogram = entry.data.title.charAt(0).toUpperCase();
+                    const offsets = fan[i % fan.length];
+                    return (
+                        <a
+                            class="cut-card"
+                            href={`/florilegium/${entry.id}/`}
+                            data-fan-item
+                            data-rot={offsets.rot}
+                            data-x={offsets.x}
+                            data-y={offsets.y}
+                        >
+                            <span class="cut-card-in">
+                                <span class="cut-tilt" data-tilt>
+                                <span class="cut-cover" style={`view-transition-name: cover-${entry.id}`}>
+                                    {cover ? (
+                                        <img
+                                            src={cover}
+                                            alt={`Cover of ${entry.data.title}`}
+                                            width="460"
+                                            height="690"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    ) : (
+                                        <span class="cut-mono" aria-hidden="true">
+                                            {monogram}
+                                        </span>
+                                    )}
+                                    <span class="cut-flag" aria-hidden="true" />
+                                </span>
+                                <span class="cut-caption">
+                                    <span class="cut-stamp">
+                                        {categoryLabels[entry.data.category]}
+                                    </span>
+                                    <span class="cut-title">{entry.data.title}</span>
+                                    <span class="cut-creator">{entry.data.creator}</span>
+                                    {entry.data.note && (
+                                        <span class="cut-note">{entry.data.note}</span>
+                                    )}
+                                </span>
+                                </span>
+                                <span class="cut-glare" data-tilt-glare aria-hidden="true"></span>
+                            </span>
+                        </a>
+                    );
+                })
+            }
+        </div>
+    </section>
+
+    <!-- ═══ chapter II · the drawer — staggered cover wall ═══ -->
+    <section class="folio-chapter" id="drawer" data-chapter="drawer" aria-labelledby="drawer-title">
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head" data-head>
+                <h2 class="chapter-title" id="drawer-title">The <em>drawer.</em></h2>
+                <p class="chapter-intro">
+                    The labels below filter the drawer.
+                </p>
+            </header>
+
+            <div class="drawer-bar">
+                <p class="shelf-count" id="shelf-count" aria-live="polite">
+                    {entries.length} cards filed.
+                </p>
+                <div class="shelf-chips" role="group" aria-label="Filter the drawer by category">
+                    <button
+                        type="button"
+                        class="shelf-chip is-active"
+                        data-filter="all"
+                        aria-pressed="true"
+                    >
+                        {/* the total already reads in the hero lede + the live
+                            counter — the chip states the filter, not the count */}
+                        All
+                    </button>
+                    {
+                        drawerCategories.map((category) => (
+                            <button
+                                type="button"
+                                class="shelf-chip"
+                                data-filter={category}
+                                aria-pressed="false"
+                            >
+                                {categoryLabels[category]}{' '}
+                                <span class="shelf-chip-count">{countFor(category)}</span>
+                            </button>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div class="wall" id="wall-grid" data-wall>
+                {
+                    entries.map((entry) => {
+                        const cover = coverPathFor(entry);
+                        const monogram = entry.data.title.charAt(0).toUpperCase();
+                        const data = entry.data;
+                        return (
+                            <a
+                                class="wall-card"
+                                href={`/florilegium/${entry.id}/`}
+                                data-wall-card
+                                data-category={data.category}
+                            >
+                                <span class="wall-card-tilt">
+                                    <span class="wall-card-body">
+                                        {/* Pairing (Leafing): finished cards pair as
+                                            cover-<id>; the still-open three pair from
+                                            their fan card instead, so their wall copy
+                                            takes a non-pairing name (names must stay
+                                            unique per page). */}
+                                        <span
+                                            class="wall-cover"
+                                            style={`view-transition-name: ${
+                                                desk.some((d) => d.id === entry.id)
+                                                    ? `cover-wall-${entry.id}`
+                                                    : `cover-${entry.id}`
+                                            }`}
+                                        >
+                                            {cover ? (
+                                                <img
+                                                    src={cover}
+                                                    alt={`Cover of ${data.title}`}
+                                                    width="460"
+                                                    height="690"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            ) : (
+                                                <span class="cut-mono" aria-hidden="true">
+                                                    {monogram}
+                                                </span>
+                                            )}
+                                            {data.badge && (
+                                                <span
+                                                    class:list={[
+                                                        'wall-heart',
+                                                        data.badge === 'all-time' && 'wall-heart-all'
+                                                    ]}
+                                                >
+                                                    <Icon name="heart-filled" />
+                                                    <span class="sr-only">
+                                                        {data.badge === 'all-time'
+                                                            ? 'All-time favorite'
+                                                            : 'Favorite'}
+                                                    </span>
+                                                </span>
+                                            )}
+                                            {data.status === 'reading' && (
+                                                <span class="wall-flag" aria-hidden="true" />
+                                            )}
+                                        </span>
+                                        <span class="wall-catalog">
+                                            <span class="wall-stamp-row">
+                                                <span class="shelf-stamp">
+                                                    {categoryLabels[data.category]}
+                                                </span>
+                                                {data.rating !== undefined && (
+                                                    <span class="wall-score">
+                                                        {data.rating.toFixed(1)} / 10
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <span class="wall-title">{data.title}</span>
+                                            <span class="wall-creator">{data.creator}</span>
+                                            <span class="wall-arrow" aria-hidden="true">
+                                                <Icon name="arrow-right" />
+                                            </span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </a>
+                        );
+                    })
+                }
+            </div>
+
+            <div class="shelf-empty" id="shelf-empty" hidden>
+                <p>Nothing filed under this label yet.</p>
+                <button type="button" class="shelf-chip" id="shelf-empty-reset">
+                    Show everything
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function bindShelf() {
+            const grid = document.getElementById('wall-grid');
+            const count = document.getElementById('shelf-count');
+            const empty = document.getElementById('shelf-empty');
+            const reset = document.getElementById('shelf-empty-reset');
+            if (!grid || !count || !empty) return;
+
+            const cards = Array.from(grid.querySelectorAll<HTMLElement>('.wall-card'));
+            const chips = Array.from(
+                document.querySelectorAll<HTMLButtonElement>('.shelf-chip[data-filter]')
+            );
+            const total = cards.length;
+            let active = 'all';
+
+            const applyFilter = (filter: string) => {
+                active = filter;
+                let visible = 0;
+                for (const card of cards) {
+                    const show = filter === 'all' || card.dataset.category === filter;
+                    card.hidden = !show;
+                    if (show) {
+                        // re-file the card: fresh, capped stagger on its body layer
+                        const body = card.querySelector<HTMLElement>('.wall-card-body');
+                        if (body) {
+                            body.style.setProperty('--wall-i', String(Math.min(visible, 14)));
+                            body.classList.remove('is-refiling');
+                            void body.offsetWidth;
+                            body.classList.add('is-refiling');
+                        }
+                        visible++;
+                    }
+                }
+                for (const chip of chips) {
+                    const isActive = chip.dataset.filter === filter;
+                    chip.classList.toggle('is-active', isActive);
+                    chip.setAttribute('aria-pressed', String(isActive));
+                }
+                empty.hidden = visible > 0;
+                count.textContent =
+                    filter === 'all'
+                        ? `${total} cards filed.`
+                        : `Showing ${visible} of ${total} cards.`;
+            };
+
+            for (const chip of chips) {
+                chip.addEventListener('click', () => {
+                    const filter = chip.dataset.filter ?? 'all';
+                    if (filter !== active) applyFilter(filter);
+                });
+            }
+            reset?.addEventListener('click', () => applyFilter('all'));
+        }
+
+        // astro:page-load fires on the initial load and after every view-transition navigation.
+        document.addEventListener('astro:page-load', bindShelf);
+    </script>
+
+    <style>
+        /* ── hero ────────────────────────────────────────────────────── */
+        .flor-title {
+            margin-top: 0.4rem;
+        }
+
+        .flor-lede {
+            max-width: 44ch;
+            font-size: clamp(1.05rem, 1.6vw, 1.18rem);
+            line-height: 1.6;
+            color: var(--color-ink-body);
+        }
+
+        .flor-profile {
+            margin: 0;
+        }
+
+        /* ── chapter I · the fanned table ──────────────────────────────
+           Three open stems laid across a tinted table band, overlapping
+           like cards thrown down; motion.ts fans them open on approach,
+           hover lifts one card out of the pile. */
+        .cut-stage {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: clamp(2.75rem, 7vw, 5rem) clamp(1rem, 4vw, 3rem);
+            margin-top: clamp(1rem, 3vw, 2rem);
+            background: var(--color-surface-tint);
+            border-top: 3px double var(--color-border-strong);
+            border-bottom: 3px double var(--color-border-strong);
+            overflow: hidden;
+        }
+
+        .cut-card {
+            flex: none;
+            width: clamp(12.5rem, 22vw, 16.5rem);
+            margin-inline: -1.1rem;
+            text-decoration: none;
+            color: inherit;
+            z-index: 1;
+        }
+
+        .cut-card:nth-child(2) {
+            z-index: 2;
+        }
+
+        .cut-card-in {
+            display: block;
+            position: relative;
+            perspective: 900px;
+            will-change: transform;
+            transition:
+                transform 0.3s var(--ease),
+                filter 0.3s var(--ease);
+        }
+
+        .cut-tilt {
+            display: block;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .cut-glare {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            border-radius: 3px;
+            background: radial-gradient(
+                circle at var(--gx, 50%) var(--gy, 50%),
+                rgb(255 255 255 / 0.5),
+                transparent 62%
+            );
+            mix-blend-mode: overlay;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cut-card:hover .cut-card-in,
+        .cut-card:focus-visible .cut-card-in {
+            transform: translateY(-10px);
+            filter: drop-shadow(0 14px 18px rgb(37 31 22 / 0.18));
+        }
+
+        .cut-cover {
+            position: relative;
+            display: block;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 50% 50% 3px 3px / 16% 16% 3px 3px;
+            background: var(--color-surface);
+            box-shadow: 0 10px 22px -16px rgb(37 31 22 / 0.45);
+        }
+
+        .cut-cover::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid color-mix(in srgb, var(--color-bg) 65%, transparent);
+            border-radius: 50% 50% 3px 3px / 16% 16% 3px 3px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cut-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cut-mono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                160deg,
+                var(--color-lilac) 0%,
+                var(--color-lilac-deep) 100%
+            );
+            color: var(--color-ink-on-tangerine);
+            font-family: var(--font-display);
+            font-size: 2.6rem;
+            font-weight: 700;
+        }
+
+        /* reading: sage corner tab, bottom-left of the cut */
+        .cut-flag {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            width: 0;
+            height: 0;
+            border-bottom: 1.7rem solid var(--color-sage);
+            border-right: 1.7rem solid transparent;
+        }
+
+        .cut-caption {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            padding-top: 0.9rem;
+            text-align: center;
+        }
+
+        .cut-stamp {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.22rem 0.55rem;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            background: var(--color-bg);
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+        }
+
+        .cut-title {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(1.15rem, 2vw, 1.45rem);
+            line-height: 1.2;
+            color: var(--color-ink);
+        }
+
+        .cut-creator {
+            font-size: 0.85rem;
+            color: var(--color-ink-muted);
+        }
+
+        .cut-note {
+            max-width: 24ch;
+            margin-top: 0.25rem;
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--color-ink-body);
+        }
+
+        @media (max-width: 639px) {
+            .cut-stage {
+                flex-direction: column;
+                align-items: center;
+                gap: 2.75rem;
+                padding-block: clamp(2.25rem, 8vw, 3rem);
+            }
+
+            .cut-card {
+                width: min(72vw, 15rem);
+                margin-inline: 0;
+            }
+        }
+
+        /* ── chapter II · the drawer ─────────────────────────────────── */
+        /* sticky label bar — count on the left, index tabs on the ink rule */
+        .drawer-bar {
+            position: sticky;
+            top: 0.5rem;
+            z-index: 6;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.6rem;
+            background: var(--color-bg);
+            padding-block: 0.65rem;
+        }
+
+        .shelf-count {
+            margin: 0;
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .shelf-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0;
+            border-bottom: 2px solid var(--color-ink);
+        }
+
+        .shelf-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            margin-left: -1px;
+            border: 1px solid var(--color-border-strong);
+            border-bottom: none;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            background: var(--color-surface);
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+            cursor: pointer;
+            transition:
+                background 0.2s var(--ease),
+                border-color 0.2s var(--ease),
+                color 0.2s var(--ease);
+        }
+
+        .shelf-chip:first-child {
+            margin-left: 0;
+        }
+
+        .shelf-chip:hover {
+            border-color: var(--color-green);
+            color: var(--color-green-deep);
+        }
+
+        .shelf-chip.is-active {
+            background: var(--color-green);
+            border-color: var(--color-green);
+            color: var(--color-ink-on-green);
+        }
+
+        .shelf-chip-count {
+            opacity: 0.72;
+        }
+
+        /* ── the staggered cover wall ──────────────────────────────────
+           Offsets and tilts live in CSS (complete without JS); the outer
+           card carries the scrub drift, the tilt layer the rotation and
+           hover lift, the body layer the entrance — three layers, three
+           transforms, no fights. */
+        .wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+            gap: clamp(1.2rem, 2.6vw, 1.75rem);
+            align-items: start;
+        }
+
+        .wall-card {
+            position: relative;
+            margin-top: 0;
+        }
+
+        .wall-card:nth-child(6n + 1) {
+            margin-top: 2.4rem;
+            --tilt: -1.4deg;
+        }
+
+        .wall-card:nth-child(6n + 2) {
+            margin-top: 0.6rem;
+            --tilt: 1.1deg;
+        }
+
+        .wall-card:nth-child(6n + 3) {
+            margin-top: 3rem;
+            --tilt: -0.7deg;
+        }
+
+        .wall-card:nth-child(6n + 4) {
+            margin-top: 1.2rem;
+            --tilt: 1.5deg;
+        }
+
+        .wall-card:nth-child(6n + 5) {
+            margin-top: 2.6rem;
+            --tilt: -1.2deg;
+        }
+
+        .wall-card:nth-child(6n) {
+            --tilt: 0.6deg;
+        }
+
+        .wall-card[hidden] {
+            display: none;
+        }
+
+        .wall-card-tilt {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            background: var(--color-surface-tint);
+            border: 1px solid var(--color-border-strong);
+            border-radius: 50% 50% 3px 3px / 16% 16% 3px 3px;
+            transform: rotate(var(--tilt, 0deg));
+            transition:
+                transform 0.3s var(--ease),
+                border-color 0.3s var(--ease),
+                box-shadow 0.3s var(--ease);
+        }
+
+        /* double-rule plate frame */
+        .wall-card-tilt::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--color-border);
+            border-radius: 50% 50% 3px 3px / 16% 16% 3px 3px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .wall-card:hover .wall-card-tilt,
+        .wall-card:focus-visible .wall-card-tilt {
+            transform: rotate(0deg) translateY(-7px);
+            border-color: var(--color-green);
+            box-shadow: 0 16px 26px -20px rgb(37 31 22 / 0.5);
+        }
+
+        .wall-card-body {
+            display: block;
+        }
+
+        /* filter re-file — the cards settle into place after a label pull
+           (first entrance is GSAP; this runs on filter changes) */
+        @keyframes wall-refile {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .wall-card-body.is-refiling {
+            animation: wall-refile 0.45s var(--ease) both;
+            animation-delay: min(calc(var(--wall-i, 0) * 26ms), 400ms);
+        }
+
+        .wall-cover {
+            position: relative;
+            display: block;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            background: var(--color-surface-tint);
+        }
+
+        .wall-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s var(--ease);
+        }
+
+        .wall-card:hover .wall-cover img,
+        .wall-card:hover .wall-cover .cut-mono {
+            transform: scale(1.045);
+        }
+
+        .wall-cover .cut-mono {
+            transition: transform 0.4s var(--ease);
+        }
+
+        .wall-heart {
+            position: absolute;
+            right: 0.6rem;
+            bottom: 0.6rem;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.9rem;
+            height: 1.9rem;
+            border-radius: 50%;
+            background: var(--color-lilac);
+            color: var(--color-ink-on-tangerine);
+            box-shadow: 0 8px 16px -8px
+                color-mix(in oklab, var(--color-lilac-deep) 55%, transparent);
+        }
+
+        .wall-heart-all {
+            background: var(--color-ink);
+            color: var(--color-bg);
+        }
+
+        .wall-flag {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            width: 0;
+            height: 0;
+            border-bottom: 1.7rem solid var(--color-sage);
+            border-right: 1.7rem solid transparent;
+        }
+
+        .wall-catalog {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.45rem;
+            padding: 0.7rem 0.8rem 0.9rem;
+        }
+
+        .wall-stamp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
+            padding-bottom: 0.45rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .shelf-stamp {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.22rem 0.55rem;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 999px;
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-body);
+            background: var(--color-bg);
+            white-space: nowrap;
+        }
+
+        .wall-score {
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            letter-spacing: 0.06em;
+            color: var(--color-green-deep);
+        }
+
+        .wall-title {
+            font-family: var(--font-display);
+            font-size: 0.98rem;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: var(--color-ink);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .wall-creator {
+            font-size: 0.82rem;
+            line-height: 1.35;
+            color: var(--color-ink-body);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* quiet hover affordance — the card points the way */
+        .wall-arrow {
+            position: absolute;
+            right: 0.7rem;
+            bottom: 0.65rem;
+            display: inline-flex;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition:
+                opacity 0.25s var(--ease),
+                transform 0.25s var(--ease);
+            color: var(--color-lilac-deep);
+        }
+
+        .wall-arrow svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .wall-card:hover .wall-arrow,
+        .wall-card:focus-visible .wall-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .shelf-empty {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: var(--color-ink-muted);
+            border: 1px dashed var(--color-border-strong);
+            border-radius: var(--radius);
+        }
+
+        .shelf-empty p {
+            margin: 0 0 1rem;
+        }
+
+        .shelf-empty .shelf-chip {
+            margin-left: 0;
+            border-bottom: 1px solid var(--color-border-strong);
+            border-radius: var(--radius-sm);
+        }
+
+        @media (max-width: 639px) {
+            .wall {
+                grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+            }
+
+            .wall-card:nth-child(n) {
+                margin-top: 0.8rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .wall-card-body.is-refiling {
+                animation: none;
+            }
+        }
+    </style>
+</BaseLayout>

@@ -1,0 +1,560 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { render } from 'astro:content';
+import { getShelf, categoryLabels, coverPathFor, type ShelfEntry } from '../../lib/shelf';
+
+export async function getStaticPaths() {
+    const entries = await getShelf();
+    return entries.map((entry, index) => ({
+        params: { slug: entry.id },
+        props: {
+            entry,
+            prev: entries[index - 1] ?? null,
+            next: entries[index + 1] ?? null
+        }
+    }));
+}
+
+interface Props {
+    entry: ShelfEntry;
+    prev: ShelfEntry | null;
+    next: ShelfEntry | null;
+}
+
+const { entry, prev, next } = Astro.props;
+const data = entry.data;
+
+const cover = coverPathFor(entry);
+const prevCover = prev ? coverPathFor(prev) : null;
+const nextCover = next ? coverPathFor(next) : null;
+const monogram = data.title.charAt(0).toUpperCase();
+
+const hasReview = Boolean(entry.body?.trim());
+const { Content } = hasReview ? await render(entry) : { Content: null };
+
+const description = data.seo?.description ?? data.description;
+---
+
+<BaseLayout title={`${data.title} · Florilegium`} description={description}>
+    <div class="content-page site-shell record-page">
+        <a href="/florilegium" class="post-back record-back">
+            <Icon name="arrow-left" />
+            Back to the drawer
+        </a>
+
+        <article class="record" data-hero>
+            <!-- left: the pressed cover + its record sheet (sticky) -->
+            <aside class="record-aside">
+                {/* Shared-element pairing (Leafing): the pressed cover morphs
+                    from its wall/fan card here — and hands off to the prev/next
+                    thumb on the next record, so browsing reads as leafing. */}
+                <figure
+                    class="record-cover"
+                    data-hero-plate
+                    style={`view-transition-name: cover-${entry.id}`}
+                >
+                    {cover ? (
+                        <img
+                            src={cover}
+                            alt={`Cover of ${data.title}`}
+                            width="460"
+                            height="690"
+                            decoding="async"
+                        />
+                    ) : (
+                        <span class="record-mono" aria-hidden="true">{monogram}</span>
+                    )}
+                </figure>
+
+                <div class="record-sheet" data-hero-item>
+                    {
+                        data.rating !== undefined && (
+                            <p class="record-score">
+                                <span class="record-score-num">{data.rating.toFixed(1)}</span>
+                                <span class="record-score-of">/ 10</span>
+                            </p>
+                        )
+                    }
+                    <dl class="record-facts">
+                        <div class="record-fact">
+                            <dt>Label</dt>
+                            <dd>{categoryLabels[data.category]}</dd>
+                        </div>
+                        <div class="record-fact">
+                            <dt>Status</dt>
+                            <dd class:list={[data.status === 'reading' && 'is-open']}>
+                                {data.status === 'reading' ? 'Still open' : 'Finished'}
+                            </dd>
+                        </div>
+                        {
+                            data.badge && (
+                                <div class="record-fact">
+                                    <dt>Marked</dt>
+                                    <dd>
+                                        {data.badge === 'all-time'
+                                            ? 'All-time favorite'
+                                            : 'Favorite'}
+                                    </dd>
+                                </div>
+                            )
+                        }
+                        <div class="record-fact">
+                            <dt>By</dt>
+                            <dd>{data.creator}</dd>
+                        </div>
+                    </dl>
+
+                    {
+                        data.links.length > 0 && (
+                            <div class="record-links">
+                                {data.links.map((link) => (
+                                    <a
+                                        class="record-link"
+                                        href={link.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {link.label}
+                                        <Icon name="external" aria-hidden="true" />
+                                        <span class="sr-only">(opens in a new tab)</span>
+                                    </a>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+            </aside>
+
+            <!-- right: the review as the centerpiece -->
+            <div class="record-main">
+                <h1 class="page-title record-title">{data.title}</h1>
+                {data.english && <p class="record-english">{data.english}</p>}
+
+                <p class="record-desc">{data.description}</p>
+
+                {data.note && <blockquote class="record-quote">{data.note}</blockquote>}
+
+                {
+                    Content && (
+                        <section class="record-review">
+                            <h2 class="record-review-heading">Field notes</h2>
+                            <div class="prose">
+                                <Content />
+                            </div>
+                        </section>
+                    )
+                }
+            </div>
+        </article>
+
+        <nav class="record-nav" aria-label="Adjacent cards in the drawer" data-reveal="rise">
+            {
+                prev ? (
+                    <a class="record-nav-link" href={`/florilegium/${prev.id}/`}>
+                        {prevCover && (
+                            <img
+                                class="record-nav-cover"
+                                src={prevCover}
+                                alt=""
+                                width="460"
+                                height="690"
+                                loading="lazy"
+                                decoding="async"
+                                style={`view-transition-name: cover-${prev.id}`}
+                            />
+                        )}
+                        <span>
+                            <span class="record-nav-label">Previous</span>
+                            <span class="record-nav-title">{prev.data.title}</span>
+                        </span>
+                    </a>
+                ) : (
+                    <span />
+                )
+            }
+            {
+                next && (
+                    <a class="record-nav-link record-nav-next" href={`/florilegium/${next.id}/`}>
+                        <span>
+                            <span class="record-nav-label">Next</span>
+                            <span class="record-nav-title">{next.data.title}</span>
+                        </span>
+                        {nextCover && (
+                            <img
+                                class="record-nav-cover"
+                                src={nextCover}
+                                alt=""
+                                width="460"
+                                height="690"
+                                loading="lazy"
+                                decoding="async"
+                                style={`view-transition-name: cover-${next.id}`}
+                            />
+                        )}
+                    </a>
+                )
+            }
+        </nav>
+    </div>
+
+    <style>
+        .record-page {
+            max-width: 66rem;
+        }
+
+        .record-back {
+            margin-bottom: 2rem;
+        }
+
+        .record {
+            display: grid;
+            grid-template-columns: minmax(13rem, 20rem) minmax(0, 1fr);
+            gap: clamp(2rem, 5vw, 3.75rem);
+            align-items: start;
+        }
+
+        /* the left column rides along while the review reads */
+        .record-aside {
+            position: sticky;
+            top: 5.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .record-cover {
+            position: relative;
+            margin: 0;
+            aspect-ratio: 2 / 3;
+            /* arched plate frame — same cut as the works plates */
+            border-radius: 50% 50% 3px 3px / 18% 18% 3px 3px;
+            overflow: hidden;
+            border: 1px solid var(--color-border-strong);
+            background: var(--color-surface-tint);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* double-rule frame inside the arch */
+        .record-cover::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--color-border);
+            border-radius: 50% 50% 3px 3px / 18% 18% 3px 3px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .record-cover img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .record-mono {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                160deg,
+                var(--color-lilac) 0%,
+                var(--color-lilac-deep) 100%
+            );
+            color: var(--color-ink-on-tangerine);
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 4.5rem);
+            font-weight: 700;
+        }
+
+        /* the record sheet — a pressed specimen label under the cover */
+        .record-sheet {
+            position: relative;
+            padding: clamp(1rem, 2.5vw, 1.35rem);
+            background: var(--color-surface-tint);
+            border: 1px solid var(--color-border-strong);
+        }
+
+        .record-sheet::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--color-border);
+            pointer-events: none;
+        }
+
+        .record-score {
+            position: relative;
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            margin: 0 0 0.8rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .record-score-num {
+            font-family: var(--font-mono);
+            font-size: clamp(1.9rem, 4vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-green-deep);
+        }
+
+        .record-score-of {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-ink-muted);
+        }
+
+        .record-facts {
+            position: relative;
+            margin: 0;
+        }
+
+        .record-fact {
+            display: grid;
+            grid-template-columns: 4.5rem minmax(0, 1fr);
+            gap: 0.75rem;
+            padding: 0.55rem 0;
+        }
+
+        .record-fact + .record-fact {
+            border-top: 1px solid var(--color-border);
+        }
+
+        .record-fact dt {
+            font-family: var(--font-mono);
+            font-size: 0.625rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+            padding-top: 0.15rem;
+        }
+
+        .record-fact dd {
+            margin: 0;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            color: var(--color-ink-body);
+        }
+
+        .record-fact dd.is-open {
+            color: var(--color-green-deep);
+            font-weight: 600;
+        }
+
+        .record-links {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.9rem;
+            padding-top: 0.9rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* chamfered ticket — cut corners, ring on hover */
+        .record-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.55rem 0.9rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-strong);
+            clip-path: polygon(
+                7px 0,
+                100% 0,
+                100% calc(100% - 7px),
+                calc(100% - 7px) 100%,
+                0 100%,
+                0 7px
+            );
+            text-decoration: none;
+            color: var(--color-ink);
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition:
+                background 0.2s var(--ease),
+                box-shadow 0.2s var(--ease);
+        }
+
+        .record-link:hover,
+        .record-link:focus-visible {
+            background: color-mix(in oklab, var(--color-lilac) 14%, var(--color-surface));
+            box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-lilac) 55%, transparent);
+        }
+
+        .record-link svg {
+            width: 0.9rem;
+            height: 0.9rem;
+            color: var(--color-ink-muted);
+        }
+
+        /* ── the main column: the review reads like a spread ─────────── */
+        .record-title {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            line-height: 1.06;
+        }
+
+        .record-english {
+            margin: 0.6rem 0 0;
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--color-ink-muted);
+        }
+
+        .record-desc {
+            margin: 1.5rem 0 0;
+            max-width: 62ch;
+            font-size: clamp(1.08rem, 1.7vw, 1.22rem);
+            line-height: 1.65;
+            color: var(--color-ink);
+        }
+
+        /* the one-line opinion, pressed as a pull quote */
+        .record-quote {
+            margin: clamp(1.75rem, 4vw, 2.5rem) 0;
+            padding: clamp(1.1rem, 2.5vw, 1.5rem) 0;
+            max-width: 34ch;
+            border-top: 1px solid var(--color-border-strong);
+            border-bottom: 1px solid var(--color-border-strong);
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(1.35rem, 2.8vw, 1.9rem);
+            line-height: 1.4;
+            color: var(--color-ink);
+        }
+
+        .record-quote::before {
+            content: '\201C';
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 1.6em;
+            line-height: 0.6;
+            color: var(--color-green);
+        }
+
+        .record-review {
+            margin-top: clamp(2rem, 5vw, 3rem);
+            max-width: 44rem;
+        }
+
+        .record-review-heading {
+            margin: 0 0 1rem;
+            font-family: var(--font-sans);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--color-green-deep);
+        }
+
+        /* drop cap — the essay opens like a first page */
+        .record-review :global(.prose > p:first-of-type)::first-letter {
+            float: left;
+            margin: 0.08em 0.12em 0 0;
+            font-family: var(--font-display);
+            font-size: 3.4em;
+            line-height: 0.8;
+            font-weight: 600;
+            color: var(--color-green-deep);
+        }
+
+        /* ── prev / next ─────────────────────────────────────────────── */
+        .record-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: clamp(2.75rem, 6vw, 4.25rem);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .record-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.85rem;
+            max-width: 46%;
+            text-decoration: none;
+            color: var(--color-ink-body);
+            transition: color 0.2s var(--ease);
+        }
+
+        .record-nav-link:hover,
+        .record-nav-link:focus-visible {
+            color: var(--color-green-deep);
+        }
+
+        .record-nav-next {
+            text-align: right;
+            margin-left: auto;
+        }
+
+        .record-nav-cover {
+            flex: none;
+            width: 2.6rem;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            border: 1px solid var(--color-border-strong);
+            border-radius: 50% 50% 2px 2px / 22% 22% 2px 2px;
+            background: var(--color-surface-tint);
+        }
+
+        .record-nav-label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-ink-muted);
+        }
+
+        .record-nav-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 0.15rem;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 860px) {
+            .record {
+                grid-template-columns: 1fr;
+            }
+
+            .record-aside {
+                position: static;
+                display: grid;
+                grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+                align-items: start;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .record-aside {
+                grid-template-columns: 1fr;
+            }
+
+            .record-cover {
+                width: min(100%, 14rem);
+                justify-self: center;
+            }
+        }
+    </style>
+</BaseLayout>

@@ -1,15 +1,10 @@
 /**
  * Shelf — the catalogued leisure corner.
- * Shared ordering, shelfmarks, and labels for the /shelf pages.
+ * Shared ordering and labels for the /florilegium pages.
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type ShelfEntry = CollectionEntry<'shelf'>;
-
-export type MarkedEntry = {
-    entry: ShelfEntry;
-    shelfmark: string;
-};
 
 export const shelfCategoryOrder = [
     'manga',
@@ -29,15 +24,6 @@ export const categoryLabels: Record<(typeof shelfCategoryOrder)[number], string>
     romance: 'Romance'
 };
 
-const shelfmarkPrefixes: Record<(typeof shelfCategoryOrder)[number], string> = {
-    manga: 'MNG',
-    anime: 'ANM',
-    'light-novel': 'LNV',
-    fiction: 'FIC',
-    'non-fiction': 'NFC',
-    romance: 'RMC'
-};
-
 /** Drawer order: category blocks, titles alphabetical inside each block. */
 export async function getShelf(): Promise<ShelfEntry[]> {
     const entries = await getCollection('shelf');
@@ -49,24 +35,11 @@ export async function getShelf(): Promise<ShelfEntry[]> {
     });
 }
 
-/** Assigns a catalog shelfmark (MNG·01…) to each entry in drawer order. */
-export function withShelfmarks(entries: ShelfEntry[]): MarkedEntry[] {
-    const counters = new Map<string, number>();
-    return entries.map((entry) => {
-        const n = (counters.get(entry.data.category) ?? 0) + 1;
-        counters.set(entry.data.category, n);
-        return {
-            entry,
-            shelfmark: `${shelfmarkPrefixes[entry.data.category]}·${String(n).padStart(2, '0')}`
-        };
-    });
-}
-
-// Cover jackets live in public/shelf/covers/. The filenames are harvested at
+// Cover jackets live in public/florilegium/covers/. The filenames are harvested at
 // compile time through Vite's static glob, so the lookup never depends on the
 // path a page module resolves from at build time (a runtime fs probe against
 // import.meta.url silently failed for the index page).
-const coverFiles = import.meta.glob('../../public/shelf/covers/*.{jpg,jpeg}');
+const coverFiles = import.meta.glob('../../public/florilegium/covers/*.{jpg,jpeg}');
 const availableCovers = new Set(
     Object.keys(coverFiles).map((p) => (p.split('/').pop() ?? p).replace(/\.jpe?g$/i, ''))
 );
@@ -74,5 +47,5 @@ const availableCovers = new Set(
 /** Cover jacket URL for an entry, or null when there is no jacket (monogram tile). */
 export function coverPathFor(entry: ShelfEntry): string | null {
     const key = entry.data.cover ?? entry.id;
-    return availableCovers.has(key) ? `/shelf/covers/${key}.jpg` : null;
+    return availableCovers.has(key) ? `/florilegium/covers/${key}.jpg` : null;
 }
