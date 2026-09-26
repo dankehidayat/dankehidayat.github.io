@@ -4,11 +4,18 @@ import MarqueeBand from '../../components/MarqueeBand.astro';
 import PlateFigure from '../../components/PlateFigure.astro';
 import Icon from '../../components/Icon.astro';
 import { PLATE_IMAGES } from '../../data/folio-plates';
-import { EXTRA_LILY_ORDER } from '../../data/extra-lilies';
-import { FOLIO_WORK_IDS, PLATE_LABELS, plateNumberOf } from '../../data/works';
+import {
+    FOLIO_WORK_IDS,
+    PLATE_LABELS,
+    PROJECT_SHOTS,
+    SHOT_PLATES,
+    plateNumberOf,
+    type FolioWorkId,
+    type ShotPlate
+} from '../../data/works';
 import { projectMeta } from '../../data/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { LILY_WIDTHS, responsiveImage } from '../../lib/responsive-image';
+import { responsiveImage } from '../../lib/responsive-image';
 
 export async function getStaticPaths() {
     const all = await getCollection('projects');
@@ -41,19 +48,45 @@ const issued = entry.data.publishDate.toLocaleDateString('en-US', {
     year: 'numeric'
 });
 
-// One margin lily per plate — rotated through the five accents so each
-// detail page keeps its own specimen beside the folio (extra-lilies.json).
-const folioIndex = FOLIO_WORK_IDS.indexOf(entry.id);
-const marginLily = EXTRA_LILY_ORDER[
-    (folioIndex < 0 ? 0 : folioIndex) % EXTRA_LILY_ORDER.length
-];
-const marginLilyPlate = await responsiveImage(marginLily.src, {
-    widths: LILY_WIDTHS,
-    quality: 80
-});
+/**
+ * The documentation plate: the project's own record, straight from
+ * PROJECT_SHOTS (src/data/works.ts). No plate, no frame — a project without a
+ * shot simply doesn't get the figure rather than an empty hatched box.
+ */
+const shot = PROJECT_SHOTS[entry.id as FolioWorkId];
+
+/** What each shot shows and how to name it: SHOT_PLATES, read off the actual
+ *  pixels in src/data/works.ts. A project with no entry gets the neutral
+ *  fallback below — never a guess. */
+const shotNote: ShotPlate = {
+    stamp: 'Project record',
+    alt: `An image from the ${entry.data.title} project record.`
+};
+
+const plateNote = SHOT_PLATES[entry.id] ?? shotNote;
+
+/**
+ * The record sheet's documentation plate runs the full width of the sheet —
+ * up to 67rem inside the 72rem shell — well past the 27rem marquee slot
+ * SHOT_WIDTHS was tuned for, so this page declares its own ladder. The helper
+ * still caps every rung at the master's own width, so nothing upscales. Move
+ * it into src/lib/responsive-image.ts with the other slot ladders when that
+ * lane is open.
+ *
+ * `sizes` mirrors the shell exactly: 72rem wide with clamp(1.25rem, 4vw,
+ * 2.5rem) of side padding, so 67rem above 1180px, 100vw − 5rem once 4vw has
+ * clamped to 2.5rem, then 92vw, then 88vw below 500px.
+ */
+const RECORD_SHOT_WIDTHS = [480, 800, 1160, 1600];
+const RECORD_SHOT_SIZES = '(min-width: 1180px) 67rem, (min-width: 1000px) calc(100vw - 5rem), (min-width: 500px) 92vw, 88vw';
+
+const shotPlate = shot ? await responsiveImage(shot, { widths: RECORD_SHOT_WIDTHS, quality: 82 }) : null;
+
+/** A master under ~480px (Eco Office is 255×191) is shown at its own size, never blown up. */
+const shotIsSmall = Boolean(shot && shot.width < 480);
 
 const marqueeItems = [
-    { text: `Plate ${number}`, italic: true },
+    { text: `Record ${number}`, italic: true },
     { text: entry.data.title, italic: true },
     { text: `Collected ${issued}` },
     { text: 'Botanical folio' }
@@ -64,7 +97,7 @@ const marqueeItems = [
     <article class="plate-detail site-shell">
         <a class="folio-back" href="/folio">
             <Icon name="arrow-left" aria-hidden="true" />
-            All plates
+            All records
         </a>
 
         <header class="plate-detail-head" data-hero>
@@ -98,13 +131,9 @@ const marqueeItems = [
                     meta?.links?.length ? (
                         <div class="plate-detail-links">
                             {meta.links.map((link) => (
-                                <a
-                                    class="folio-text-link"
-                                    href={link.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                <a class="plate-link" href={link.href} target="_blank" rel="noopener noreferrer">
                                     {link.label}
+                                    <span class="plate-link-rule" aria-hidden="true" />
                                     <Icon name="external" aria-hidden="true" />
                                     <span class="sr-only">(opens in new tab)</span>
                                 </a>
@@ -115,39 +144,54 @@ const marqueeItems = [
             </div>
         </header>
 
-        <div class="plate-detail-body">
-            <div class="prose">
-                <Content />
-            </div>
-        </div>
+        {/* the record sheet — the sheet proper, centred inside the shell so
+            the evidence and the story sit on one axis instead of hanging
+            off the left edge */}
+        <div class="plate-detail-sheet">
+            {
+                shotPlate && (
+                    <figure class:list={['doc-plate', shotIsSmall && 'doc-plate--small']} data-reveal="rule">
+                        <div class="doc-frame">
+                            <img
+                                src={shotPlate.src}
+                                srcset={shotPlate.srcset}
+                                sizes={RECORD_SHOT_SIZES}
+                                width={shotPlate.width}
+                                height={shotPlate.height}
+                                alt={plateNote.alt}
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </div>
+                        <figcaption class="doc-cap">
+                            <span class="doc-fig">Fig. {number}</span>
+                            <span class="doc-name">{entry.data.title}</span>
+                            <span class="doc-stamp">{plateNote.stamp}</span>
+                        </figcaption>
+                    </figure>
+                )
+            }
 
-        <!-- rotating margin specimen — kept outside the related-plates grid -->
-        <div class="lily-break">
-            <figure class="lily-accent" data-reveal>
-                <span class="lily-accent-frame">
-                    <img
-                        src={marginLilyPlate.src}
-                        srcset={marginLilyPlate.srcset}
-                        sizes="11.5rem"
-                        width={marginLilyPlate.width}
-                        height={marginLilyPlate.height}
-                        alt={marginLily.alt}
-                        loading="lazy"
-                        decoding="async"
-                    />
+            <div class="plate-detail-body">
+                <div class="prose">
+                    <Content />
+                </div>
+                <span class="record-fleuron" aria-hidden="true">
+                    <svg class="floret" viewBox="0 0 24 24">
+                        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none">
+                            <path d="M12 2.5v19M3.77 7.25l16.46 9.5M3.77 16.75l16.46-9.5" />
+                        </g>
+                        <circle cx="12" cy="12" r="1.7" fill="currentColor" />
+                    </svg>
                 </span>
-                <figcaption class="lily-accent-cap">
-                    <em>{marginLily.species}</em>
-                    <span class="lily-accent-src">{marginLily.source}</span>
-                </figcaption>
-            </figure>
+            </div>
         </div>
 
         {
             related.length > 0 && (
-                <section class="related" aria-label="Adjacent plates">
+                <section class="related" aria-label="Adjacent records">
                     <div class="related-head" data-head>
-                        <h2 class="related-title">Adjacent plates</h2>
+                        <h2 class="related-title">Adjacent records</h2>
                         <span class="related-note">More from the folio</span>
                     </div>
                     <div class="plate-grid" data-plate-group>

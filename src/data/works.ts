@@ -62,6 +62,41 @@ export const PROJECT_SHOTS: Record<FolioWorkId, ImageMetadata> = {
 };
 
 /**
+ * What each shot actually shows, read off the master's own pixels (opened
+ * 2026-09-26) — never inferred from the file name. Three of the six are
+ * dashboard captures; the other three are photographs of the hardware and of
+ * the people who built it, so the caption stamp and the alt text say which
+ * instead of calling every one of them a screenshot.
+ */
+export type ShotPlate = { stamp: string; alt: string };
+export const SHOT_PLATES: Record<string, ShotPlate> = {
+    selene: {
+        stamp: 'Screenshot · dashboard',
+        alt: 'The Selene dashboard: energy cards reading AC voltage, AC current, AC power and estimated cost above an energy-usage line chart, with a climate-history chart and a comfort summary below.'
+    },
+    'flowpoint-next': {
+        stamp: 'Screenshot · dashboard',
+        alt: 'The Flowpoint dashboard: a comfort status of Fair, environmental metrics for temperature and humidity, energy metrics for active power and power factor, and a daily energy estimate.'
+    },
+    flora: {
+        stamp: 'Screenshot · dashboard',
+        alt: 'The Flora dashboard: temperature, humidity, pressure and altitude readings under environmental sensors, and three soil-moisture gauges for Soil 1, Soil 2 and Soil 3.'
+    },
+    'eco-office': {
+        stamp: 'Photograph · the unit',
+        alt: 'The Eco Office unit on a workbench: a black enclosure with a blue-lit LCD screen, cables running from its side.'
+    },
+    'ecobin-sorter': {
+        stamp: 'Photograph · the machine',
+        alt: 'The sorting machine standing in a lab with the project team gathered around it, a laptop open on top of the unit.'
+    },
+    hydrolevi: {
+        stamp: 'Photograph · the team',
+        alt: 'The project team posing outdoors beside a HydroleVi banner.'
+    }
+};
+
+/**
  * Category grouping for /folio (owner decision 2026-09-24; the Works
  * dropdown is retired): Web Apps and Internet of Things only. Category
  * names render in Bodoni Moda italic wherever they appear.

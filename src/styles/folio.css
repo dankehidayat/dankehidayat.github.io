@@ -1652,6 +1652,7 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 /* ─────────────────────────── plate detail ────────────────────────── */
 
 .plate-detail {
+    --record-gap: clamp(2rem, 5vw, 3.5rem);
     padding-top: clamp(2rem, 5vw, 3.25rem);
     padding-bottom: clamp(3.5rem, 8vw, 6rem);
 }
@@ -1686,7 +1687,7 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 
 .plate-detail-head {
     display: grid;
-    gap: clamp(2rem, 5vw, 3.5rem);
+    gap: var(--record-gap);
     align-items: center;
     padding-bottom: clamp(2.5rem, 6vw, 4rem);
     border-bottom: 1px solid var(--color-border);
@@ -1735,20 +1736,274 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     gap: 0.45rem;
 }
 
+/* The outbound stamps. Square-cut tickets pressed into the sheet rather than
+   rounded software buttons: a tinted ground, a hairline that actually carries
+   the boundary (ink-muted on the page ground reads 5.20:1 light / 5.74:1 dark,
+   so the control is identifiable without relying on the label), and a press of
+   1px on hover so the affordance is felt rather than only coloured. Lilac
+   stays a mark — border and label — never a fill. */
 .plate-detail-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem;
-    margin-top: 0.4rem;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
 }
 
-.plate-detail-body {
-    max-width: 46rem;
+.plate-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-ink-muted);
+    border-radius: 0;
+    background: var(--color-surface-tint);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+        background-color 0.22s var(--ease),
+        border-color 0.22s var(--ease),
+        color 0.22s var(--ease);
+}
+
+/* the hairline between the label and the outbound mark */
+.plate-link-rule {
+    width: 1px;
+    align-self: stretch;
+    margin-block: 0.2rem;
+    background: var(--color-border-strong);
+}
+
+.plate-link svg {
+    width: 0.95rem;
+    height: 0.95rem;
+}
+
+.plate-link:hover,
+.plate-link:focus-visible {
+    background: var(--color-surface);
+    border-color: var(--color-lilac);
+    color: var(--color-lilac-deep);
+}
+
+.plate-link:active {
+    background: var(--color-lilac-field);
+}
+
+/* the press — transform only where motion is welcome */
+@media (prefers-reduced-motion: no-preference) {
+    .plate-link {
+        transition:
+            background-color 0.22s var(--ease),
+            border-color 0.22s var(--ease),
+            color 0.22s var(--ease),
+            transform 0.16s var(--ease);
+    }
+
+    .plate-link:hover,
+    .plate-link:focus-visible {
+        transform: translateY(1px);
+    }
+
+    .plate-link:active {
+        transform: translateY(2px);
+    }
+}
+
+/* The record sheet — the project's own documentation plate and the owner's
+   account, sharing one left edge with the title so the whole record reads as
+   a single sheet rather than a caption in one column and notes in another. */
+.plate-detail-sheet {
     margin-top: clamp(2.5rem, 6vw, 4rem);
 }
 
+/* Fig. NN — the documentation plate, framed like a plate figure: a hairline
+   rule, an inset rule in the cream gap, and a print caption beneath. The
+   plate keeps its own aspect ratio (six masters, four of them landscape and
+   two portrait) so nothing is cropped to fit a box. */
+.doc-plate {
+    --line: 1;
+    margin: 0;
+}
+
+.doc-frame {
+    position: relative;
+    padding: 7px;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
+}
+
+.doc-frame::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+}
+
+.doc-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--color-surface-tint);
+}
+
+/* the inset rule draws across as the plate is tipped in — the one authored
+   moment on this page, and it never runs where motion is not welcome */
+@media (prefers-reduced-motion: no-preference) {
+    .doc-frame::after {
+        transform: scaleX(var(--line, 1));
+        transform-origin: left center;
+    }
+}
+
+/* A master too small to fill the sheet (Eco Office is 255×191) is mounted at
+   its own size and centred rather than blown up to a soft plate. Only the
+   frame shrinks — the caption still runs the sheet's measure, so a long
+   project name never breaks into a narrow ribbon under a small plate. */
+.doc-plate--small .doc-frame {
+    width: min(100%, 17.5rem);
+    margin-inline: auto;
+}
+
+.doc-cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.9rem;
+    margin-top: 0.9rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.doc-fig {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-lilac-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.doc-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--color-ink);
+}
+
+.doc-stamp {
+    margin-left: auto;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+/* The account. The measure is set in `ch` rather than rem so it lands at
+   ~66 characters whatever the fluid size resolves to, and the words sit at
+   their own measure below a plate that runs the full width of the sheet —
+   evidence wide, account narrow, the way a field journal reads. */
+.plate-detail-body {
+    max-width: none;
+    margin-top: clamp(2.25rem, 5vw, 3.25rem);
+}
+
 .plate-detail-body .prose {
-    font-size: 1.08rem;
+    max-width: 68ch;
+    font-size: clamp(1.06rem, 0.5vw + 0.98rem, 1.16rem);
+    line-height: 1.72;
+    text-wrap: pretty;
+}
+
+/* The record's prose opts out of the site-wide paragraph line-split.
+   initSplitText (src/scripts/motion.ts) slices every block paragraph in
+   <main> into per-line wrappers behind overflow-hidden masks. On this page
+   that clips a floated initial outright, and it leaves the tail of the
+   account loose below the masks, so the paragraph reads as one ragged block
+   instead of one set paragraph. The bundle already treats a non-block
+   display as "do not slice" — `flow-root` is that opt-out and is otherwise
+   indistinguishable from `block` for a paragraph with no floats and no
+   margin to collapse. The account keeps the page's authored moment on the
+   documentation plate above; the ask to the motion lane is to re-split
+   after document.fonts.ready rather than to carve out pages. */
+.plate-detail-body .prose > p {
+    display: flow-root;
+}
+
+/* Images inside the account. The owner's original complaint: a photo dropped
+   into a project description renders at its full natural width, which on a
+   375px phone overflows the measure and pushes the whole sheet sideways.
+   Nothing constrained them before. These cap the rendered box, never upscale
+   past the intrinsic size, and centre a narrower image in the measure rather
+   than stretching it. The documentation plate above is a separate component
+   and is unaffected. */
+.plate-detail-body .prose img,
+.plate-detail-body .prose video,
+.plate-detail-body .prose iframe {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+}
+
+.plate-detail-body .prose figure {
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.plate-detail-body .prose figure img {
+    max-width: 100%;
+}
+
+/* A wide image in a narrow measure is unreadable at full height, so cap the
+   box on short viewports and let the reader tap through to the full frame.
+   The cap is generous — this only catches the genuinely oversized case. */
+@media (max-width: 640px) {
+    .plate-detail-body .prose img,
+    .plate-detail-body .prose video {
+        max-height: 70vh;
+        object-fit: contain;
+    }
+}
+
+.plate-detail-body .prose > * + * {
+    margin-top: 1.55em;
+}
+
+/* The opening. The account is set in body ink and its first line in graphite,
+   and a fleuron closes it below. Two things were built here and rejected, both
+   because the site-wide paragraph line-split (initSplitText in
+   src/scripts/motion.ts) owns the prose: a drop cap cannot survive it, because
+   every line is wrapped in its own overflow-hidden mask and a floated capital
+   is clipped by the first mask; and `text-indent` on the opening line makes
+   SplitText mis-measure the block and slice it into twelve half-width lines
+   instead of seven. A colour carries the opening and reflows honestly.
+   Graphite reads 12.74:1 on the page ground in light and 14.93:1 in dark. */
+.plate-detail-body .prose > p:first-of-type::first-line {
+    color: var(--color-ink);
+}
+
+/* the printer's fleuron that closes a record — the floret is the one mark the
+   folio allows as pure decoration, and it is drawn, not typed */
+.record-fleuron {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.record-fleuron .floret {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: var(--color-green);
 }
 
 .related {
@@ -1789,6 +2044,11 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     .related .plate-grid {
         grid-template-columns: minmax(0, 1fr);
     }
+
+    .doc-stamp {
+        flex-basis: 100%;
+        margin-left: 0;
+    }
 }
 
 @media (min-width: 900px) {
@@ -1798,6 +2058,28 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 
     .plate-detail-figure {
         justify-self: start;
+    }
+}
+
+/* Above 1024 the record is one sheet with a rail: the specimen arch holds the
+   left column and stays beside the account as it is read, the account starts
+   on the title's left edge, and the documentation plate deliberately ignores
+   the rail — it runs the full width of the sheet, because it is the evidence
+   and it should carry the page. The rail is a fixed min() so the notes can
+   find the same offset without a magic ratio. Sticky is a layout property, so
+   it never competes with the hero plate's own GSAP transform. */
+@media (min-width: 1024px) {
+    .plate-detail-head {
+        grid-template-columns: min(22rem, 38%) minmax(0, 1fr);
+    }
+
+    .plate-detail-figure {
+        position: sticky;
+        top: 6.5rem;
+    }
+
+    .plate-detail-body {
+        margin-left: calc(min(22rem, 38%) + var(--record-gap));
     }
 }
 
@@ -1932,90 +2214,6 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     }
 }
 
-/* ─────────────── extra lily accents (owner 2026-09-25) ─────────────────
-   Margin specimens OUTSIDE the six-works plate grids. Round 4 (owner):
-   the home-page placements (About aside + chapter interleaf) are retired
-   and the /folio head accent became a featured title plate — what remains
-   is the /folio colophon plate and the rotating margin plate on each
-   plate-detail page.
-   DESIGN.md plate treatment, scaled down: 1px hairline outer rule, inset
-   hairline 4px in, arched silhouette on a 3:4 slot (contain, so the
-   engraved specimen is never cropped), dashed baseline + italic species +
-   small-caps source below. Imagery + alt come from extra-lilies.json via
-   src/data/extra-lilies.ts. Visible by default — only the [data-reveal]
-   entrance is motion-gated, per the folio's motion contract. */
-
-.lily-accent {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.7rem;
-    width: min(100%, 11.5rem);
-}
-
-.lily-accent-frame {
-    position: relative;
-    display: block;
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    padding: 6px;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 50% 50% 3px 3px / 30% 30% 3px 3px;
-    background: var(--color-surface);
-}
-
-.lily-accent-frame::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1px solid var(--color-border);
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.lily-accent-frame img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: var(--color-surface-tint);
-    border-radius: 50% 50% 2px 2px / 30% 30% 2px 2px;
-}
-
-.lily-accent-cap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    width: 100%;
-    padding-top: 0.7rem;
-    border-top: 1px dashed var(--color-border-strong);
-    text-align: center;
-}
-
-.lily-accent-cap em {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1.02rem;
-    line-height: 1.2;
-    color: var(--color-ink);
-}
-
-.lily-accent-src {
-    font-family: var(--font-sans);
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-ink-muted);
-}
-
-/* home · the About aside now closes on the education ledger note — the
-   margin lily moved out with the round-4 home cleanup */
-
 /* /folio · head accent — the title plate beside the folio headline
    (round 4: upgraded from a small margin lily to the same featured
    plate the florilegium and atelier heroes carry) */
@@ -2039,39 +2237,6 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
         width: min(100%, 23rem);
         justify-self: end;
     }
-}
-
-/* /folio · colophon — closing margin plate + note above the foot rule */
-.works-colophon {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(1.5rem, 4vw, 3rem);
-    margin-top: clamp(3rem, 7vw, 5rem);
-    padding-top: clamp(2rem, 5vw, 3rem);
-    border-top: 1px solid var(--color-border);
-}
-
-.works-colophon .lily-accent {
-    width: min(100%, 10rem);
-}
-
-.works-colophon-note {
-    max-width: 32ch;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    line-height: 1.5;
-    color: var(--color-green);
-}
-
-/* /folio/[slug] · rotating margin plate between the record and the
-   related-plates rule (the .related border closes the pair) */
-.lily-break {
-    display: flex;
-    justify-content: center;
-    margin-top: clamp(3rem, 7vw, 5rem);
 }
 
 /* ─────────────────────── reduced motion ─────────────────────────── */

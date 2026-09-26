@@ -51,7 +51,8 @@ export const SHOT_WIDTHS = [320, 480, 640, 864];
  */
 export const COVER_WIDTHS = [200, 300, 400, 528, 672];
 
-/** `.lily-accent` is min(100%, 11.5rem) — the smallest slot on the site. */
+/** The margin-lily accent slot was min(100%, 11.5rem); the folio's smallest
+ *  image slot now lives in the record's plate ladder in folio/[slug].astro. */
 export const LILY_WIDTHS = [200, 320, 460];
 
 /**
