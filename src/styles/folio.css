@@ -768,6 +768,68 @@ a.plate:hover .plate-slot .floret {
     font-size: 1.05rem;
 }
 
+/* ── hero plate · 3D lift (owner 2026-09-26) ──────────────────────────
+   The freshly-cut treatment for every page's specimen: pointer-driven
+   perspective tilt + glare, driven by initHeroPlateTilt in motion.ts.
+   Three layers, three owners — same rule as .cut-card / .cut-card-in /
+   .cut-tilt: the figure keeps its reveal + scroll parallax transform and
+   only gains a perspective (a layout property, never a transform), .plate
+   carries the rotation, and the glare/shade ride ::after off --glare.
+   Everything stays at zero under prefers-reduced-motion (no JS writes the
+   props there, and the transform is hard-disabled at the foot of this file). */
+
+[data-hero-plate] {
+    perspective: 1150px;
+    perspective-origin: 50% 45%;
+    --gx: 50%;
+    --gy: 50%;
+    --glare: 0;
+    /* theme-aware ink for the lift shade: warm black in light, a lifted
+       graphite in the night herbarium (never a glow) */
+    --plate-lift: color-mix(in srgb, var(--color-ink) 22%, black);
+}
+
+/* the tilt layer — inner content only; the figure's transform stays GSAP's */
+[data-hero-plate] > .plate,
+[data-hero-plate] > img,
+[data-hero-plate] > .record-mono {
+    will-change: transform;
+    transform-origin: 50% 45%;
+}
+
+/* covers fill an overflow:hidden arch — a hair of overscan so the tilt
+   never opens a gap at the far edge (GSAP folds it into its transforms) */
+[data-hero-plate] > img,
+[data-hero-plate] > .record-mono {
+    transform: scale(1.04);
+}
+
+/* the sheen — .cut-glare's radial, clipped to the frame (or the cover arch) */
+[data-hero-plate] .plate-frame::after,
+.record-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    background: radial-gradient(
+        circle at var(--gx, 50%) var(--gy, 50%),
+        rgb(255 255 255 / 0.55),
+        transparent 62%
+    );
+    mix-blend-mode: overlay;
+    opacity: var(--glare, 0);
+    pointer-events: none;
+}
+
+/* the lift — a whisper of shade pools under the plate while the pointer
+   holds it (record covers already carry --shadow-sm, so they keep theirs) */
+[data-hero-plate] .plate-frame {
+    box-shadow:
+        0 14px 24px -16px color-mix(in srgb, var(--plate-lift) calc(var(--glare, 0) * 130%), transparent),
+        var(--shadow-sm);
+}
+
 /* ── plate grids: equal scale, one baseline ── */
 
 .plate-grid {
@@ -2030,5 +2092,14 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     a.plate:hover .plate-slot img,
     a.plate:focus-visible .plate-slot img {
         transform: none;
+    }
+
+    /* hero plate 3D lift — the JS never writes these under reduce, and this
+       hard-stops a stray transform if a reduced-motion flip lands mid-tilt */
+    [data-hero-plate] > .plate,
+    [data-hero-plate] > img,
+    [data-hero-plate] > .record-mono {
+        transform: none !important;
+        will-change: auto;
     }
 }

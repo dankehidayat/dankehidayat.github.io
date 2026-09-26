@@ -1414,6 +1414,140 @@ function initLetterParallax() {
     cleanups.push(() => mm.revert());
 }
 
+/**
+ * Hero plate lift — the freshly-cut treatment for every page's specimen
+ * (owner 2026-09-26: "3D effect motion for all the hero's flowers").
+ *
+ * Layer rule, straight from the cut-card system: three layers, three
+ * transform owners, never two systems on one element.
+ *   outer   figure[data-hero-plate] — the reveal + scroll parallax own its
+ *           transform (initTitlePlate); this block only gives it a
+ *           perspective, which is a layout property, not a transform.
+ *   middle  .plate (PlateFigure heroes) or the cover image on the
+ *           florilegium record — rotateX/rotateY follows the pointer here.
+ *   inner   the glare ::after on .plate-frame / .record-cover, lit through
+ *           --gx/--gy/--glare written on the figure, plus a shade pool that
+ *           blooms from the same --glare (folio.css).
+ * The settle entrance below plays with the hero reveal (outer fades/slides,
+ * inner eases out of a laid-back angle) so they compose instead of compete.
+ *
+ * Gated like initCardTilt: hover+fine pointer for the tracking, and
+ * no-preference for the settle. mm.revert() lands in cleanups, so a route
+ * swap or a reduced-motion flip unwinds listeners, tweens, and inline props.
+ */
+function initHeroPlateTilt() {
+    const plates: Array<{ figure: HTMLElement; tilt: HTMLElement; settle: gsap.core.Tween | null }> = [];
+    document.querySelectorAll<HTMLElement>('[data-hero-plate]').forEach((figure) => {
+        const tilt =
+            figure.querySelector<HTMLElement>(':scope > .plate') ??
+            figure.querySelector<HTMLElement>(':scope > img, :scope > .record-mono');
+        if (tilt) plates.push({ figure, tilt, settle: null });
+    });
+    if (!plates.length) return;
+
+    const mm = gsap.matchMedia();
+
+    // entrance settle — fires wherever motion is allowed (touch included):
+    // the plate eases up from 6° laid-back as the reveal lands. Owns
+    // rotationX until a pointer claims it (first move kills the settle, so
+    // the two never fight over one channel).
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+        plates.forEach((plate) => {
+            plate.settle = gsap.fromTo(
+                plate.tilt,
+                { rotationX: 6 },
+                { rotationX: 0, duration: 1.05, delay: 0.4, ease: 'power3.out' }
+            );
+        });
+        return () => {
+            plates.forEach((plate) => {
+                plate.settle?.kill();
+                plate.settle = null;
+            });
+        };
+    });
+
+    mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+        // small angles by design — a pressed plate lifting off paper
+        const clampY = gsap.utils.clamp(-7, 7); // rotationY
+        const clampX = gsap.utils.clamp(-6, 6); // rotationX
+
+        const undos: Array<() => void> = [];
+
+        plates.forEach((plate) => {
+            const { figure, tilt } = plate;
+            gsap.set(tilt, { transformOrigin: '50% 45%' });
+            figure.style.setProperty('--gx', '50%');
+            figure.style.setProperty('--gy', '50%');
+
+            const rotY = gsap.quickTo(tilt, 'rotationY', {
+                duration: 0.5,
+                ease: 'power2.out',
+                overwrite: 'auto'
+            });
+            const rotX = gsap.quickTo(tilt, 'rotationX', {
+                duration: 0.5,
+                ease: 'power2.out',
+                overwrite: 'auto'
+            });
+
+            let lit = false;
+            let sheen: gsap.core.Tween | null = null;
+            const setLit = (on: boolean) => {
+                if (on === lit) return;
+                lit = on;
+                sheen?.kill();
+                sheen = gsap.to(figure, {
+                    '--glare': on ? 0.55 : 0,
+                    duration: on ? 0.3 : 0.5,
+                    ease: 'power2.out'
+                });
+            };
+
+            const onMove = (e: PointerEvent) => {
+                if (e.pointerType !== 'mouse') return;
+                // the pointer owns rotationX from here on
+                plate.settle?.kill();
+                plate.settle = null;
+                const box = figure.getBoundingClientRect();
+                if (!box.width || !box.height) return;
+                const px = (e.clientX - box.left) / box.width - 0.5;
+                const py = (e.clientY - box.top) / box.height - 0.5;
+                rotY(clampY(px * 14));
+                rotX(clampX(-py * 12));
+                figure.style.setProperty('--gx', `${(px + 0.5) * 100}%`);
+                figure.style.setProperty('--gy', `${(py + 0.5) * 100}%`);
+                setLit(true);
+            };
+            const onLeave = () => {
+                rotY(0);
+                rotX(0);
+                setLit(false);
+            };
+
+            figure.addEventListener('pointermove', onMove);
+            figure.addEventListener('pointerleave', onLeave);
+            undos.push(() => {
+                figure.removeEventListener('pointermove', onMove);
+                figure.removeEventListener('pointerleave', onLeave);
+                sheen?.kill();
+            });
+        });
+
+        return () => {
+            undos.forEach((fn) => fn());
+            plates.forEach(({ figure, tilt }) => {
+                figure.style.removeProperty('--gx');
+                figure.style.removeProperty('--gy');
+                figure.style.removeProperty('--glare');
+                gsap.set(tilt, { rotationX: 0, rotationY: 0, clearProps: 'transform' });
+            });
+        };
+    });
+
+    cleanups.push(() => mm.revert());
+}
+
 export function initMotion() {
     killMotion();
     initLenis();
@@ -1437,6 +1571,7 @@ export function initMotion() {
     initSectionSnap();
     initCardTilt();
     initLetterParallax();
+    initHeroPlateTilt();
 
     // Layout after ClientRouter swap + images can shift triggers
     requestAnimationFrame(() => {
