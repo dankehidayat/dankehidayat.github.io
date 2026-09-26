@@ -1,5 +1,5 @@
 /**
- * Setup — the machine, the hardware on the desk, and the tools on the machine.
+ * Atelier — the machine, the hardware on the desk, and the tools on the machine.
  * Every item carries a slug so any row can grow into its own page
  * later without a migration.
  */
@@ -7,7 +7,7 @@
 export type SetupItem = {
     slug: string;
     name: string;
-    role: string;
+    role?: string;
     href?: string;
 };
 
@@ -15,12 +15,12 @@ export const setupHardware: SetupItem[] = [
     {
         slug: 'macbook-pro',
         name: 'MacBook Pro (M1 Pro)',
-        role: 'The machine — macOS.'
+        role: 'macOS.'
     },
     {
         slug: 'weikav-alice-record',
         name: 'Weikav Alice Record',
-        role: 'Keyboard — MMD Holy Panda switches, stock stabilizers.'
+        role: 'Keyboard: MMD Holy Panda switches, stock stabilizers.'
     },
     {
         slug: 'switch-stash',
@@ -29,18 +29,15 @@ export const setupHardware: SetupItem[] = [
     },
     {
         slug: 'fantech-sakura-vx7',
-        name: 'Fantech Sakura VX7',
-        role: 'Mouse — current.'
+        name: 'Fantech Sakura VX7'
     },
     {
         slug: 'logitech-m170',
-        name: 'Logitech M170',
-        role: 'Wireless mouse.'
+        name: 'Logitech M170'
     },
     {
         slug: 'tecware-torque-plus',
-        name: 'Tecware Torque Plus',
-        role: 'Mouse.'
+        name: 'Tecware Torque Plus'
     },
     {
         slug: 'fantech-sakura-mousepad',
@@ -50,12 +47,12 @@ export const setupHardware: SetupItem[] = [
     {
         slug: 'moondrop-space-travel-2',
         name: 'Moondrop Space Travel 2',
-        role: 'Wireless earbuds — current.'
+        role: 'Daily pair.'
     },
     {
         slug: 'cca-c10',
         name: 'CCA C10',
-        role: 'Wired earphones.'
+        role: 'Wired pair, desk only.'
     },
     {
         slug: 'g-shock-ga-100',
@@ -65,7 +62,7 @@ export const setupHardware: SetupItem[] = [
     {
         slug: 'ugreen-36w-pd',
         name: 'Ugreen 36 W Dual PD',
-        role: 'Charger — two USB-C ports.'
+        role: 'Two USB-C PD ports.'
     }
 ];
 
@@ -73,19 +70,17 @@ export const setupTools: SetupItem[] = [
     {
         slug: 'brave',
         name: 'Brave',
-        role: 'Browser.',
         href: 'https://brave.com'
     },
     {
         slug: 'vs-code',
         name: 'VS Code',
-        role: 'Editor.',
         href: 'https://code.visualstudio.com'
     },
     {
         slug: 'neovim',
         name: 'Neovim',
-        role: 'Terminal editor — LazyVim, Rosé Pine, Flutter tools, CodeCompanion via 9Router.',
+        role: 'Terminal editor: Rosé Pine, Flutter tools, CodeCompanion via 9Router.',
         href: 'https://neovim.io'
     },
     {
@@ -97,7 +92,6 @@ export const setupTools: SetupItem[] = [
     {
         slug: 'iterm2',
         name: 'iTerm2',
-        role: 'Terminal.',
         href: 'https://iterm2.com'
     }
 ];
@@ -105,7 +99,7 @@ export const setupTools: SetupItem[] = [
 /** Where the old setup lives, for the curious. */
 export const setupRepos = [
     {
-        label: 'Archrice (2019)',
+        label: 'Archrice',
         href: 'https://github.com/nishimi-ya/Archrice'
     },
     {
