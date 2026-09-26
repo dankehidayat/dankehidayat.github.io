@@ -475,6 +475,14 @@ function initSplitText() {
         splits.push(split);
     });
 
+    // Kept per element, not shared: SplitText.split(vars) is typed as
+    // required, and onSplit closes over that element for its ScrollTrigger.
+    // Storing each split beside its own vars lets the re-measure below
+    // re-split with the matching config, so a later resize-driven autoSplit
+    // still has the entrance attached.
+    const paragraphSplits: Array<{ split: SplitText; vars: SplitText.Vars }> = [];
+    let remeasuring = false;
+
     document.querySelectorAll<HTMLElement>('main p').forEach((el) => {
         if (el.hasAttribute('data-no-split')) return;
         if (el.hasAttribute('aria-live')) return;
@@ -482,12 +490,14 @@ function initSplitText() {
         if (!el.textContent?.trim()) return;
         if (getComputedStyle(el).display !== 'block') return;
 
-        const split = SplitText.create(el, {
+        const vars: SplitText.Vars = {
             type: 'lines',
             mask: 'lines',
             aria: 'none',
             autoSplit: true,
-            onSplit: (self) =>
+            onSplit: (self) => {
+                // A re-measure must not replay the entrance (below).
+                if (remeasuring) return;
                 gsap.from(self.lines, {
                     yPercent: 110,
                     duration: 0.7,
@@ -495,10 +505,50 @@ function initSplitText() {
                     stagger: 0.09,
                     scrollTrigger: { trigger: el, start: 'top 90%', once: true },
                     clearProps: 'opacity,visibility,transform'
-                })
-        });
+                });
+            }
+        };
+
+        const split = SplitText.create(el, vars);
         splits.push(split);
+        paragraphSplits.push({ split, vars });
     });
+
+    // Re-measure once the real webfonts are in.
+    //
+    // `autoSplit` re-splits through a ResizeObserver, which only fires when
+    // the element's BOX changes. A webfont swap keeps the same box and moves
+    // only the line breaks, so nothing re-fires and every per-line mask stays
+    // sized to the fallback metrics: the paragraph breaks at the wrong points
+    // and the tail of the text sits loose below the masks. That is what made
+    // long prose read as ragged half-width blocks.
+    //
+    // `split()` re-runs the split in place, which is what we want; the
+    // remeasuring guard keeps onSplit from replaying the entrance animation
+    // on a page that is already settled.
+    if (paragraphSplits.length && document.fonts?.status !== 'loaded') {
+        let live = true;
+        cleanups.push(() => {
+            live = false;
+        });
+        document.fonts.ready
+            .then(() => {
+                if (!live) return;
+                remeasuring = true;
+                paragraphSplits.forEach(({ split, vars }) => {
+                    try {
+                        split.split(vars);
+                    } catch {
+                        /* reverted by killMotion on a view-transition swap */
+                    }
+                });
+                remeasuring = false;
+                ScrollTrigger.refresh(true);
+            })
+            .catch(() => {
+                /* fonts.ready never rejects in practice; ignore if it does */
+            });
+    }
 }
 
 /**
