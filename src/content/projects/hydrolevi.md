@@ -1,14 +1,13 @@
 ---
 title: 'HydroleVI: Water Level Monitoring Control System'
 description: "Three-tier water level monitoring with siren alerts, offline LCD, and a Laravel team site."
-descriptionId: "Monitoring level air tiga tingkat dengan sirine, Blynk, LCD offline, dan situs tim Laravel."
 publishDate: 'Aug 01 2023'
 isFeatured: false
 ---
 
 [GitHub](https://github.com/dankehidayat/HydroleVI)
 
-Three-tier water level monitoring — Safe, Warning, Dangerous — with local siren alerts for community safety, real-time mobile status, an offline LCD for remote locations, and a Laravel site for the team behind it.
+Water level monitoring in three tiers, Safe, Warning, Dangerous, with local siren alerts for community safety, real-time mobile status, an offline LCD for remote locations, and a Laravel site for the team behind it.
 
 ## Highlights
 

@@ -1,14 +1,13 @@
 ---
 title: 'Flora'
-description: "ESP32 environmental monitoring — temperature, humidity, pressure, and three soil-moisture probes with a live web dashboard."
-descriptionId: "Monitoring lingkungan ESP32 — suhu, kelembapan, tekanan, dan tiga probe kelembapan tanah dengan dasbor web langsung."
+description: "ESP32 environmental monitoring: temperature, humidity, pressure, and three soil-moisture probes with a live web dashboard."
 publishDate: 'Nov 01 2025'
 isFeatured: true
 ---
 
 [GitHub](https://github.com/dankehidayat/Flora) · [Live](https://flora.dankehidayat.my.id/)
 
-An ESP32 station (FloraPro) reading the room and the soil — AHT20 temperature and humidity, BMP280 pressure and altitude, three soil-moisture probes, and an RTC clock — fused into a responsive Next.js dashboard that refreshes every five seconds through Blynk IoT.
+FloraPro is an ESP32 station that reads the room and the soil: AHT20 temperature and humidity, BMP280 pressure and altitude, three soil-moisture probes, and an RTC clock, fused into a responsive Next.js dashboard that refreshes every five seconds through Blynk IoT.
 
 ## Stack
 

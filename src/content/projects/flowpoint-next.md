@@ -1,14 +1,13 @@
 ---
 title: 'FlowPoint-Next'
-description: "Real-time energy monitoring dashboard — Next.js, Prisma, Vercel Postgres, with automatic data collection from the Blynk IoT platform."
-descriptionId: "Dashboard monitoring energi real-time — Next.js, Prisma, Vercel Postgres, dengan pengumpulan data otomatis dari platform IoT Blynk."
+description: "Real-time energy monitoring dashboard with Next.js, Prisma, and Vercel Postgres, collecting data automatically from the Blynk IoT platform."
 publishDate: 'Nov 01 2025'
 isFeatured: true
 ---
 
 [GitHub](https://github.com/dankehidayat/FlowPoint-Next) · [Live](https://flowpoint.dankehidayat.my.id/)
 
-A real-time energy dashboard — Next.js 15, React 19, Prisma, and Vercel Postgres — where IoT sensor readings arrive by five-minute cron from the Blynk platform and leave as Recharts trends.
+I run this real-time energy dashboard on Next.js 15, React 19, Prisma, and Vercel Postgres. IoT sensor readings arrive by five-minute cron from the Blynk platform and leave as Recharts trends.
 
 ## Stack
 

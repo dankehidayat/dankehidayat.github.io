@@ -12,7 +12,7 @@ export type Stat = {
 
 export const stats: Stat[] = [
     // Verifiable: 6 curated project entries in src/content/projects/.
-    { value: '6', label: 'Projects shipped' },
+    { value: '6', label: 'Projects I shipped' },
     // Verifiable: 11 certification records in src/data/certifications.ts.
     { value: '11', label: 'Certifications' }
 ];

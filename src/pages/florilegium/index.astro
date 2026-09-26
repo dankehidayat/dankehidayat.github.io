@@ -40,7 +40,7 @@ const chapters = [
 
 <BaseLayout
     title="Florilegium"
-    description="Every manga, anime, and light novel I've pressed into the florilegium — what I'm reading, what I've finished, and what's still open."
+    description="Every manga, anime, and light novel I've pressed into the florilegium: what I'm reading, what I've finished, and what's still open."
 >
     <ChapterRail chapters={chapters} />
 
@@ -51,7 +51,6 @@ const chapters = [
                 <h1 class="chapter-title flor-title">The <em>florilegium.</em></h1>
                 <p class="flor-lede" data-hero-item>
                     Manga, anime, light novels, and the occasional serious book.
-                    {entries.length} cards, {desk.length} still open.
                 </p>
                 <p class="flor-profile" data-hero-item>
                     <a
@@ -60,7 +59,7 @@ const chapters = [
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        The raw list is on AniList
+                        I keep the raw list on AniList
                         <Icon name="external" aria-hidden="true" />
                         <span class="sr-only">(opens in a new tab)</span>
                     </a>

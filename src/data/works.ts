@@ -80,7 +80,7 @@ export const WORK_CATEGORIES = [
     {
         id: 'web-apps',
         name: 'Web Apps',
-        note: 'Dashboards and live data surfaces — browsers doing the watching.',
+        note: 'Dashboards and live data surfaces: browsers doing the watching.',
         works: ['selene', 'flowpoint-next'] as const
     },
     {

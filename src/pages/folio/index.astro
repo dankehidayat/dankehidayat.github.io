@@ -18,7 +18,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const title = 'Folio';
 const description =
-    'Six works at equal scale — IoT dashboards, environmental monitors, and embedded systems, presented as plates of a botanical folio.';
+    'Six works at equal scale: IoT dashboards, environmental monitors, and embedded systems, presented as plates of a botanical folio.';
 
 const allProjects = await getCollection('projects');
 const folioWorks = FOLIO_WORK_IDS.map((id) => allProjects.find((p) => p.id === id)).filter(
@@ -70,8 +70,9 @@ const { superbum, catesbaei } = EXTRA_LILIES;
             <div class="works-head-copy">
                 <h1 class="works-title">The <em>folio.</em></h1>
                 <p class="works-lede">
-                    Every plate printed at the same scale on plate cream — dashboards, sensors,
-                    and sorting bins from selene to hydrolevi. Open any plate for its full record.
+                    Every plate printed at the same scale on plate cream: dashboards,
+                    sensors, and sorting bins from Selene to HydroleVI. Open any plate for
+                    its full record.
                 </p>
             </div>
 
@@ -177,8 +178,8 @@ const { superbum, catesbaei } = EXTRA_LILIES;
                 </figcaption>
             </figure>
             <p class="works-colophon-note">
-                The margins keep their own specimens: five lilies from Curtis and
-                Redouté, pressed beside the six works.
+                “Fair daffodils, we weep to see / You haste away so soon;” · Robert
+                Herrick, “To Daffodils”
             </p>
         </div>
 

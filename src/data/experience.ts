@@ -20,11 +20,11 @@ export const workTimeline: TimelineItem[] = [
             'Keeping the infrastructure running so the team can focus on building. Dashboards, APIs, and the data pipelines in between.',
         points: [
             'Develop and maintain Ansible playbooks for provisioning, configuration, and patch management across the server fleet.',
-            'Manage release cycles end to end — dependency audits, security patches, rolling deployments, and rollback strategies.',
+            'Manage release cycles end to end: dependency audits, security patches, rolling deployments, and rollback strategies.',
             'Own containerization and orchestration of application services across development, staging, and production environments.',
             'Configure and maintain the reverse proxy layer, including automated TLS certificate management.',
             'Monitor service health, uptime, and capacity, and respond to incidents until they are resolved.',
-            'Enforce reliability and security practices — backups, access control, secrets management, and rollback drills.'
+            'Enforce reliability and security practices: backups, access control, secrets management, and rollback drills.'
         ]
     },
     {

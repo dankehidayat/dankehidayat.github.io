@@ -1,6 +1,6 @@
 /** Home About-section body (markdown). Professional, first person, no filler. */
 export const aboutMarkdown = `
-As a Junior Software Developer at PT. Labdha Teknika Nusantara, I focus on engineering end-to-end software solutions. My primary work involves building robust web applications and native Android software, and alongside that I'm deepening my expertise in IoT engineering — designing and programming embedded electronic systems to create connected, smart devices.
+I'm a Junior Software Developer at PT. Labdha Teknika Nusantara, where I build web applications and native Android software. Alongside that I'm going deeper on IoT engineering: designing and programming embedded electronic systems that become connected, smart devices.
 
-My technical foundation is complemented by practical computer networking skills grounded in Cisco principles, and by experience applying machine learning models to data-oriented challenges. I'm currently completing my studies at the Vocational School of IPB University, where I continue to hone this integrated skill set. I'm always looking to connect with professionals and organizations pioneering advances in IoT, mobile, and full-stack web development.
+I also work with computer networking on Cisco principles, and I've applied machine learning models to data problems. I'm finishing my studies at the Vocational School of IPB University, where all of this keeps coming together. If you're working on IoT, mobile, or full-stack web development, I'd like to hear from you.
 `;
