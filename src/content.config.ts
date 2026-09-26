@@ -15,21 +15,6 @@ const seoSchema = (image: ImageFunction) =>
         pageType: z.enum(['website', 'article']).default('website')
     });
 
-const blog = defineCollection({
-    // Prefer MDX; plain .md still works if you drop one in
-    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
-    schema: ({ image }) =>
-        z.object({
-            title: z.string(),
-            excerpt: z.string().optional(),
-            publishDate: z.coerce.date(),
-            updatedDate: z.coerce.date().optional(),
-            isFeatured: z.boolean().default(false),
-            tags: z.array(z.string()).default([]),
-            seo: seoSchema(image).optional()
-        })
-});
-
 const projects = defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
     schema: ({ image }) =>
@@ -62,4 +47,4 @@ const shelf = defineCollection({
         })
 });
 
-export const collections = { blog, projects, shelf };
+export const collections = { projects, shelf };

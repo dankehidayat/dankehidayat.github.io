@@ -20,9 +20,8 @@ const siteConfig: SiteConfig = {
         { text: 'GitHub', href: 'https://github.com/dankehidayat' },
         { text: 'Bluesky', href: 'https://bsky.app/profile/dankehidayat.my.id' },
         { text: 'LinkedIn', href: 'https://www.linkedin.com/in/dankehidayat/' },
-        { text: 'RSS', href: '/rss.xml' }
-    ],
-    postsPerPage: 8
+        { text: 'Telegram', href: 'https://t.me/dankehidayat' }
+    ]
 };
 
 export default siteConfig;

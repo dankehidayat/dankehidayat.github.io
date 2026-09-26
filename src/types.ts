@@ -19,5 +19,4 @@ export type SiteConfig = {
     description: string;
     image?: ImageInput;
     socialLinks?: Link[];
-    postsPerPage?: number;
 };
