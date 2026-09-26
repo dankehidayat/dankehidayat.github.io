@@ -11,7 +11,7 @@ const siteConfig: SiteConfig = {
     title: 'Danke Hidayat',
     subtitle: 'Junior Software Developer & DevOps Engineer',
     description:
-        "I'm a junior software developer and DevOps engineer in Bandung: full-stack IoT systems, embedded firmware, real-time dashboards, and the containers that keep them reliable in production.",
+        "I'm a junior software developer and DevOps engineer in Bandung. I build IoT dashboards, embedded firmware, and the containers that keep them running in production.",
     image: {
         src: hero,
         alt: 'Danke Hidayat'

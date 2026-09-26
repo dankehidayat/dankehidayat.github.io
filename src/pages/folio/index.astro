@@ -15,11 +15,10 @@ import {
     plateNumberOf
 } from '../../data/works';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { LILY_WIDTHS, responsiveImage } from '../../lib/responsive-image';
 
 const title = 'Folio';
 const description =
-    'Six works at equal scale: IoT dashboards, environmental monitors, and embedded systems, presented as plates of a botanical folio.';
+    'Six records: IoT dashboards, environmental monitors, and embedded systems, kept together in a botanical folio.';
 
 const allProjects = await getCollection('projects');
 const folioWorks = FOLIO_WORK_IDS.map((id) => allProjects.find((p) => p.id === id)).filter(
@@ -44,9 +43,9 @@ const shotItems = folioWorks.map((work) => {
 });
 
 const marqueeItems = [
-    { text: 'The folio · plates 01–06' },
+    { text: 'The folio · records 01–06' },
     { text: 'Observed. Built. Preserved.' },
-    { text: 'Equal scale' },
+    { text: 'Six records' },
     { text: 'One baseline' }
 ];
 
@@ -57,13 +56,9 @@ const chapters = [
     { num: '004', label: 'IoT', href: '#iot' }
 ];
 
-// Margin lily — the colophon plate from extra-lilies.json (the head is a
-// featured title plate, same treatment as the florilegium/atelier heroes).
-const { superbum, catesbaei } = EXTRA_LILIES;
-const superbumPlate = await responsiveImage(superbum.src, {
-    widths: LILY_WIDTHS,
-    quality: 80
-});
+// The folio title plate (extra-lilies.json) — same featured treatment as the
+// florilegium and atelier heroes.
+const { catesbaei } = EXTRA_LILIES;
 ---
 
 <BaseLayout title={title} description={description}>
@@ -73,9 +68,9 @@ const superbumPlate = await responsiveImage(superbum.src, {
             <div class="works-head-copy">
                 <h1 class="works-title">The <em>folio.</em></h1>
                 <p class="works-lede">
-                    Every plate printed at the same scale on plate cream: dashboards,
-                    sensors, and sorting bins from Selene to HydroleVI. Open any plate for
-                    its full record.
+                    Six records of things I measured and built: dashboards, sensors, and a
+                    sorting bin, from Selene to HydroleVI. Open any record for the full
+                    account.
                 </p>
             </div>
 
@@ -97,7 +92,7 @@ const superbumPlate = await responsiveImage(superbum.src, {
         <nav
             class="works-contents"
             id="contents"
-            aria-label="Plate contents"
+            aria-label="Record contents"
             data-reveal="rule"
         >
             <p class="works-contents-label">Contents</p>
@@ -140,7 +135,7 @@ const superbumPlate = await responsiveImage(superbum.src, {
                         </h2>
                         <p class="zoom-note">{category.note}</p>
                         <span class="zoom-count">
-                            {String(category.works.length).padStart(2, '0')} plates
+                            {String(category.works.length).padStart(2, '0')} records
                         </span>
                     </header>
                     <div class="plate-grid plate-grid--works" data-plate-group>
@@ -153,7 +148,7 @@ const superbumPlate = await responsiveImage(superbum.src, {
                                 href={`/folio/${work.id}/`}
                                 variant="cell"
                                 description={work.data.description}
-                                cta="View plate"
+                                cta="View record"
                                 image={PLATE_IMAGES[work.id]}
                             />
                         ))}
@@ -161,32 +156,6 @@ const superbumPlate = await responsiveImage(superbum.src, {
                 </section>
             ))
         }
-
-        <!-- closing margin plate + colophon note (extra-lilies.json) -->
-        <div class="works-colophon" data-reveal>
-            <figure class="lily-accent works-colophon-plate">
-                <span class="lily-accent-frame">
-                    <img
-                        src={superbumPlate.src}
-                        srcset={superbumPlate.srcset}
-                        sizes="11.5rem"
-                        width={superbumPlate.width}
-                        height={superbumPlate.height}
-                        alt={superbum.alt}
-                        loading="lazy"
-                        decoding="async"
-                    />
-                </span>
-                <figcaption class="lily-accent-cap">
-                    <em>{superbum.species}</em>
-                    <span class="lily-accent-src">{superbum.source}</span>
-                </figcaption>
-            </figure>
-            <p class="works-colophon-note">
-                “Fair daffodils, we weep to see / You haste away so soon;” · Robert
-                Herrick, “To Daffodils”
-            </p>
-        </div>
 
         <div class="works-foot" data-reveal>
             <a href="/#contact" class="folio-text-link">
