@@ -1857,6 +1857,12 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
     position: relative;
     width: fit-content;
     max-width: 100%;
+    /* The plate is mounted on the sheet, not set into its margin — owner
+       decision 2026-09-26, after seeing the capped plates hang on the start
+       edge. Auto margins on the frame itself rather than centring the figure,
+       because the figure's other child is the caption, which is set to the
+       sheet's full measure and must not move. */
+    margin-inline: auto;
     padding: 7px;
     border: 1px solid var(--color-border-strong);
     background: var(--color-surface);
@@ -1891,17 +1897,18 @@ html[data-theme='dark'] .theme-toggle-icon-sun {
 /* A master too small to fill the sheet (Eco Office is 255×191) is capped and
    centred rather than blown up to a soft plate. Only the frame narrows: the
    caption still runs the sheet's measure, so a long project name never breaks
-   into a narrow ribbon under a small plate. The cap, not a fixed width, is
-   deliberate — the frame shrink-wraps, so on a master large enough to reach
-   it this rule simply does not apply. Note the plate still renders at 264px
-   rather than its 255px master: `sizes` describes the full sheet measure, so
-   the browser density-corrects the single 255w candidate and `max-width: 100%`
-   fills the frame. That 1.035× is the no-upscale rule yielding to a truthful
-   `sizes`; correcting it means narrowing `sizes` for this one plate, which is
-   a call for the build that owns the image ladder. */
+   into a narrow ribbon under a small plate — which is also why the caption is
+   not tied to the plate's width. The cap, not a fixed width, is deliberate —
+   the frame shrink-wraps, so on a master large enough to reach it this rule
+   simply does not apply, and the centring above already applies. Note the plate
+   still renders at 264px rather than its 255px master: `sizes` describes the
+   full sheet measure, so the browser density-corrects the single 255w
+   candidate and `max-width: 100%` fills the frame. That 1.035× is the
+   no-upscale rule yielding to a truthful `sizes`; correcting it means narrowing
+   `sizes` for this one plate, which is a call for the build that owns the
+   image ladder. */
 .doc-plate--small .doc-frame {
     max-width: min(100%, 17.5rem);
-    margin-inline: auto;
 }
 
 .doc-cap {
