@@ -21,6 +21,7 @@ pnpm-debug.log*
 .impeccable/
 .opencode/
 .vscode/
+.playwright-mcp/
 
 # macOS-specific files
 .DS_Store

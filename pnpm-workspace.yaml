@@ -2,4 +2,5 @@
 # the auto-generated placeholders must be resolved to booleans before install.
 allowBuilds:
   esbuild: true
+  puppeteer: true
   sharp: true
