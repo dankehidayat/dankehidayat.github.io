@@ -1,0 +1,39 @@
+---
+/**
+ * ChapterRail — the chapter rail down the left margin of a folio page
+ * (home, /folio, /florilegium, /atelier; ≥1440px only). Numbers with
+ * small-caps stage labels; active state comes from an IntersectionObserver
+ * (motion.ts), progress fill from a GSAP scrub (skipped entirely under
+ * prefers-reduced-motion → .is-static). The fill also tracks the active
+ * section's background luminance so it never blends into a heat band.
+ */
+type Chapter = {
+    num: string;
+    label: string;
+    href: string;
+};
+
+type Props = {
+    chapters: Chapter[];
+};
+
+const { chapters } = Astro.props;
+---
+
+<nav class="chapter-rail" aria-label="Folio chapters" data-chapter-rail>
+    <div class="rail-track" aria-hidden="true">
+        <span class="rail-progress" data-rail-progress></span>
+    </div>
+    <ol class="rail-list">
+        {
+            chapters.map((chapter) => (
+                <li>
+                    <a class="rail-link" href={chapter.href} data-rail-link={chapter.href.replace('#', '')}>
+                        <span class="rail-num">{chapter.num}</span>
+                        <span class="rail-label">{chapter.label}</span>
+                    </a>
+                </li>
+            ))
+        }
+    </ol>
+</nav>

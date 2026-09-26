@@ -1,0 +1,169 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import MarqueeBand from '../../components/MarqueeBand.astro';
+import PlateFigure from '../../components/PlateFigure.astro';
+import Icon from '../../components/Icon.astro';
+import { PLATE_IMAGES } from '../../data/folio-plates';
+import { EXTRA_LILY_ORDER } from '../../data/extra-lilies';
+import { FOLIO_WORK_IDS, PLATE_LABELS, plateNumberOf } from '../../data/works';
+import { projectMeta } from '../../data/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+    const all = await getCollection('projects');
+    const folio = FOLIO_WORK_IDS.map((id) => all.find((p) => p.id === id)).filter(
+        (p): p is NonNullable<typeof p> => Boolean(p)
+    );
+
+    return folio.map((entry, index) => {
+        const related = [folio[(index + 1) % folio.length], folio[(index + 2) % folio.length], folio[(index + 3) % folio.length]];
+        return {
+            params: { slug: entry.id },
+            props: { entry, related }
+        };
+    });
+}
+
+type Props = {
+    entry: CollectionEntry<'projects'>;
+    related: CollectionEntry<'projects'>[];
+};
+
+const { entry, related } = Astro.props;
+const { Content } = await render(entry);
+const meta = projectMeta[entry.id];
+const number = plateNumberOf(entry.id);
+const label = PLATE_LABELS[entry.id as keyof typeof PLATE_LABELS];
+
+const issued = entry.data.publishDate.toLocaleDateString('en-US', {
+    month: 'short',
+    year: 'numeric'
+});
+
+// One margin lily per plate — rotated through the five accents so each
+// detail page keeps its own specimen beside the folio (extra-lilies.json).
+const folioIndex = FOLIO_WORK_IDS.indexOf(entry.id);
+const marginLily = EXTRA_LILY_ORDER[
+    (folioIndex < 0 ? 0 : folioIndex) % EXTRA_LILY_ORDER.length
+];
+
+const marqueeItems = [
+    { text: `Plate ${number}`, italic: true },
+    { text: entry.data.title, italic: true },
+    { text: `Collected ${issued}` },
+    { text: 'Botanical folio' }
+];
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+    <article class="plate-detail site-shell">
+        <a class="folio-back" href="/folio">
+            <Icon name="arrow-left" aria-hidden="true" />
+            All plates
+        </a>
+
+        <header class="plate-detail-head" data-hero>
+            <figure class="plate-detail-figure" data-hero-plate>
+                <PlateFigure
+                    number={number}
+                    name={entry.data.title}
+                    label={label}
+                    id={entry.id}
+                    variant="featured"
+                    image={PLATE_IMAGES[entry.id]}
+                />
+            </figure>
+
+            <div class="plate-detail-meta" data-hero-item>
+                <h1 class="plate-detail-title">{entry.data.title}</h1>
+                {entry.data.description && <p class="plate-detail-desc">{entry.data.description}</p>}
+                <p class="plate-detail-issued">Collected {issued}</p>
+
+                {
+                    meta?.tech?.length ? (
+                        <ul class="plate-detail-tech">
+                            {meta.tech.map((tech) => (
+                                <li class="tag-chip">{tech}</li>
+                            ))}
+                        </ul>
+                    ) : null
+                }
+
+                {
+                    meta?.links?.length ? (
+                        <div class="plate-detail-links">
+                            {meta.links.map((link) => (
+                                <a
+                                    class="folio-text-link"
+                                    href={link.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {link.label}
+                                    <Icon name="external" aria-hidden="true" />
+                                    <span class="sr-only">(opens in new tab)</span>
+                                </a>
+                            ))}
+                        </div>
+                    ) : null
+                }
+            </div>
+        </header>
+
+        <div class="plate-detail-body">
+            <div class="prose">
+                <Content />
+            </div>
+        </div>
+
+        <!-- rotating margin specimen — kept outside the related-plates grid -->
+        <div class="lily-break">
+            <figure class="lily-accent" data-reveal>
+                <span class="lily-accent-frame">
+                    <img
+                        src={marginLily.src.src}
+                        width={marginLily.src.width}
+                        height={marginLily.src.height}
+                        alt={marginLily.alt}
+                        loading="lazy"
+                        decoding="async"
+                    />
+                </span>
+                <figcaption class="lily-accent-cap">
+                    <em>{marginLily.species}</em>
+                    <span class="lily-accent-src">{marginLily.source}</span>
+                </figcaption>
+            </figure>
+        </div>
+
+        {
+            related.length > 0 && (
+                <section class="related" aria-label="Adjacent plates">
+                    <div class="related-head" data-head>
+                        <h2 class="related-title">Adjacent plates</h2>
+                        <span class="related-note">More from the folio</span>
+                    </div>
+                    <div class="plate-grid" data-plate-group>
+                        {related.map((work) => (
+                            <PlateFigure
+                                number={plateNumberOf(work.id)}
+                                name={work.data.title}
+                                label={PLATE_LABELS[work.id as keyof typeof PLATE_LABELS]}
+                                id={work.id}
+                                href={`/folio/${work.id}/`}
+                                variant="mini"
+                                image={PLATE_IMAGES[work.id]}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )
+        }
+    </article>
+
+    <MarqueeBand items={marqueeItems} />
+</BaseLayout>
+
+<script>
+    import '../../scripts/motion.ts';
+</script>

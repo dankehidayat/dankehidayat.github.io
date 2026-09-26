@@ -1,0 +1,2034 @@
+/*
+  Botanical Folio — component layer.
+  New class names only (shared chrome stays in global.css).
+  Materials: plate ground, hairline sepia rules, arched double-rule frames,
+  engraved italic plate names, small-caps stage labels, lilac bloom heat.
+  Everything here is visible-by-default; JS only animates in when motion is allowed.
+*/
+
+/* ─────────────────────────── folio ground ────────────────────────────
+   Light mode only: the cream endpaper texture under everything, veiled
+   by an 88% plate-cream wash so text contrast stays put (worst-case
+   drift ≈ 12% of the texture's own variance — ink-body still clears 7:1).
+   Dark mode keeps its own token set with no texture.
+   Two selectors: JS-on theme (explicit data-theme) + no-JS light OS. */
+
+:root[data-theme='light'] body {
+    background-image:
+        linear-gradient(
+            color-mix(in oklab, var(--color-bg) 88%, transparent),
+            color-mix(in oklab, var(--color-bg) 88%, transparent)
+        ),
+        url('../assets/images/folio/paper-texture-cream.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) body {
+        background-image:
+            linear-gradient(
+                color-mix(in oklab, var(--color-bg) 88%, transparent),
+                color-mix(in oklab, var(--color-bg) 88%, transparent)
+            ),
+            url('../assets/images/folio/paper-texture-cream.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+}
+
+/* ─────────────────────────── shared bits ─────────────────────────── */
+
+.floret {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    color: var(--color-sage);
+    flex: none;
+}
+
+.folio-lede {
+    max-width: 44rem;
+    font-size: 1.05rem;
+    color: var(--color-ink-body);
+}
+
+.folio-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-lilac-deep);
+    border-bottom: 1px solid color-mix(in oklab, var(--color-lilac) 45%, transparent);
+    padding-bottom: 0.2rem;
+    transition:
+        color 0.2s var(--ease),
+        border-color 0.2s var(--ease),
+        gap 0.2s var(--ease);
+}
+
+.folio-text-link:hover {
+    color: var(--color-green);
+    border-color: var(--color-green);
+    gap: 0.7rem;
+}
+
+/* ──────────────────────── chapter scaffolding ────────────────────── */
+
+.folio-chapter {
+    position: relative;
+    padding-block: clamp(4rem, 9vw, 7rem);
+    scroll-margin-top: 5.5rem;
+}
+
+.folio-chapter + .folio-chapter {
+    border-top: 1px solid var(--color-border);
+}
+
+.folio-chapter-inner {
+    display: grid;
+    gap: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.chapter-head {
+    position: relative;
+    max-width: 52rem;
+    margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* display scale (owner directive 2026-09-25): chapter titles carry the
+   page the way saglitz display type does — big enough to wrap onto two
+   lines, capped at 5.5rem so they never crowd the rail. */
+.chapter-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 6.4vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    max-width: 15ch;
+}
+
+/* italic key phrase: the scroll-scrubbed em-underline (motion.ts
+   initChapterScrub draws --u while the head enters; default 1 keeps it
+   drawn for reduced-motion / no-JS). inline-block keeps the phrase atomic
+   so the rule never spans a line break. */
+.chapter-title em {
+    position: relative;
+    display: inline-block;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-green);
+}
+
+.chapter-title em::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.04em;
+    height: 0.045em;
+    min-height: 2px;
+    background: currentColor;
+    opacity: 0.55;
+    transform: scaleX(var(--u, 1));
+    transform-origin: left center;
+    pointer-events: none;
+}
+
+.chapter-intro {
+    margin-top: 1rem;
+    max-width: 46rem;
+    font-size: 1.05rem;
+    color: var(--color-ink-body);
+}
+
+/* ─────────────────────────────── hero ────────────────────────────── */
+
+.folio-hero {
+    position: relative;
+    padding-block: clamp(2.25rem, 6vh, 4rem) 0;
+    scroll-margin-top: 5.5rem;
+    overflow: hidden;
+}
+
+/* paper grain — one quiet texture layer across the title plate;
+   --hero-grain-shift drifts it slowly on desktop (background plane of
+   the hero's differential parallax — see motion.ts initTitlePlate) */
+.folio-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    background-position: 0 var(--hero-grain-shift, 0px);
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.folio-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    align-items: center;
+}
+
+.folio-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+/* ── the title plate ── */
+
+.title-plate {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
+    padding: clamp(1.75rem, 4vw, 2.4rem) clamp(1.1rem, 3vw, 1.9rem) clamp(1.4rem, 3vw, 2rem);
+}
+
+.title-plate::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+}
+
+.title-plate-name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05em;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    color: var(--color-ink);
+    font-size: clamp(3.1rem, 8.5vw, 6.4rem);
+}
+
+.title-line {
+    display: block;
+    white-space: nowrap;
+}
+
+.title-letter {
+    display: inline-block;
+    will-change: transform;
+}
+
+/* engraved baseline under the name */
+.title-plate-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--color-sage);
+}
+
+.title-plate-foot::before,
+.title-plate-foot::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+}
+
+.title-plate-foot .floret {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.folio-positioning {
+    max-width: 40ch;
+    font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--color-ink-body);
+}
+
+.folio-positioning strong {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+.folio-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.1rem;
+}
+
+.folio-hero-role {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+}
+
+.folio-hero-plate {
+    margin: 0;
+    justify-self: center;
+    width: min(100%, 22rem);
+}
+
+.folio-hero-plate .plate {
+    width: 100%;
+}
+
+/* ── stage strip at the fold ── */
+
+.stage-strip {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem clamp(0.9rem, 3vw, 1.8rem);
+    margin-top: clamp(2rem, 5vh, 3.25rem);
+    padding-block: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.stage-strip::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-border);
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.stage-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: var(--color-ink-muted);
+    transition: color 0.2s var(--ease);
+}
+
+.stage-item:hover {
+    color: var(--color-lilac-deep);
+}
+
+.stage-item[data-current] {
+    color: var(--color-ink);
+}
+
+.stage-num {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    color: var(--color-lilac);
+    font-variant-numeric: tabular-nums;
+}
+
+.stage-name {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+@media (min-width: 960px) {
+    .folio-hero-inner {
+        grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+        gap: clamp(3rem, 5vw, 5rem);
+    }
+
+    .folio-hero-plate {
+        width: min(100%, 24rem);
+        justify-self: end;
+    }
+}
+
+/* ───────────────────────────── marquee ───────────────────────────── */
+
+.marquee {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface-tint);
+    padding-block: 0.85rem;
+    padding-inline: 1.25rem;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: folio-marquee 52s linear infinite;
+}
+
+.marquee-group {
+    display: flex;
+    align-items: center;
+    flex: none;
+}
+
+.marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding-right: 1.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-ink-body);
+    white-space: nowrap;
+}
+
+.marquee-item .floret {
+    width: 0.8rem;
+    height: 0.8rem;
+    color: var(--color-lilac);
+}
+
+.marquee-item em {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--color-green);
+}
+
+@keyframes folio-marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* ─────────────── screenshot slots (owner amendment 2026-09-24) ───────── */
+
+/* The works band where real project screenshots will scroll once
+   captured. Slots are honestly marked pending — no fabricated imagery. */
+.marquee--shots {
+    background: var(--color-surface);
+    padding-block: clamp(1.4rem, 3vw, 2.25rem);
+}
+
+.shot-group {
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+/* bigger screenshots (owner directive 2026-09-25): the band is the proof
+   of work, so the slots read as plates, not thumbnails. */
+.shot-slot {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    width: clamp(19rem, 27vw, 27rem);
+}
+
+.shot-frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface-tint);
+    color: var(--color-ink-muted);
+    overflow: hidden;
+}
+
+/* engraving hatch — the plates' image-slot language, not a photo fake */
+.shot-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 8px,
+        color-mix(in oklab, var(--color-border) 60%, transparent) 8px 9px
+    );
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.shot-frame .floret {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-sage);
+    opacity: 0.9;
+}
+
+.shot-pending {
+    position: relative;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+.shot-cap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding-inline: 0.15rem;
+}
+
+.shot-num {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--color-lilac-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.shot-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 639px) {
+    .shot-slot {
+        width: min(76vw, 17.5rem);
+    }
+}
+
+/* real screenshots (captured 2026-09) — no hatch, image fills the frame */
+.shot-frame--image {
+    padding: 0;
+    background: var(--color-bg);
+}
+
+.shot-frame--image::before {
+    display: none;
+}
+
+.shot-frame--image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+
+/* ─────────────── category heads (SplitText reveal, 2026-09-24) ────── */
+
+.zoom-head {
+    position: relative;
+    margin-bottom: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.zoom-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.6vw, 3.3rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    will-change: transform;
+}
+
+.zoom-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-green);
+}
+
+.zoom-note {
+    margin: 0.7rem 0 0;
+    max-width: 44rem;
+    color: var(--color-ink-body);
+}
+
+.zoom-count {
+    display: block;
+    margin-top: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .zoom-title {
+        transform: none !important;
+    }
+}
+
+/* ─────────────────────────── plate figure ────────────────────────── */
+
+.plate {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+}
+
+/* arched double-rule frame */
+.plate-frame {
+    position: relative;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50% 50% 3px 3px / 32% 32% 3px 3px;
+    background: var(--color-surface);
+    padding: 6px;
+    transition: border-color 0.25s var(--ease);
+}
+
+.plate-frame::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.plate-arch {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 50% 50% 2px 2px / 32% 32% 2px 2px;
+    overflow: hidden;
+    background: var(--color-surface-tint);
+}
+
+/* the image slot — engraving hatch + floret until the imagery lane fills it */
+.plate-slot {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background-image: repeating-linear-gradient(
+        -45deg,
+        transparent 0 8px,
+        color-mix(in oklab, var(--color-border) 60%, transparent) 8px 9px
+    );
+}
+
+.plate-slot .floret {
+    width: clamp(1.6rem, 26%, 2.6rem);
+    height: auto;
+    color: var(--color-sage);
+    opacity: 0.85;
+}
+
+.plate-slot img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--color-surface-tint);
+    transition: transform 0.55s var(--ease);
+}
+
+/* hover — the engraving eases forward inside its arch */
+a.plate:hover .plate-slot img,
+a.plate:focus-visible .plate-slot img {
+    transform: scale(1.035);
+}
+
+/* labels below the frame — italic name, small-caps stage, number, floret */
+.plate-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.3rem;
+    padding: 0.9rem 0.4rem 0.25rem;
+}
+
+.plate-baseline {
+    width: 100%;
+    border-top: 1px dashed var(--color-border-strong);
+    margin-bottom: 0.75rem;
+}
+
+.plate-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.15;
+    color: var(--color-ink);
+    transition: color 0.2s var(--ease);
+}
+
+.plate-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    min-height: 2.4em;
+}
+
+.plate-num {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    color: var(--color-lilac-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.plate-labels .floret {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-top: 0.15rem;
+}
+
+.plate-desc {
+    margin-top: 0.4rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--color-ink-body);
+    text-align: center;
+    max-width: 30ch;
+    min-height: 4.6em;
+}
+
+.plate-cta {
+    margin-top: 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-lilac-deep);
+}
+
+/* hover — the plate warms, the name takes bloom */
+a.plate:hover .plate-frame,
+a.plate:focus-visible .plate-frame {
+    border-color: var(--color-lilac);
+}
+
+a.plate:hover .plate-name,
+a.plate:focus-visible .plate-name {
+    color: var(--color-lilac-deep);
+}
+
+a.plate:hover .plate-slot .floret {
+    color: var(--color-lilac);
+}
+
+/* featured variant — hero scale */
+.plate--featured .plate-frame {
+    padding: 7px;
+}
+
+.plate--featured .plate-name {
+    font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+}
+
+.plate--featured .plate-label {
+    letter-spacing: 0.22em;
+}
+
+/* detail variant — large header plate */
+.plate--detail .plate-frame {
+    padding: 8px;
+}
+
+/* mini variant — related works */
+.plate--mini .plate-label {
+    min-height: 0;
+}
+
+.plate--mini .plate-name {
+    font-size: 1.05rem;
+}
+
+/* ── plate grids: equal scale, one baseline ── */
+
+.plate-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+}
+
+.plate-grid > .plate {
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: clamp(1rem, 2.5vw, 1.6rem) clamp(0.75rem, 2vw, 1.25rem) clamp(1.1rem, 2.5vw, 1.5rem);
+    background: var(--color-bg);
+    transition: background 0.25s var(--ease);
+}
+
+.plate-grid > a.plate:hover {
+    background: var(--color-surface);
+}
+
+/* home strip: six across at full width */
+@media (min-width: 1180px) {
+    .plate-grid--strip {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 720px) and (max-width: 1179px) {
+    .plate-grid--strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* works folio: 1 / 2 / 3 columns */
+@media (min-width: 640px) {
+    .plate-grid--works {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .plate-grid--works {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 479px) {
+    .plate-grid--strip,
+    .plate-grid--works {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* ─────────────────────────── story chapter ───────────────────────── */
+
+.story-grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+}
+
+.story-body {
+    max-width: 46rem;
+    font-size: 1.08rem;
+}
+
+.story-body p + p {
+    margin-top: 1.2rem;
+}
+
+.story-body strong {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+.story-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-self: start;
+}
+
+.story-card {
+    position: relative;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
+    padding: 1.4rem 1.4rem 1.5rem;
+}
+
+.story-card::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+}
+
+.story-card-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: 0.9rem;
+}
+
+/* stats ledger keeps global .stats-ledger/.stat styles */
+
+/* education note — degree and school carry the voice; the numbers sit
+   beneath a hairline as ledger meta (round 4: hierarchy, not run-on) */
+.story-note {
+    margin-top: 0.15rem;
+}
+
+.story-note-degree {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--color-ink);
+}
+
+.story-note-org {
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+    color: var(--color-ink-body);
+}
+
+.story-note-meta {
+    margin-top: 0.65rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+@media (min-width: 1024px) {
+    .story-grid {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+    }
+}
+
+/* ─────────────────────── record chapter bits ─────────────────────── */
+
+.record-group + .record-group {
+    margin-top: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.record-group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--color-border-strong);
+    margin-bottom: 0.25rem;
+}
+
+.record-group-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.35rem;
+    color: var(--color-ink);
+}
+
+.record-group-note {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+/* ─────────────── 004 · growth timeline (experience) ─────────────── */
+
+@media (min-width: 1024px) {
+    .folio-chapter--record .folio-chapter-inner {
+        grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr);
+        column-gap: clamp(2rem, 4vw, 3.5rem);
+        align-items: start;
+    }
+
+    .folio-chapter--record .chapter-head--sticky {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        position: sticky;
+        top: 5rem;
+        align-self: start;
+        max-width: none;
+        margin-bottom: 0;
+    }
+
+    .folio-chapter--record .growth {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .folio-chapter--record .record-group {
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+
+.growth {
+    --grow: 1;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.growth::before,
+.growth::after {
+    content: '';
+    position: absolute;
+    left: 0.33rem;
+    top: 0.9rem;
+    bottom: 1.5rem;
+    width: 1px;
+}
+
+.growth::before {
+    background: var(--color-border-strong);
+}
+
+.growth::after {
+    background: linear-gradient(to bottom, var(--color-green), var(--color-lilac));
+    transform: scaleY(var(--grow, 1));
+    transform-origin: top center;
+}
+
+.growth-node {
+    position: relative;
+    padding: 1.35rem 0 1.35rem 2.1rem;
+}
+
+.growth-node + .growth-node {
+    border-top: 1px solid var(--color-border);
+}
+
+.growth-bud {
+    position: absolute;
+    left: 0.33rem;
+    top: 1.65rem;
+    width: 0.66rem;
+    height: 0.66rem;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-strong);
+    transform: translateX(-50%) scale(0.75);
+    transition:
+        transform 0.45s var(--ease),
+        background 0.45s var(--ease),
+        border-color 0.45s var(--ease),
+        box-shadow 0.45s var(--ease);
+}
+
+.growth-node.is-awake .growth-bud {
+    background: var(--color-green);
+    border-color: var(--color-green);
+    transform: translateX(-50%) scale(1);
+}
+
+.growth-node.is-current .growth-bud {
+    background: var(--color-lilac);
+    border-color: var(--color-lilac);
+    transform: translateX(-50%) scale(1.15);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-lilac) 25%, transparent);
+}
+
+.growth-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.4rem;
+}
+
+.growth-period {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-lilac-deep);
+}
+
+.growth-bloom {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-lilac-deep);
+    background: var(--color-lilac-field);
+    border: 1px solid color-mix(in oklab, var(--color-lilac) 45%, transparent);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+}
+
+.growth-role {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--color-ink);
+}
+
+.growth-org {
+    margin-top: 0.3rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-ink-body);
+}
+
+.growth-org-loc {
+    font-weight: 400;
+    color: var(--color-ink-muted);
+}
+
+.growth-expanded {
+    margin-top: 0.75rem;
+}
+
+.growth-summary {
+    margin-top: 0.35rem;
+    max-width: min(46rem, 72ch);
+    color: var(--color-ink-body);
+}
+
+.growth-points {
+    margin-top: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    max-width: min(46rem, 72ch);
+    padding: 0;
+    list-style: none;
+}
+
+.growth-points li {
+    position: relative;
+    padding-left: 1.3rem;
+    color: var(--color-ink-body);
+}
+
+.growth-points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.66em;
+    width: 0.45rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-lilac);
+}
+
+.growth-details {
+    margin-top: 0.85rem;
+}
+
+.growth-details-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-green-deep);
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    transition:
+        border-color 0.2s var(--ease),
+        background 0.2s var(--ease);
+}
+
+.growth-details-summary::-webkit-details-marker {
+    display: none;
+}
+
+.growth-details-summary:hover,
+.growth-details-summary:focus-visible {
+    border-color: var(--color-green);
+    background: var(--color-surface);
+}
+
+.growth-details-count {
+    color: var(--color-ink-muted);
+    letter-spacing: 0.08em;
+}
+
+.growth-details-body {
+    padding-top: 0.9rem;
+}
+
+/* ─────────────────── sealed credentials · seals ─────────────────── */
+
+.seals {
+    list-style: none;
+    margin: 0;
+    padding: 1.25rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 1rem;
+}
+
+.seal {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.2rem 1.1rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+}
+
+.seal::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+}
+
+.seal-face {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.seal-issuer {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+.seal-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.08rem;
+    line-height: 1.35;
+    color: var(--color-ink);
+}
+
+.seal-issued {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-green-deep);
+}
+
+.seal-foot {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.seal-verify {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-green-deep);
+    transition: color 0.2s var(--ease);
+}
+
+.seal-verify:hover {
+    color: var(--color-lilac-deep);
+}
+
+.seal-verify svg {
+    width: 0.85em;
+    height: 0.85em;
+}
+
+/* ───────────────── 005 · contact — quiet letterpress ─────────────────
+   Round 4 (owner): the full-bleed lilac field is retired — the closing
+   chapter sits on plate cream like every other chapter, and the peak is
+   typographic (the display-scale email) instead of a color fill. Lilac
+   keeps its job on the primary button; Telegram now lives in Elsewhere. */
+
+.contact-grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+}
+
+.contact-email {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.6rem, 4.5vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-border-strong);
+    padding-bottom: 0.4rem;
+    transition:
+        color 0.2s var(--ease),
+        border-color 0.2s var(--ease);
+}
+
+.contact-email:hover {
+    color: var(--color-green-deep);
+    border-color: var(--color-green);
+}
+
+.contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: clamp(1.75rem, 4vw, 2.25rem);
+}
+
+.contact-side-title {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--color-border-strong);
+}
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.contact-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 0.1rem;
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    color: var(--color-ink);
+    transition:
+        padding 0.2s var(--ease),
+        color 0.2s var(--ease);
+}
+
+.contact-list a:hover {
+    color: var(--color-green-deep);
+    padding-left: 0.35rem;
+}
+
+.contact-list .social-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.contact-list .social-icon svg {
+    width: 1.05rem;
+    height: 1.05rem;
+}
+
+.contact-list .social-arrow {
+    width: 0.95rem;
+    height: 0.95rem;
+    flex: none;
+    opacity: 0.65;
+}
+
+@media (min-width: 860px) {
+    .contact-grid {
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+        align-items: start;
+    }
+}
+
+/* ───────────────────────── measure caps ──────────────────────────── */
+
+.chapter-intro,
+.story-body,
+.works-lede,
+.folio-lede,
+.plate-detail-body {
+    max-width: min(46rem, 72ch);
+}
+
+/* ───────────────────────── chapter rail ──────────────────────────── */
+
+.chapter-rail {
+    display: none;
+}
+
+@media (min-width: 1440px) {
+    .chapter-rail {
+        position: fixed;
+        left: clamp(0.75rem, 1.6vw, 1.6rem);
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 60;
+        display: flex;
+        gap: 0.8rem;
+    }
+}
+
+.rail-track {
+    position: relative;
+    width: 1px;
+    background: var(--color-border-strong);
+    margin-top: 0.35rem;
+    margin-bottom: 0.35rem;
+}
+
+.rail-progress {
+    position: absolute;
+    inset: 0;
+    background: var(--color-lilac);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: background-color 0.3s var(--ease);
+}
+
+/* luminance-aware fill — motion.ts hit-tests whatever ground sits behind
+   the rail and hands CSS the winner via data-rail-fill: lilac, or the
+   on-heat cream (near-ink in dark mode, so the flip never lands
+   dark-on-dark). */
+.chapter-rail[data-rail-fill='on-heat'] .rail-progress {
+    background: var(--color-ink-on-tangerine);
+}
+
+/* the labels ride that same ground: ink-muted and lilac-deep lose their
+   contrast against a heat band, so they take the color that just beat
+   lilac for contrast (active link + its number included). */
+.chapter-rail[data-rail-fill='on-heat'] .rail-link,
+.chapter-rail[data-rail-fill='on-heat'] .rail-link.is-active .rail-num {
+    color: var(--color-ink-on-tangerine);
+}
+
+.chapter-rail.is-static .rail-progress {
+    display: none;
+}
+
+.rail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.rail-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    color: var(--color-ink-muted);
+    transition: color 0.2s var(--ease);
+}
+
+.rail-link:hover {
+    color: var(--color-ink);
+}
+
+.rail-num {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+}
+
+.rail-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+        opacity 0.25s var(--ease),
+        transform 0.25s var(--ease);
+}
+
+.rail-link:hover .rail-label,
+.rail-link:focus-visible .rail-label,
+.rail-link.is-active .rail-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.rail-link.is-active {
+    color: var(--color-lilac-deep);
+}
+
+.rail-link.is-active .rail-num {
+    color: var(--color-lilac);
+}
+
+/* ───────────────────────── theme toggle ──────────────────────────── */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    padding: 0;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+    clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0 calc(100% - 5px), 0 5px);
+    transition:
+        border-color 0.2s var(--ease),
+        color 0.2s var(--ease),
+        background 0.2s var(--ease);
+}
+
+.theme-toggle:hover {
+    border-color: var(--color-lilac);
+    color: var(--color-lilac-deep);
+}
+
+.theme-toggle-icon {
+    width: 1.05rem;
+    height: 1.05rem;
+}
+
+/* show the icon of the theme currently in force */
+html[data-theme='light'] .theme-toggle-icon-moon,
+html:not([data-theme]) .theme-toggle-icon-moon {
+    display: none;
+}
+
+html[data-theme='dark'] .theme-toggle-icon-sun {
+    display: none;
+}
+
+/* ─────────────────────────── works index ─────────────────────────── */
+
+.works-page {
+    padding-top: clamp(3rem, 7vw, 5rem);
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+}
+
+.works-head {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.works-title {
+    margin-top: 1.1rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.04;
+    color: var(--color-ink);
+}
+
+.works-title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-green);
+}
+
+.works-lede {
+    margin-top: 1.1rem;
+    max-width: 44rem;
+    font-size: 1.08rem;
+    color: var(--color-ink-body);
+}
+
+.works-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.works-foot-note {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
+}
+
+/* ─────────────────────────── plate detail ────────────────────────── */
+
+.plate-detail {
+    padding-top: clamp(2rem, 5vw, 3.25rem);
+    padding-bottom: clamp(3.5rem, 8vw, 6rem);
+}
+
+.folio-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    transition: color 0.2s var(--ease);
+}
+
+.folio-back:hover {
+    color: var(--color-lilac-deep);
+}
+
+.folio-back svg {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s var(--ease);
+}
+
+.folio-back:hover svg {
+    transform: translateX(-3px);
+}
+
+.plate-detail-head {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.plate-detail-figure {
+    margin: 0;
+    width: min(100%, 22rem);
+    justify-self: center;
+}
+
+.plate-detail-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.plate-detail-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2.3rem, 5.5vw, 3.8rem);
+    line-height: 1.05;
+    color: var(--color-ink);
+}
+
+.plate-detail-desc {
+    max-width: 44ch;
+    font-size: 1.08rem;
+    color: var(--color-ink-body);
+}
+
+.plate-detail-issued {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+.plate-detail-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.plate-detail-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 0.4rem;
+}
+
+.plate-detail-body {
+    max-width: 46rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.plate-detail-body .prose {
+    font-size: 1.08rem;
+}
+
+.related {
+    margin-top: clamp(3rem, 7vw, 5rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--color-border);
+}
+
+.related-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.related-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: var(--color-ink);
+}
+
+.related-note {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+.related .plate-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 639px) {
+    .related .plate-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .plate-detail-head {
+        grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+    }
+
+    .plate-detail-figure {
+        justify-self: start;
+    }
+}
+
+/* ───────── round-2 amendments 2026-09-24 — full-screen sections ───────── */
+
+/* About + Contact stand as full-viewport plates: the chapter fills the
+   screen and its inner grid is vertically centered. */
+.folio-chapter--viewport {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(4.5rem, 12vh, 8rem);
+}
+
+.folio-chapter--viewport > .folio-chapter-inner {
+    width: 100%;
+}
+
+/* 003 · Works — the full-scroll set-piece: head + plates in the shell,
+   screenshot band at full bleed, closing foot back in the shell. */
+.folio-chapter--works {
+    padding-block: clamp(5rem, 11vw, 8.5rem);
+}
+
+.folio-chapter--works .works-foot {
+    margin-top: clamp(2.25rem, 5vw, 3.25rem);
+}
+
+/* /folio — viewport head */
+.works-head--viewport {
+    min-height: min(68vh, 38rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+/* /folio — editorial contents table between the head and the plates */
+.works-contents {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    border-top: 2px solid var(--color-ink);
+}
+
+.works-contents-label {
+    margin: 0;
+    padding: 0.85rem 0 0.7rem;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+.works-contents-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.works-contents-row {
+    border-top: 1px solid var(--color-border);
+}
+
+.works-contents-row a {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) 1.25rem;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.95rem 0.35rem;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.2s var(--ease);
+}
+
+.works-contents-row a:hover,
+.works-contents-row a:focus-visible {
+    background: color-mix(in oklab, var(--color-surface-tint) 70%, transparent);
+}
+
+.works-contents-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    color: var(--color-lilac-deep);
+    font-variant-numeric: tabular-nums;
+}
+
+.works-contents-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.2;
+    color: var(--color-ink);
+}
+
+.works-contents-row svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-ink-muted);
+    transition:
+        transform 0.2s var(--ease),
+        color 0.2s var(--ease);
+}
+
+.works-contents-row a:hover svg,
+.works-contents-row a:focus-visible svg {
+    transform: translateX(3px);
+    color: var(--color-lilac-deep);
+}
+
+@media (max-width: 640px) {
+    .works-contents-row a {
+        grid-template-columns: 2.6rem minmax(0, 1fr) 1.25rem;
+    }
+
+    .works-contents-num {
+        grid-row: 1;
+        align-self: center;
+    }
+
+    .works-contents-name {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .works-contents-row svg {
+        grid-column: 3;
+        grid-row: 1;
+        align-self: center;
+    }
+}
+
+/* ─────────────── extra lily accents (owner 2026-09-25) ─────────────────
+   Margin specimens OUTSIDE the six-works plate grids. Round 4 (owner):
+   the home-page placements (About aside + chapter interleaf) are retired
+   and the /folio head accent became a featured title plate — what remains
+   is the /folio colophon plate and the rotating margin plate on each
+   plate-detail page.
+   DESIGN.md plate treatment, scaled down: 1px hairline outer rule, inset
+   hairline 4px in, arched silhouette on a 3:4 slot (contain, so the
+   engraved specimen is never cropped), dashed baseline + italic species +
+   small-caps source below. Imagery + alt come from extra-lilies.json via
+   src/data/extra-lilies.ts. Visible by default — only the [data-reveal]
+   entrance is motion-gated, per the folio's motion contract. */
+
+.lily-accent {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    width: min(100%, 11.5rem);
+}
+
+.lily-accent-frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    padding: 6px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50% 50% 3px 3px / 30% 30% 3px 3px;
+    background: var(--color-surface);
+}
+
+.lily-accent-frame::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lily-accent-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: var(--color-surface-tint);
+    border-radius: 50% 50% 2px 2px / 30% 30% 2px 2px;
+}
+
+.lily-accent-cap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    border-top: 1px dashed var(--color-border-strong);
+    text-align: center;
+}
+
+.lily-accent-cap em {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.02rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+}
+
+.lily-accent-src {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+}
+
+/* home · the About aside now closes on the education ledger note — the
+   margin lily moved out with the round-4 home cleanup */
+
+/* /folio · head accent — the title plate beside the folio headline
+   (round 4: upgraded from a small margin lily to the same featured
+   plate the florilegium and atelier heroes carry) */
+.works-head-plate {
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    align-self: center;
+    justify-self: center;
+}
+
+@media (min-width: 1024px) {
+    .works-head--viewport {
+        display: grid;
+        grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+        align-items: center;
+        align-content: center;
+        column-gap: clamp(2rem, 6vw, 5rem);
+    }
+
+    .works-head-plate {
+        margin-top: 0;
+        width: min(100%, 23rem);
+        justify-self: end;
+    }
+}
+
+/* /folio · colophon — closing margin plate + note above the foot rule */
+.works-colophon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: clamp(3rem, 7vw, 5rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--color-border);
+}
+
+.works-colophon .lily-accent {
+    width: min(100%, 10rem);
+}
+
+.works-colophon-note {
+    max-width: 32ch;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--color-green);
+}
+
+/* /folio/[slug] · rotating margin plate between the record and the
+   related-plates rule (the .related border closes the pair) */
+.lily-break {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+/* ─────────────────────── reduced motion ─────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
+        transform: none;
+    }
+
+    .title-letter {
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+    }
+
+    .plate-slot img {
+        transition: none;
+    }
+
+    a.plate:hover .plate-slot img,
+    a.plate:focus-visible .plate-slot img {
+        transform: none;
+    }
+}

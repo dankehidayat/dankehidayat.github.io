@@ -8,7 +8,7 @@ isFeatured: false
 
 [GitHub](https://github.com/dankehidayat/HydroleVI)
 
-Three-tier water level monitoring (Safe, Warning, Dangerous) with local siren alerts for community safety.
+Three-tier water level monitoring — Safe, Warning, Dangerous — with local siren alerts for community safety, real-time mobile status, an offline LCD for remote locations, and a Laravel site for the team behind it.
 
 ## Highlights
 
