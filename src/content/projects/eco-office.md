@@ -11,4 +11,8 @@ facts:
     - 'TimescaleDB as the time-series store — the sensors report every second.'
 ---
 
-Eco Office is related with my Selene and Flowpoint project. It's part of my final project and final report for my requirement to graduate from my college. Still the same sensor; DHT11, PZEM-004T, and ESP32 DevKit V1. On my initial plan, I was planning to add a relay controller to the schematic design, but I thought to myself, adding a relay on a terminal extension would just turn off the entire socket instead of the specified socket. So I went without the control system. For this project, it was originally written to only send the sensor data to the Blynk server. But as time goes on, and especially when I finally have an access to a borrowed VPS, I suddenly thought, why not implement MQTT which is more superior than Blynk? And so, I implemented the MQTT. Oh, and I also use TimescaleDB for the time-series database, since the sensor data is stored every second.
+Eco Office is related with my Selene and Flowpoint project. It's part of my final project and final report for my requirement to graduate from my college. Still the same sensor: DHT11, PZEM-004T, and ESP32 DevKit V1.
+
+On my initial plan, I was planning to add a relay controller to the schematic design. But I thought to myself, adding a relay on a terminal extension would just turn off the entire socket instead of the specified socket. So I went without the control system.
+
+For this project, it was originally written to only send the sensor data to the Blynk server. But as time goes on, and especially when I finally have access to a borrowed VPS, I suddenly thought, why not implement MQTT which is more superior than Blynk? And so, I implemented the MQTT. Oh, and I also use TimescaleDB for the time-series database, since the sensor data is stored every second.
