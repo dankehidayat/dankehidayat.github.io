@@ -1,18 +1,22 @@
 ---
 /**
  * ScreenshotMarquee — an infinite horizontal band of project screenshots
- * (real images from public/projects/, captured 2026-09 — owner evidence,
- * never fabricated). Slots without a src fall back to the honest pending
- * hatch. Decorative duplicate of the plate grid, so it stays out of the
- * accessibility tree; reuses .marquee-track so GSAP velocity and the
+ * (real images from src/assets/images/projects/, captured 2026-09 — owner
+ * evidence, never fabricated). Slots without a src fall back to the honest
+ * pending hatch. Decorative duplicate of the plate grid, so it stays out of
+ * the accessibility tree; reuses .marquee-track so GSAP velocity and the
  * prefers-reduced-motion pause apply automatically.
+ *
+ * Each shot is a width laddered `srcset` capped at the slot's own width
+ * (clamp(19rem, 27vw, 27rem)) — the masters are 3360px dashboard captures
+ * and used to travel whole into this aria-hidden band.
  */
+import { SHOT_SIZES, SHOT_WIDTHS, responsiveImage } from '../lib/responsive-image';
+
 type Shot = {
     number: string;
     name: string;
-    src?: string | undefined;
-    width?: number | undefined;
-    height?: number | undefined;
+    src?: ImageMetadata | undefined;
 };
 
 type Props = {
@@ -20,6 +24,14 @@ type Props = {
 };
 
 const { shots } = Astro.props;
+
+const slots = await Promise.all(
+    shots.map(async (shot) => ({
+        number: shot.number,
+        name: shot.name,
+        image: shot.src ? await responsiveImage(shot.src, { widths: SHOT_WIDTHS, quality: 74 }) : null
+    }))
+);
 ---
 
 <div class="marquee marquee--shots" aria-hidden="true">
@@ -27,18 +39,20 @@ const { shots } = Astro.props;
         {
             [0, 1].map(() => (
                 <div class="marquee-group shot-group">
-                    {shots.map((shot) => (
+                    {slots.map((shot) => (
                         <div class="shot-slot">
                             <div
-                                class:list={['shot-frame', shot.src && 'shot-frame--image']}
+                                class:list={['shot-frame', shot.image && 'shot-frame--image']}
                                 data-image-slot={`shot-${shot.number}`}
                             >
-                                {shot.src ? (
+                                {shot.image ? (
                                     <img
-                                        src={shot.src}
+                                        src={shot.image.src}
+                                        srcset={shot.image.srcset}
+                                        sizes={SHOT_SIZES}
                                         alt=""
-                                        width={shot.width ?? 1440}
-                                        height={shot.height ?? 900}
+                                        width={shot.image.width}
+                                        height={shot.image.height}
                                         loading="lazy"
                                         decoding="async"
                                     />

@@ -5,6 +5,21 @@ import Icon from '../components/Icon.astro';
 import PlateFigure from '../components/PlateFigure.astro';
 import { setupHardware, setupTools, setupRepos } from '../data/setup';
 import { ATELIER_PLATE_IMAGE } from '../data/folio-plates';
+import {
+    ATELIER_SHOT_WIDTHS,
+    ATELIER_THEME_WIDTHS,
+    responsiveImage
+} from '../lib/responsive-image';
+import archrice from '../assets/images/atelier/archrice.jpg';
+import neovimDawn from '../assets/images/atelier/neovim_rose-pine-dawn.webp';
+import neovimMain from '../assets/images/atelier/neovim_rose-pine-main.webp';
+import openboxDesktop from '../assets/images/atelier/openbox-desktop.jpg';
+import openboxSddm from '../assets/images/atelier/openbox-sddm.jpg';
+import rice2020 from '../assets/images/atelier/rice-2020.jpg';
+import rice2021 from '../assets/images/atelier/rice-2021.jpg';
+import rice2022 from '../assets/images/atelier/rice-2022.jpg';
+import riceFlashbang from '../assets/images/atelier/rice-flashbang.jpg';
+import riceMisc from '../assets/images/atelier/rice-misc.jpg';
 
 const chapters = [
     { num: '001', label: 'Intro', href: '#top' },
@@ -64,67 +79,85 @@ const editorSheet = [
     }
 ];
 
-/** Archive footage for the filmstrip — real screenshots, dated as given. */
+/**
+ * Archive footage for the filmstrip — real screenshots, dated as given.
+ * Static imports so each frame gets a width ladder: the filmstrip thumb is
+ * clamp(13rem, 22vw, 18rem) but the same frame opens full-bleed in the
+ * lightbox, so one ladder serves both via `sizes`.
+ */
 const archiveShots = [
     {
-        src: '/atelier/archrice.jpg',
+        image: archrice,
         label: 'The first desk \u00b7 2019',
         alt: 'Arch Linux desktop from 2019, from the Archrice repository',
-        width: 1366,
-        height: 768,
         repo: { label: 'Archrice repo', href: 'https://github.com/nishimi-ya/Archrice' }
     },
     {
-        src: '/atelier/rice-2020.jpg',
+        image: rice2020,
         label: 'August 2020',
-        alt: 'Desktop from August 2020',
-        width: 1366,
-        height: 768
+        alt: 'Desktop from August 2020'
     },
     {
-        src: '/atelier/rice-misc.jpg',
+        image: riceMisc,
         label: '2019\u20132022 \u00b7 miscellany',
-        alt: 'Desktop from the 2019\u20132022 era',
-        width: 1920,
-        height: 1080
+        alt: 'Desktop from the 2019\u20132022 era'
     },
     {
-        src: '/atelier/rice-2021.jpg',
+        image: rice2021,
         label: 'April 2021',
-        alt: 'Desktop from April 2021',
-        width: 1366,
-        height: 768
+        alt: 'Desktop from April 2021'
     },
     {
-        src: '/atelier/rice-2022.jpg',
+        image: rice2022,
         label: 'March 2022',
-        alt: 'Desktop from March 2022',
-        width: 1920,
-        height: 1080
+        alt: 'Desktop from March 2022'
     },
     {
-        src: '/atelier/openbox-desktop.jpg',
+        image: openboxDesktop,
         label: 'Openbox \u00b7 desktop',
         alt: 'Openbox desktop from the Openbox dotfiles branch',
-        width: 1920,
-        height: 1080,
         repo: {
             label: 'Openbox dotfiles',
             href: 'https://github.com/nishimi-ya/dotfiles/tree/openbox'
         }
     },
     {
-        src: '/atelier/openbox-sddm.jpg',
+        image: openboxSddm,
         label: 'Openbox \u00b7 lockscreen',
         alt: 'SDDM lockscreen from the Openbox dotfiles branch',
-        width: 1920,
-        height: 1080,
         repo: {
             label: 'Openbox dotfiles',
             href: 'https://github.com/nishimi-ya/dotfiles/tree/openbox'
         }
     }
 ];
+
+/** One ladder per frame; the lightbox reuses it at a larger `sizes`. */
+const archiveFrames = await Promise.all(
+    archiveShots.map(async (shot) => {
+        const frame = await responsiveImage(shot.image, {
+            widths: ATELIER_SHOT_WIDTHS,
+            quality: 76
+        });
+        // The anchor's href is the no-JS fallback and the lightbox target, so
+        // it points at the widest rung rather than a mid-rung.
+        const widest = frame.srcset.trim().split(',').pop()?.trim().split(' ')[0] ?? frame.src;
+        return { ...shot, frame, href: widest };
+    })
+);
+
+const deskPlate = await responsiveImage(riceFlashbang, {
+    widths: ATELIER_SHOT_WIDTHS,
+    quality: 76
+});
+const themeDawn = await responsiveImage(neovimDawn, {
+    widths: ATELIER_THEME_WIDTHS,
+    quality: 78
+});
+const themeMain = await responsiveImage(neovimMain, {
+    widths: ATELIER_THEME_WIDTHS,
+    quality: 78
+});
 ---
 
 <BaseLayout
@@ -335,19 +368,23 @@ const archiveShots = [
                 <div class="theme-shot-frame">
                     <img
                         class="theme-shot-img theme-shot-img--dawn"
-                        src="/atelier/neovim_rose-pine-dawn.webp"
+                        src={themeDawn.src}
+                        srcset={themeDawn.srcset}
+                        sizes="(min-width: 1180px) 72rem, 92vw"
                         alt="Neovim with the Rosé Pine dawn theme, light variant"
-                        width="3360"
-                        height="1966"
+                        width={themeDawn.width}
+                        height={themeDawn.height}
                         loading="lazy"
                         decoding="async"
                     />
                     <img
                         class="theme-shot-img theme-shot-img--main"
-                        src="/atelier/neovim_rose-pine-main.webp"
+                        src={themeMain.src}
+                        srcset={themeMain.srcset}
+                        sizes="(min-width: 1180px) 72rem, 92vw"
                         alt="Neovim with the Rosé Pine main theme, dark variant"
-                        width="3360"
-                        height="1964"
+                        width={themeMain.width}
+                        height={themeMain.height}
                         loading="lazy"
                         decoding="async"
                     />
@@ -384,10 +421,12 @@ const archiveShots = [
                 <div class="archive-desk-frame">
                     <img
                         class="archive-desk-img"
-                        src="/atelier/rice-flashbang.jpg"
+                        src={deskPlate.src}
+                        srcset={deskPlate.srcset}
+                        sizes="(min-width: 1180px) 72rem, 92vw"
                         alt="The bright BSPWM desktop from 2019"
-                        width="1920"
-                        height="1080"
+                        width={deskPlate.width}
+                        height={deskPlate.height}
                         loading="lazy"
                         decoding="async"
                         data-drift="14"
@@ -402,22 +441,25 @@ const archiveShots = [
                 </p>
                 <div class="filmstrip-track" data-filmstrip-track>
                     {
-                        archiveShots.map((shot, i) => (
+                        archiveFrames.map((shot, i) => (
                             <a
                                 class="filmstrip-item"
-                                href={shot.src}
+                                href={shot.href}
                                 data-gallery-index={i}
                                 data-gallery-label={shot.label}
+                                data-gallery-srcset={shot.frame.srcset}
                                 data-gallery-repo={shot.repo?.href}
                                 data-gallery-repo-label={shot.repo?.label}
                                 aria-label={`${shot.label}: view larger`}
                             >
                                 <span class="filmstrip-frame">
                                     <img
-                                        src={shot.src}
+                                        src={shot.frame.src}
+                                        srcset={shot.frame.srcset}
+                                        sizes="(min-width: 1180px) 18rem, (min-width: 640px) 22vw, min(70vw, 16rem)"
                                         alt={shot.alt}
-                                        width={shot.width}
-                                        height={shot.height}
+                                        width={shot.frame.width}
+                                        height={shot.frame.height}
                                         loading="lazy"
                                         decoding="async"
                                     />
@@ -464,10 +506,12 @@ const archiveShots = [
         <figure class="setup-gallery-figure">
             <img
                 id="setup-gallery-img"
-                src="/atelier/archrice.jpg"
-                alt="Arch Linux desktop from 2019"
-                width="1366"
-                height="768"
+                src={archiveFrames[0].frame.src}
+                srcset={archiveFrames[0].frame.srcset}
+                sizes="100vw"
+                alt={archiveFrames[0].alt}
+                width={archiveFrames[0].frame.width}
+                height={archiveFrames[0].frame.height}
             />
             <figcaption class="setup-gallery-caption">
                 <span id="setup-gallery-label"></span>
@@ -523,6 +567,7 @@ const archiveShots = [
             const linkText = document.getElementById('setup-gallery-link-text') as HTMLElement;
             const shots = thumbs.map((a) => ({
                 src: a.href,
+                srcset: a.dataset.gallerySrcset ?? '',
                 label: a.dataset.galleryLabel ?? '',
                 alt: a.querySelector('img')?.alt ?? '',
                 repo: a.dataset.galleryRepo
@@ -534,6 +579,13 @@ const archiveShots = [
             const render = () => {
                 const shot = shots[current];
                 img.src = shot.src;
+                // The same ladder the thumb uses, read at the lightbox's width.
+                if (shot.srcset) {
+                    img.srcset = shot.srcset;
+                    img.sizes = '100vw';
+                } else {
+                    img.removeAttribute('srcset');
+                }
                 img.alt = shot.alt;
                 label.textContent = shot.label;
                 pos.textContent = `${current + 1} / ${shots.length}`;

@@ -13,6 +13,7 @@ import { educationTimeline, workTimeline } from '../data/experience';
 import { stats } from '../data/stats';
 import { FOLIO_WORK_IDS, PLATE_LABELS, PROJECT_SHOTS, plateNumberOf } from '../data/works';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { PLATE_STRIP_SIZES } from '../lib/responsive-image';
 import { marked } from 'marked';
 
 const { title, description } = siteConfig;
@@ -53,9 +54,7 @@ const shotItems = folioWorks.map((work) => {
     return {
         number: plateNumberOf(work.id),
         name: work.data.title,
-        src: shot?.src,
-        width: shot?.width,
-        height: shot?.height
+        src: shot
     };
 });
 
@@ -215,6 +214,7 @@ const education = educationTimeline[0];
                             id={work.id}
                             href={`/folio/${work.id}/`}
                             variant="cell"
+                            sizes={PLATE_STRIP_SIZES}
                             image={PLATE_IMAGES[work.id]}
                         />
                     ))
@@ -401,5 +401,5 @@ const education = educationTimeline[0];
 </BaseLayout>
 
 <script>
-    import '../scripts/motion.ts';
+    import '../scripts/defer-motion.ts';
 </script>

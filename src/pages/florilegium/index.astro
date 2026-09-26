@@ -5,8 +5,24 @@ import Icon from '../../components/Icon.astro';
 import PlateFigure from '../../components/PlateFigure.astro';
 import { FLORILEGIUM_PLATE_IMAGE } from '../../data/folio-plates';
 import { getShelf, categoryLabels, coverPathFor } from '../../lib/shelf';
+import { COVER_SIZES, COVER_WIDTHS, responsiveImage } from '../../lib/responsive-image';
 
 const entries = await getShelf();
+
+/**
+ * One width ladder per jacket, resolved here rather than in a child
+ * component: Astro scopes a page's <style> block to the markup in that same
+ * template, so a jacket element rendered by an extracted component would
+ * silently miss .cut-cover img's object-fit and box. The ladder logic itself
+ * stays shared in lib/responsive-image.
+ */
+const jacketFor = new Map<string, Awaited<ReturnType<typeof responsiveImage>>>();
+for (const entry of entries) {
+    const cover = coverPathFor(entry);
+    if (cover && !jacketFor.has(entry.id)) {
+        jacketFor.set(entry.id, await responsiveImage(cover, { widths: COVER_WIDTHS, quality: 76 }));
+    }
+}
 const desk = entries.filter((entry) => entry.data.status === 'reading');
 const categoryOrder = [
     'manga',
@@ -110,10 +126,12 @@ const chapters = [
                                 <span class="cut-cover" style={`view-transition-name: cover-${entry.id}`}>
                                     {cover ? (
                                         <img
-                                            src={cover}
+                                            src={jacketFor.get(entry.id)?.src}
+                                            srcset={jacketFor.get(entry.id)?.srcset}
+                                            sizes={COVER_SIZES}
                                             alt={`Cover of ${entry.data.title}`}
-                                            width="460"
-                                            height="690"
+                                            width={jacketFor.get(entry.id)?.width}
+                                            height={jacketFor.get(entry.id)?.height}
                                             loading="lazy"
                                             decoding="async"
                                         />
@@ -215,10 +233,12 @@ const chapters = [
                                         >
                                             {cover ? (
                                                 <img
-                                                    src={cover}
+                                                    src={jacketFor.get(entry.id)?.src}
+                                                    srcset={jacketFor.get(entry.id)?.srcset}
+                                                    sizes={COVER_SIZES}
                                                     alt={`Cover of ${data.title}`}
-                                                    width="460"
-                                                    height="690"
+                                                    width={jacketFor.get(entry.id)?.width}
+                                                    height={jacketFor.get(entry.id)?.height}
                                                     loading="lazy"
                                                     decoding="async"
                                                 />

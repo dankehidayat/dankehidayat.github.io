@@ -19,7 +19,7 @@
             color-mix(in oklab, var(--color-bg) 88%, transparent),
             color-mix(in oklab, var(--color-bg) 88%, transparent)
         ),
-        url('../assets/images/folio/paper-texture-cream.jpg');
+        url('../assets/images/folio/paper-texture.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -32,7 +32,7 @@
                 color-mix(in oklab, var(--color-bg) 88%, transparent),
                 color-mix(in oklab, var(--color-bg) 88%, transparent)
             ),
-            url('../assets/images/folio/paper-texture-cream.jpg');
+            url('../assets/images/folio/paper-texture.webp');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;

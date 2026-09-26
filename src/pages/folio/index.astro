@@ -15,6 +15,7 @@ import {
     plateNumberOf
 } from '../../data/works';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LILY_WIDTHS, responsiveImage } from '../../lib/responsive-image';
 
 const title = 'Folio';
 const description =
@@ -38,9 +39,7 @@ const shotItems = folioWorks.map((work) => {
     return {
         number: plateNumberOf(work.id),
         name: work.data.title,
-        src: shot?.src,
-        width: shot?.width,
-        height: shot?.height
+        src: shot
     };
 });
 
@@ -61,6 +60,10 @@ const chapters = [
 // Margin lily — the colophon plate from extra-lilies.json (the head is a
 // featured title plate, same treatment as the florilegium/atelier heroes).
 const { superbum, catesbaei } = EXTRA_LILIES;
+const superbumPlate = await responsiveImage(superbum.src, {
+    widths: LILY_WIDTHS,
+    quality: 80
+});
 ---
 
 <BaseLayout title={title} description={description}>
@@ -164,9 +167,11 @@ const { superbum, catesbaei } = EXTRA_LILIES;
             <figure class="lily-accent works-colophon-plate">
                 <span class="lily-accent-frame">
                     <img
-                        src={superbum.src.src}
-                        width={superbum.src.width}
-                        height={superbum.src.height}
+                        src={superbumPlate.src}
+                        srcset={superbumPlate.srcset}
+                        sizes="11.5rem"
+                        width={superbumPlate.width}
+                        height={superbumPlate.height}
                         alt={superbum.alt}
                         loading="lazy"
                         decoding="async"
@@ -224,5 +229,5 @@ const { superbum, catesbaei } = EXTRA_LILIES;
 </style>
 
 <script>
-    import '../../scripts/motion.ts';
+    import '../../scripts/defer-motion.ts';
 </script>

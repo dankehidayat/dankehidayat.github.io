@@ -39,36 +39,26 @@ export const PLATE_LABELS: Record<FolioWorkId, string> = {
 };
 
 /**
- * Real project screenshots from public/projects/ (captured 2026-09, owner
- * evidence — never fabricated). They only render inside ScreenshotMarquee,
- * which is aria-hidden decoration, so no alt text rides along with them.
+ * Real project screenshots (captured 2026-09, owner evidence — never
+ * fabricated). Static imports through the Astro asset pipeline, so each one
+ * gets a width laddered `srcset` in ScreenshotMarquee; they used to travel
+ * whole out of public/, which put a 5.6MB PNG in an aria-hidden decorative
+ * band. No alt text rides along — the marquee is decoration.
  */
-export const PROJECT_SHOTS: Record<
-    FolioWorkId,
-    { src: string; width: number; height: number }
-> = {
-    selene: { src: '/projects/Selene.png', width: 1440, height: 900 },
-    'flowpoint-next': {
-        src: '/projects/Flowpoint.png',
-        width: 1440,
-        height: 900
-    },
-    flora: { src: '/projects/Flora.png', width: 1440, height: 900 },
-    'eco-office': {
-        src: '/projects/EcoOffice.png',
-        width: 1440,
-        height: 900
-    },
-    'ecobin-sorter': {
-        src: '/projects/EcoBin-Sorter.jpeg',
-        width: 1440,
-        height: 900
-    },
-    hydrolevi: {
-        src: '/projects/HydroleVI.jpeg',
-        width: 1440,
-        height: 900
-    }
+import ecoBinSorter from '../assets/images/projects/EcoBin-Sorter.jpeg';
+import ecoOffice from '../assets/images/projects/EcoOffice.png';
+import floraShot from '../assets/images/projects/Flora.png';
+import flowpointShot from '../assets/images/projects/Flowpoint.png';
+import hydroleviShot from '../assets/images/projects/HydroleVI.jpeg';
+import seleneShot from '../assets/images/projects/Selene.png';
+
+export const PROJECT_SHOTS: Record<FolioWorkId, ImageMetadata> = {
+    selene: seleneShot,
+    'flowpoint-next': flowpointShot,
+    flora: floraShot,
+    'eco-office': ecoOffice,
+    'ecobin-sorter': ecoBinSorter,
+    hydrolevi: hydroleviShot
 };
 
 /**

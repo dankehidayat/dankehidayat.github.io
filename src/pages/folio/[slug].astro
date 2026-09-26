@@ -8,6 +8,7 @@ import { EXTRA_LILY_ORDER } from '../../data/extra-lilies';
 import { FOLIO_WORK_IDS, PLATE_LABELS, plateNumberOf } from '../../data/works';
 import { projectMeta } from '../../data/projects';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LILY_WIDTHS, responsiveImage } from '../../lib/responsive-image';
 
 export async function getStaticPaths() {
     const all = await getCollection('projects');
@@ -46,6 +47,10 @@ const folioIndex = FOLIO_WORK_IDS.indexOf(entry.id);
 const marginLily = EXTRA_LILY_ORDER[
     (folioIndex < 0 ? 0 : folioIndex) % EXTRA_LILY_ORDER.length
 ];
+const marginLilyPlate = await responsiveImage(marginLily.src, {
+    widths: LILY_WIDTHS,
+    quality: 80
+});
 
 const marqueeItems = [
     { text: `Plate ${number}`, italic: true },
@@ -121,9 +126,11 @@ const marqueeItems = [
             <figure class="lily-accent" data-reveal>
                 <span class="lily-accent-frame">
                     <img
-                        src={marginLily.src.src}
-                        width={marginLily.src.width}
-                        height={marginLily.src.height}
+                        src={marginLilyPlate.src}
+                        srcset={marginLilyPlate.srcset}
+                        sizes="11.5rem"
+                        width={marginLilyPlate.width}
+                        height={marginLilyPlate.height}
                         alt={marginLily.alt}
                         loading="lazy"
                         decoding="async"
@@ -165,5 +172,5 @@ const marqueeItems = [
 </BaseLayout>
 
 <script>
-    import '../../scripts/motion.ts';
+    import '../../scripts/defer-motion.ts';
 </script>

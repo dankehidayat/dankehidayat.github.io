@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { render } from 'astro:content';
 import { getShelf, categoryLabels, coverPathFor, type ShelfEntry } from '../../lib/shelf';
+import { COVER_WIDTHS, RECORD_COVER_SIZES, responsiveImage } from '../../lib/responsive-image';
 
 export async function getStaticPaths() {
     const entries = await getShelf();
@@ -28,6 +29,17 @@ const data = entry.data;
 const cover = coverPathFor(entry);
 const prevCover = prev ? coverPathFor(prev) : null;
 const nextCover = next ? coverPathFor(next) : null;
+
+// Ladders resolved here, not in a child component: Astro scopes this page's
+// <style> block to its own template, so a jacket element rendered by an
+// extracted component would silently miss .record-cover img's box.
+const jacket = cover ? await responsiveImage(cover, { widths: COVER_WIDTHS, quality: 76 }) : null;
+const prevJacket = prevCover
+    ? await responsiveImage(prevCover, { widths: COVER_WIDTHS, quality: 76 })
+    : null;
+const nextJacket = nextCover
+    ? await responsiveImage(nextCover, { widths: COVER_WIDTHS, quality: 76 })
+    : null;
 const monogram = data.title.charAt(0).toUpperCase();
 
 const hasReview = Boolean(entry.body?.trim());
@@ -56,10 +68,12 @@ const description = data.seo?.description ?? data.description;
                 >
                     {cover ? (
                         <img
-                            src={cover}
+                            src={jacket?.src}
+                            srcset={jacket?.srcset}
+                            sizes={RECORD_COVER_SIZES}
                             alt={`Cover of ${data.title}`}
-                            width="460"
-                            height="690"
+                            width={jacket?.width}
+                            height={jacket?.height}
                             decoding="async"
                         />
                     ) : (
@@ -155,10 +169,12 @@ const description = data.seo?.description ?? data.description;
                         {prevCover && (
                             <img
                                 class="record-nav-cover"
-                                src={prevCover}
+                                src={prevJacket?.src}
+                                srcset={prevJacket?.srcset}
+                                sizes="2.6rem"
                                 alt=""
-                                width="460"
-                                height="690"
+                                width={prevJacket?.width}
+                                height={prevJacket?.height}
                                 loading="lazy"
                                 decoding="async"
                                 style={`view-transition-name: cover-${prev.id}`}
@@ -183,10 +199,12 @@ const description = data.seo?.description ?? data.description;
                         {nextCover && (
                             <img
                                 class="record-nav-cover"
-                                src={nextCover}
+                                src={nextJacket?.src}
+                                srcset={nextJacket?.srcset}
+                                sizes="2.6rem"
                                 alt=""
-                                width="460"
-                                height="690"
+                                width={nextJacket?.width}
+                                height={nextJacket?.height}
                                 loading="lazy"
                                 decoding="async"
                                 style={`view-transition-name: cover-${next.id}`}

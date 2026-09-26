@@ -6,7 +6,12 @@
  * in as static imports from src/data/folio-plates.ts; the hatch + floret
  * remains only as a defensive no-image fallback (never rendered in the
  * built site — every call site supplies an image).
+ *
+ * The plate ships as a width-laddered `srcset` (see lib/responsive-image),
+ * never the full-resolution master: a 1661×2154 Köhler engraving used to
+ * travel whole for a ~300px arch.
  */
+import { PLATE_SIZES, PLATE_WIDTHS, responsiveImage } from '../lib/responsive-image';
 import type { FolioPlateImage } from '../data/folio-plates';
 
 type Props = {
@@ -20,19 +25,28 @@ type Props = {
     id: string;
     /** When set, the whole plate becomes a link */
     href?: string | undefined;
-    variant?: 'featured' | 'cell' | 'mini';
+    variant?: 'featured' | 'cell' | 'mini' | 'detail';
     /** Optional one-line description (works index cells) */
     description?: string | undefined;
     /** Optional CTA line under the cell (works index) */
     cta?: string | undefined;
     /** Static-imported plate image with factual alt text */
     image?: FolioPlateImage | undefined;
+    /**
+     * Overrides the `sizes` hint when the plate sits in a grid the variant
+     * does not describe (the six-across home strip, for one).
+     */
+    sizes?: string | undefined;
 };
 
 const { number, name, label, id, href, variant = 'cell', description, cta, image } =
     Astro.props;
 const Tag = href ? 'a' : 'div';
 const eager = variant === 'featured';
+const plate = image
+    ? await responsiveImage(image.src, { widths: PLATE_WIDTHS, quality: 80 })
+    : null;
+const sizes = Astro.props.sizes ?? PLATE_SIZES[variant] ?? PLATE_SIZES.cell;
 ---
 
 <Tag
@@ -47,11 +61,13 @@ const eager = variant === 'featured';
         <div class="plate-arch" style={`view-transition-name: plate-${id}`}>
             <div class="plate-slot" data-image-slot={`plate-${id}`}>
                 {
-                    image ? (
+                    plate && image ? (
                         <img
-                            src={image.src.src}
-                            width={image.src.width}
-                            height={image.src.height}
+                            src={plate.src}
+                            srcset={plate.srcset}
+                            sizes={sizes}
+                            width={plate.width}
+                            height={plate.height}
                             alt={image.alt}
                             loading={eager ? 'eager' : 'lazy'}
                             decoding="async"

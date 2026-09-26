@@ -8,6 +8,10 @@ import {
     transformerNotationWordHighlight
 } from '@shikijs/transformers';
 import { defineConfig } from 'astro/config';
+import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import siteConfig from './src/data/site-config';
@@ -30,8 +34,7 @@ function transformerTitleToFile() {
 /**
  * warm-signal — Warm Signal code surface.
  * Warm paper code field with the palette's green / tangerine family.
- */
-const salmonLightTheme = {
+ */const salmonLightTheme = {
     name: 'warm-signal',
     type: 'light',
     colors: {
@@ -104,13 +107,71 @@ const salmonLightTheme = {
     ]
 };
 
+const RASTER = /\.(jpe?g|png|webp|avif|gif)$/i;
+
+/**
+ * pruneUnusedRasters — drop the full-resolution masters from the build.
+ *
+ * Every `import img from './photo.jpg'` makes Vite emit the original file so
+ * the module has a URL to hand back — even when the page only renders the
+ * width-laddered WebP variants (see src/lib/responsive-image.ts). Those
+ * originals are never referenced by any page, so no browser ever requests
+ * them; they are pure deploy weight, and a big one: the pre-ladder masters
+ * alone were 16MB.
+ *
+ * Runs on `astro:build:done` and deletes a raster under `_astro/` only when
+ * its exact filename appears in no other file in the build at all. That makes
+ * it safe by construction — a referenced asset can never be dropped.
+ */
+function pruneUnusedRasters() {
+    return {
+        name: 'prune-unused-rasters',
+        hooks: {
+            'astro:build:done': ({ dir }) => {
+                const fs = require('node:fs');
+                const path = require('node:path');
+                const root = fileURLToPath(dir);
+                const assetsDir = path.join(root, '_astro');
+                if (!fs.existsSync(assetsDir)) return;
+
+                // Every file in the build, as text. Binary reads are lossy but
+                // a false positive here only means we keep a file, never drop one.
+                const haystack = [];
+                const walk = (d) => {
+                    for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
+                        const full = path.join(d, entry.name);
+                        if (entry.isDirectory()) walk(full);
+                        else haystack.push(fs.readFileSync(full).toString('utf8'));
+                    }
+                };
+                walk(root);
+                const blob = haystack.join('\n');
+
+                let bytes = 0;
+                let count = 0;
+                for (const name of fs.readdirSync(assetsDir)) {
+                    if (!RASTER.test(name)) continue;
+                    if (blob.includes(name)) continue;
+                    const full = path.join(assetsDir, name);
+                    bytes += fs.statSync(full).size;
+                    fs.unlinkSync(full);
+                    count += 1;
+                }
+                if (count > 0) {
+                    const mb = (bytes / 1024 / 1024).toFixed(1);
+                    console.log(`[prune-unused-rasters] removed ${count} unreferenced raster(s), ${mb}MB`);
+                }
+            }
+        }
+    };
+}
+
 // https://astro.build/config
 export default defineConfig({
     site: siteConfig.website,
     vite: {
         plugins: [tailwindcss()]
-    },
-    markdown: {
+    },    markdown: {
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
         shikiConfig: {
@@ -152,6 +213,7 @@ export default defineConfig({
         '/en/contact': '/#contact'
     },
     integrations: [
+        pruneUnusedRasters(),
         mdx({
             remarkPlugins: [remarkMath],
             rehypePlugins: [rehypeKatex],
