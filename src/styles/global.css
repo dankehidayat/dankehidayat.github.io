@@ -1,72 +1,169 @@
-@import '@fontsource-variable/bricolage-grotesque' layer(base);
+@import '@fontsource-variable/bodoni-moda' layer(base);
+@import '@fontsource-variable/bodoni-moda/wght-italic.css' layer(base);
+@import '@fontsource-variable/newsreader' layer(base);
+@import '@fontsource-variable/newsreader/wght-italic.css' layer(base);
 @import '@fontsource-variable/source-sans-3' layer(base);
 @import '@fontsource-variable/jetbrains-mono' layer(base);
+@import '@fontsource/instrument-serif/400.css' layer(base);
 
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
 /*
-  Warm Signal — a warm, saturated editorial-technical system.
-  Warm paper field, leaf-green / tangerine / saffron signal tricolor,
-  Bricolage display lockup, ledger structure.
-  Light only. No dark mode. No costume. No kickers.
+  Botanical Folio — a plate-cream herbarium world.
+  Plate ground, hairline sepia rules, leaf-green ink, sage secondary,
+  graphite text, lilac bloom accent (the only heat — retunes the folio scarlet).
+  Bodoni Moda display with italic plate names, Newsreader body,
+  small-caps stage labels, arched plate frames (see folio.css).
+  Light-first; real dark token set below; no inversion hacks.
 */
 :root {
     /* Field + neutrals */
-    --color-bg: #fbf5ea;
-    --color-surface: #ffffff;
-    --color-surface-tint: #f3ead7;
-    --color-border: #e4d9c2;
-    --color-border-strong: #c9bca0;
-    --color-ink: #251f16;
-    --color-ink-body: #453b2e;
-    --color-ink-muted: #7a6c59;
-    --color-code-bg: #f1e7d0;
+    --color-bg: #f6f1e6;
+    --color-surface: #fbf8ef;
+    --color-surface-tint: #efe8d8;
+    --color-border: #d9cdb5;
+    --color-border-strong: #c2b294;
+    --color-ink: #2c2a24;
+    --color-ink-body: #4a4a4a;
+    --color-ink-muted: #6b6456;
+    --color-code-bg: #efe8d8;
 
-    /* Signal tricolor */
-    --color-green: #1e6b4a;
-    --color-green-deep: #155236;
-    --color-green-bright: #2f9e65;
-    --color-tangerine: #e05d1e;
-    --color-tangerine-deep: #b8430e;
-    --color-tangerine-field: #e4651f;
-    --color-saffron: #e5a81c;
+    /* Leaf green ink + sage secondary */
+    --color-green: #2e5e3d;
+    --color-green-deep: #23492f;
+    --color-green-bright: #4e8260;
+    --color-sage: #7fa37a;
+
+    /* Lilac bloom accent — the folio's only heat (retunes the scarlet) */
+    --color-lilac: #7b5c9e;
+    --color-lilac-deep: #64497f;
+    --color-lilac-bright: #a98bc6;
+    --color-lilac-field: #efe7f5;
+
+    /* Legacy aliases — old selectors now draw in folio ink, never off-world */
+    --color-tangerine: var(--color-lilac);
+    --color-tangerine-deep: var(--color-lilac-deep);
+    --color-tangerine-field: var(--color-lilac);
+    --color-saffron: var(--color-sage);
 
     /* On-field inks */
-    --color-ink-on-green: #fbf5ea;
+    --color-ink-on-green: #f6f1e6;
     --color-ink-on-green-muted: #cfe3d5;
-    --color-ink-on-tangerine: #2e1608;
-    --color-ink-on-tangerine-muted: #4a2305;
+    --color-ink-on-tangerine: #fbf7ee;
+    --color-ink-on-tangerine-muted: #e8ddf3;
 
     /* Functional */
-    --color-success: #2f9e65;
-    --color-warning: #b38614;
-    --color-error: #c2402e;
+    --color-success: #4e8260;
+    --color-warning: #a4791c;
+    --color-error: #a33c2b;
 
     /* Type */
-    --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-display: 'Bodoni Moda Variable', 'Bodoni Moda', 'Didot', Georgia, serif;
+    --font-serif: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
     --font-sans: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+    /* Instrument Serif — reserved for the contact email address only */
+    --font-instrument: 'Instrument Serif', Georgia, serif;
 
     /* Shape */
-    --radius-sm: 6px;
-    --radius: 10px;
-    --radius-lg: 14px;
+    --radius-sm: 3px;
+    --radius: 4px;
+    --radius-lg: 6px;
     --shell: 72rem;
 
-    /* Depth */
-    --shadow-sm: 0 1px 2px rgb(37 31 22 / 0.06);
-    --shadow-md: 0 16px 36px -20px rgb(37 31 22 / 0.22);
-    --shadow-lg: 0 30px 60px -30px rgb(37 31 22 / 0.28);
+    /* Depth — folio pages are flat; shadows stay whisper-quiet */
+    --shadow-sm: 0 1px 2px rgb(44 42 36 / 0.05);
+    --shadow-md: 0 6px 12px -8px rgb(44 42 36 / 0.4);
+    --shadow-lg: 0 8px 12px -6px rgb(44 42 36 / 0.45);
 
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     color-scheme: light;
+}
+
+/*
+  Dark folio — night herbarium: same materials under low light.
+  A real token set (ground, rules, inks, accent all re-specified),
+  selected by data-theme (set pre-paint by the inline head script).
+*/
+html[data-theme='dark'] {
+    --color-bg: #17150f;
+    --color-surface: #1e1b14;
+    --color-surface-tint: #262219;
+    --color-border: #3a3527;
+    --color-border-strong: #544d3b;
+    --color-ink: #efe8d6;
+    --color-ink-body: #c7c0ae;
+    --color-ink-muted: #97907d;
+    --color-code-bg: #242017;
+
+    --color-green: #8fbe9c;
+    --color-green-deep: #a7cdb1;
+    --color-green-bright: #7fb08d;
+    --color-sage: #86a881;
+
+    --color-lilac: #b69bd6;
+    --color-lilac-deep: #c9b2e2;
+    --color-lilac-bright: #cdb6e6;
+    --color-lilac-field: #2a2335;
+
+    --color-ink-on-green: #17150f;
+    --color-ink-on-green-muted: #2c3a2f;
+    --color-ink-on-tangerine: #17121f;
+    --color-ink-on-tangerine-muted: #241c31;
+
+    --color-success: #8fbe9c;
+    --color-warning: #d3a94a;
+    --color-error: #d98a76;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 6px 12px -8px rgb(0 0 0 / 0.65);
+    --shadow-lg: 0 8px 12px -6px rgb(0 0 0 / 0.7);
+
+    color-scheme: dark;
+}
+
+/* No-JS fallback: follow the system when the document carries no choice. */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --color-bg: #17150f;
+        --color-surface: #1e1b14;
+        --color-surface-tint: #262219;
+        --color-border: #3a3527;
+        --color-border-strong: #544d3b;
+        --color-ink: #efe8d6;
+        --color-ink-body: #c7c0ae;
+        --color-ink-muted: #97907d;
+        --color-code-bg: #242017;
+
+        --color-green: #8fbe9c;
+        --color-green-deep: #a7cdb1;
+        --color-green-bright: #7fb08d;
+        --color-sage: #86a881;
+
+        --color-lilac: #b69bd6;
+        --color-lilac-deep: #c9b2e2;
+        --color-lilac-bright: #cdb6e6;
+        --color-lilac-field: #2a2335;
+
+        --color-ink-on-green: #17150f;
+        --color-ink-on-green-muted: #2c3a2f;
+        --color-ink-on-tangerine: #17121f;
+        --color-ink-on-tangerine-muted: #241c31;
+
+        --color-success: #8fbe9c;
+        --color-warning: #d3a94a;
+        --color-error: #d98a76;
+
+        color-scheme: dark;
+    }
 }
 
 @theme inline {
     --font-sans: var(--font-sans);
     --font-display: var(--font-display);
     --font-mono: var(--font-mono);
+    --font-instrument: var(--font-instrument);
     --color-bg: var(--color-bg);
     --color-surface: var(--color-surface);
     --color-surface-tint: var(--color-surface-tint);
@@ -99,17 +196,17 @@ body {
     min-height: 100dvh;
     background: var(--color-bg);
     color: var(--color-ink-body);
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-optical-sizing: auto;
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 1.0625rem;
+    line-height: 1.72;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
 }
 
 ::selection {
-    background: color-mix(in oklab, var(--color-tangerine) 30%, transparent);
+    background: color-mix(in oklab, var(--color-lilac) 28%, transparent);
     color: var(--color-ink);
 }
 
@@ -193,8 +290,9 @@ h3,
 h4 {
     margin: 0;
     color: var(--color-ink);
-    font-weight: 700;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.16;
     text-wrap: balance;
 }
 
@@ -240,19 +338,36 @@ li {
 
 /* ───────────────────────────── buttons ──────────────────────────── */
 
+/*
+ * Folio buttons are engraved tickets: chamfered corners, all-caps
+ * letterspaced labels, a floret before the words. Primary is solid
+ * lilac (the only heat); secondary is a double hairline frame.
+ */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.72rem 1.4rem;
-    border-radius: var(--radius-sm);
+    gap: 0.55rem;
+    padding: 0.78rem 1.5rem;
+    border-radius: 0;
     border: 1px solid transparent;
-    font: inherit;
-    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
     font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     line-height: 1.2;
     cursor: pointer;
+    clip-path: polygon(
+        7px 0,
+        calc(100% - 7px) 0,
+        100% 7px,
+        100% calc(100% - 7px),
+        calc(100% - 7px) 100%,
+        7px 100%,
+        0 calc(100% - 7px),
+        0 7px
+    );
     transition:
         background-color 0.22s var(--ease),
         border-color 0.22s var(--ease),
@@ -267,279 +382,223 @@ li {
     flex: none;
 }
 
+/* Drawn floret (same path as the plate/floret SVGs) before the label on tickets */
+.btn::before {
+    content: '';
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    opacity: 0.85;
+    background-color: currentColor;
+    -webkit-mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg stroke='%23000' stroke-width='1.4' stroke-linecap='round' fill='none'%3E%3Cpath d='M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9'/%3E%3C/g%3E%3Ccircle cx='12' cy='12' r='1.5' fill='%23000'/%3E%3C/svg%3E")
+            center / contain no-repeat;
+    mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg stroke='%23000' stroke-width='1.4' stroke-linecap='round' fill='none'%3E%3Cpath d='M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9'/%3E%3C/g%3E%3Ccircle cx='12' cy='12' r='1.5' fill='%23000'/%3E%3C/svg%3E")
+            center / contain no-repeat;
+}
+
 .btn-primary {
-    background: var(--color-green);
-    color: #fff;
-    box-shadow: 0 10px 22px -14px color-mix(in oklab, var(--color-green) 80%, transparent);
+    background: var(--color-lilac);
+    color: var(--color-ink-on-tangerine);
+    box-shadow: 0 4px 12px -8px color-mix(in oklab, var(--color-lilac) 80%, transparent);
 }
 
 .btn-primary:hover {
-    background: var(--color-green-deep);
+    background: var(--color-lilac-deep);
     transform: translateY(-1px);
-    box-shadow: 0 14px 28px -14px color-mix(in oklab, var(--color-green-deep) 85%, transparent);
+    box-shadow: 0 6px 12px -8px color-mix(in oklab, var(--color-lilac-deep) 85%, transparent);
 }
 
 .btn-secondary {
-    background: var(--color-surface);
+    background: transparent;
     color: var(--color-ink);
     border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-sm);
+    /* double hairline frame: outer rule separated by a ground gap */
+    box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 4px var(--color-border);
 }
 
 .btn-secondary:hover {
-    border-color: var(--color-green);
-    color: var(--color-green-deep);
+    border-color: var(--color-lilac);
+    color: var(--color-lilac-deep);
+    box-shadow: 0 0 0 3px var(--color-bg), 0 0 0 4px var(--color-lilac-bright);
 }
 
-/* Inverse buttons sit on the tangerine hero field */
-.btn-inverse {
-    background: var(--color-ink-on-tangerine);
-    color: #f7ead6;
-    box-shadow: 0 10px 24px -16px rgb(0 0 0 / 0.35);
+.btn-secondary::before {
+    color: var(--color-sage);
+    opacity: 1;
 }
 
-.btn-inverse:hover {
-    background: #1d0e04;
+/* resume — the dark ink cut-out; the hero's download CTA and the
+   contact action share it (owner amendment 2026-09-24) */
+.btn-resume {
+    background: var(--color-ink);
+    color: var(--color-bg);
+    border-color: var(--color-ink);
+    box-shadow: 0 4px 12px -8px rgb(37 31 22 / 0.55);
+}
+
+.btn-resume:hover {
+    background: var(--color-green-deep);
+    border-color: var(--color-green-deep);
+    color: #f6f1e6;
     transform: translateY(-1px);
-}
-
-.btn-inverse-ghost {
-    background: transparent;
-    color: var(--color-ink-on-tangerine);
-    border-color: color-mix(in oklab, var(--color-ink-on-tangerine) 45%, transparent);
-}
-
-.btn-inverse-ghost:hover {
-    background: color-mix(in oklab, var(--color-ink-on-tangerine) 10%, transparent);
-    border-color: var(--color-ink-on-tangerine);
-}
-
-/* Dark buttons sit on the tangerine contact field */
-.btn-dark {
-    background: var(--color-ink-on-tangerine);
-    color: #f7ead6;
-    box-shadow: 0 12px 26px -16px rgb(46 22 8 / 0.5);
-}
-
-.btn-dark:hover {
-    background: #1d0e04;
-    transform: translateY(-1px);
-}
-
-.btn-dark-ghost {
-    background: transparent;
-    color: var(--color-ink-on-tangerine);
-    border-color: color-mix(in oklab, var(--color-ink-on-tangerine) 75%, transparent);
-}
-
-.btn-dark-ghost:hover {
-    border-color: var(--color-ink-on-tangerine);
-    background: color-mix(in oklab, var(--color-ink-on-tangerine) 8%, transparent);
-}
-
-/* Tangerine — the nav contact call-to-action */
-.btn-tangerine {
-    background: var(--color-tangerine);
-    color: var(--color-ink-on-tangerine);
-    box-shadow: 0 10px 22px -14px color-mix(in oklab, var(--color-tangerine) 85%, transparent);
-}
-
-.btn-tangerine:hover {
-    background: var(--color-tangerine-deep);
-    transform: translateY(-1px);
-    box-shadow: 0 14px 28px -14px color-mix(in oklab, var(--color-tangerine-deep) 85%, transparent);
-}
-
-.btn-tangerine svg {
-    width: 1rem;
-    height: 1rem;
+    box-shadow: 0 6px 12px -8px rgb(35 73 47 / 0.6);
 }
 
 /* ────────────────────────────── nav ─────────────────────────────── */
 
-/* The nav floats as a frosted pill over the page — sticky with a small
-   gap, so content scrolls under it while it stays a contained capsule. */
+/* The nav is the folio's running head: a full-width paper strip closed by
+   a double hairline, brand "Danke" centered between the link groups
+   (owner amendments 2026-09-24 — order About · Works ▾ | Danke |
+   Florilegium · Atelier; no floating pill, no glass, no shadow). */
 .site-nav {
     position: sticky;
-    top: 0.75rem;
+    top: 0;
     z-index: 100;
-    padding-inline: clamp(1rem, 4vw, 2rem);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
 }
 
-.site-nav-pill {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    max-width: 66rem;
-    margin-inline: auto;
-    padding: 0.45rem 0.55rem 0.45rem 1.15rem;
-    border-radius: 999px;
-    background: rgb(251 245 234 / 0.65);
-    -webkit-backdrop-filter: blur(16px) saturate(1.3);
-    backdrop-filter: blur(16px) saturate(1.3);
-    border: 1px solid color-mix(in oklab, var(--color-border-strong) 70%, transparent);
-    box-shadow: 0 14px 34px -22px rgb(37 31 22 / 0.4);
+/* second hairline — the folio's double rule */
+.site-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: var(--color-border);
+    pointer-events: none;
 }
 
 .site-nav-inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     width: 100%;
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding: 0.55rem clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.site-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+/* Explicit columns: below the breakpoint the start group is display:none
+   and drops out of the grid, which would auto-place the brand into column
+   1 (left) and the menu button into the auto track (centre) — pinning
+   each group keeps the brand centred and the button on the right edge,
+   aligned to the strip's padding at any width. */
+.site-nav-group--start {
+    display: none;
+    justify-self: start;
+    grid-column: 1;
+}
+
+.site-nav-group--end {
+    justify-self: end;
+    gap: 0.5rem;
+    grid-column: 3;
 }
 
 .site-logo {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-display);
-    font-size: 1.12rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
+    gap: 0.5rem;
     white-space: nowrap;
+    color: var(--color-ink);
+    justify-self: center;
+    grid-column: 2;
 }
 
-.site-links {
+.site-logo-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1;
+}
+
+.site-logo-floret {
+    width: 0.8rem;
+    height: 0.8rem;
+    color: var(--color-sage);
+}
+
+.site-nav-group--end .site-link {
     display: none;
-    align-items: center;
-    gap: 0.15rem;
 }
 
-/* Link pills inside the nav pill — the active section is a soft green tab
-   instead of an underline. */
+/* Below the breakpoint the theme toggle lives in the sheet footer, so the
+   strip is just brand + menu button (shown again with the desktop nav). */
+.site-nav-group--end .theme-toggle {
+    display: none;
+}
+
+/* Small-caps chapter links — active one takes the lilac rule. */
 .site-link {
-    padding: 0.42rem 0.9rem;
+    position: relative;
+    padding: 0.45rem 0.85rem;
+    font-family: var(--font-serif);
     font-size: 0.95rem;
-    font-weight: 500;
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
     color: var(--color-ink-body);
-    border-radius: 999px;
     white-space: nowrap;
     transition:
-        background 0.2s var(--ease),
-        color 0.2s var(--ease);
+        color 0.2s var(--ease),
+        border-color 0.2s var(--ease);
+    border-bottom: 1px solid transparent;
 }
 
 .site-link:hover {
-    background: color-mix(in oklab, var(--color-green) 8%, transparent);
     color: var(--color-ink);
+    border-bottom-color: var(--color-border-strong);
 }
 
 .site-link.is-active {
-    background: color-mix(in oklab, var(--color-green) 14%, transparent);
-    color: var(--color-green-deep);
+    color: var(--color-lilac-deep);
     font-weight: 600;
+    border-bottom-color: var(--color-lilac);
 }
 
-.site-nav-end {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+@media (min-width: 900px) {
+    .site-nav-group--start {
+        display: flex;
+    }
+
+    .site-nav-group--end .site-link {
+        display: inline-flex;
+    }
 }
 
-.site-nav-cta {
-    display: none;
-    border-radius: 999px;
-    padding: 0.5rem 1.15rem;
-    font-size: 0.9rem;
-}
-
-/* The nav CTA lives inside the frosted pill, so its hover stays seated:
-   it darkens to deep tangerine without the lift/shadow of a floating button. */
-.site-nav-cta:hover,
-.site-nav-cta:focus-visible {
-    transform: none;
-    box-shadow: 0 10px 22px -14px color-mix(in oklab, var(--color-tangerine-deep) 85%, transparent);
-}
-
-/* ── nav dropdown panels ────────────────────────────────────── */
-.site-dropdown {
-    position: relative;
-}
-
-.site-dropdown-panel {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(6px);
-    min-width: 14rem;
-    max-width: 18rem;
-    padding: 0.5rem;
-    border-radius: var(--radius);
-    background: rgb(251 245 234 / 0.96);
-    -webkit-backdrop-filter: blur(16px) saturate(1.3);
-    backdrop-filter: blur(16px) saturate(1.3);
-    border: 1px solid var(--color-border);
-    box-shadow: 0 20px 44px -18px rgb(37 31 22 / 0.45);
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity 0.2s var(--ease),
-        visibility 0.2s var(--ease),
-        transform 0.2s var(--ease);
-    z-index: 110;
-}
-
-.site-dropdown.is-open .site-dropdown-panel {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(10px);
-}
-
-.site-dropdown-item {
-    display: block;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-ink-body);
-    text-decoration: none;
-    transition:
-        background 0.15s var(--ease),
-        color 0.15s var(--ease);
-}
-
-.site-dropdown-item:hover,
-.site-dropdown-item:focus {
-    background: color-mix(in oklab, var(--color-green) 8%, transparent);
-    color: var(--color-green-deep);
-    outline: none;
-}
-
-.site-dropdown-item-name {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.site-dropdown-heading {
-    margin: 0 0 0.25rem;
-    padding: 0.35rem 0.75rem 0.3rem;
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--color-ink-muted);
-    border-bottom: 1px solid var(--color-border);
-    pointer-events: none;
-}
-
-/* ── mobile accordion sub-menus (removed: nav links now navigate directly) */
+/* ── mobile menu button ─────────────────────────────────────────────
+   Owner 2026-09-26 — "the menu button shows very bad": the glyph is
+   two rules (the resting pair echoes the strip's double hairline) that
+   cross into an X when the sheet opens. 44px target, cut-corner tile,
+   hover tint, and an inset focus ring — clip-path would swallow an
+   outline drawn outside the tile. */
 
 .site-menu-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    /* 44px tap target — mobile-only control, hidden with the desktop nav */
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
     border: 1px solid var(--color-border-strong);
-    border-radius: 999px;
+    border-radius: 0;
     background: var(--color-surface);
     color: var(--color-ink);
     cursor: pointer;
+    clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0 calc(100% - 5px), 0 5px);
     transition:
         border-color 0.2s var(--ease),
         color 0.2s var(--ease),
@@ -547,125 +606,226 @@ li {
 }
 
 .site-menu-btn:hover {
-    border-color: var(--color-green);
-    color: var(--color-green-deep);
+    border-color: var(--color-lilac);
+    color: var(--color-lilac-deep);
 }
 
-/* hamburger → X line morph — three bars, animated, no raw glyph */
+.site-menu-btn:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: -4px;
+    border-color: var(--color-green);
+}
+
+/* two rules → X — drawn, never a text glyph */
 .menu-bars {
     position: relative;
     display: block;
-    width: 1.15rem;
-    height: 1rem;
+    width: 1.35rem;
+    height: 0.55rem;
 }
 
 .menu-bar {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 1.5px;
     border-radius: 2px;
     background: currentColor;
-    transition: transform 0.28s var(--ease), opacity 0.2s var(--ease);
+    transition: transform 0.28s var(--ease);
 }
 
 .menu-bar:nth-child(1) {
     top: 0;
 }
 .menu-bar:nth-child(2) {
-    top: calc(50% - 1px);
-}
-.menu-bar:nth-child(3) {
-    top: calc(100% - 2px);
+    bottom: 0;
 }
 
 .site-menu-btn[aria-expanded='true'] {
-    border-color: var(--color-tangerine-deep);
-    background: var(--color-tangerine);
+    border-color: var(--color-lilac-deep);
+    background: var(--color-lilac);
     color: var(--color-ink-on-tangerine);
 }
 
+/* both rules ride to the middle of the box, then cross */
 .site-menu-btn[aria-expanded='true'] .menu-bar:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+    transform: translateY(calc((0.55rem - 1.5px) / 2)) rotate(45deg);
 }
 .site-menu-btn[aria-expanded='true'] .menu-bar:nth-child(2) {
-    opacity: 0;
-}
-.site-menu-btn[aria-expanded='true'] .menu-bar:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    transform: translateY(calc((1.5px - 0.55rem) / 2)) rotate(-45deg);
 }
 
-/* The mobile dropdown hangs below the pill, centered under it.
-   Open/close is animated (fade + gentle drop, links stagger in) via the
-   .is-open class that JS toggles; using visibility/opacity instead of
-   display:none is what lets the panel transition. */
+/* ── mobile contents sheet ───────────────────────────────────────────
+   A full-screen index hung under the running head: the strip (brand +
+   two-rule glyph → X) stays above the double rule, the sheet fills
+   everything below it. JS measures the strip into --site-nav-h so the
+   sheet lands flush at the viewport bottom; .is-open is toggled by the
+   menu button. No floating pill, no glass, no shadow — plate cream +
+   hairlines only. */
 .site-mobile {
     position: absolute;
-    top: calc(100% + 0.5rem);
+    /* 100% = the strip's padding box; +1px clears its bottom border, so
+       the sepia rule stays visible and the double hairline keeps its gap */
+    top: calc(100% + 1px);
     left: 0;
     right: 0;
-    z-index: 99;
-    margin-inline: auto;
-    max-width: 24rem;
-    padding: 0.5rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border-strong);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 30px 60px -30px rgb(37 31 22 / 0.45);
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    display: none;
+    height: calc(100dvh - var(--site-nav-h, 4rem));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    background: var(--color-bg);
     opacity: 0;
-    visibility: hidden;
-    transform: translateY(-0.5rem) scale(0.98);
+    transform: translateY(-0.4rem);
     transform-origin: top center;
     pointer-events: none;
     transition:
-        opacity 0.22s var(--ease),
-        transform 0.22s var(--ease),
-        visibility 0s linear 0.22s;
+        opacity 0.26s var(--ease),
+        transform 0.26s var(--ease),
+        display 0.26s allow-discrete;
 }
 
 .site-mobile.is-open {
+    display: block;
     opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
     pointer-events: auto;
-    transition-delay: 0s;
 }
 
-/* Link rows and the Contact button rise in with a light stagger. */
-.site-mobile.is-open .site-mobile-link,
-.site-mobile.is-open .btn {
-    animation: site-menu-item-in 0.3s var(--ease) both;
+@starting-style {
+    .site-mobile.is-open {
+        opacity: 0;
+        transform: translateY(-0.4rem);
+    }
 }
 
-.site-mobile.is-open .site-mobile-link:nth-child(1) {
-    animation-delay: 0.04s;
+/* The sheet spans the viewport; its contents hold a single index measure. */
+.site-mobile-inner {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 34rem);
+    min-height: 100%;
+    margin-inline: auto;
+    padding: clamp(1.4rem, 6vw, 2.2rem) clamp(1.25rem, 4vw, 2.5rem)
+        calc(clamp(1.4rem, 6vw, 2.2rem) + env(safe-area-inset-bottom));
 }
-.site-mobile.is-open .site-mobile-link:nth-child(2) {
-    animation-delay: 0.07s;
+
+/* Label-style grouping — tracked Source Sans 3 small caps (label rule) */
+.site-mobile-label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
 }
-.site-mobile.is-open .site-mobile-link:nth-child(3) {
-    animation-delay: 0.1s;
+
+/* The index: chapters as a contents list, separated by sepia hairlines. */
+.site-mobile-index {
+    margin-top: 0.9rem;
+    border-top: 1px solid var(--color-border);
 }
-.site-mobile.is-open .site-mobile-link:nth-child(4) {
-    animation-delay: 0.13s;
+
+.site-mobile-index > li {
+    border-bottom: 1px solid var(--color-border);
 }
-.site-mobile.is-open .site-mobile-link:nth-child(5) {
-    animation-delay: 0.16s;
+
+/* Index entry — Bodoni title size, roman (structure, not specimen),
+   arrow mark resting in sage, lilac on engagement. */
+.site-mobile-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 44px;
+    padding: clamp(0.8rem, 3.4vw, 1.1rem) 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 7.6vw, 2.35rem);
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    transition:
+        color 0.2s var(--ease),
+        padding-left 0.2s var(--ease);
 }
-.site-mobile.is-open .site-mobile-link:nth-child(6) {
-    animation-delay: 0.19s;
+
+.site-mobile-entry:hover,
+.site-mobile-entry:focus-visible {
+    color: var(--color-lilac-deep);
+    padding-left: 0.35rem;
 }
-.site-mobile.is-open .btn {
-    animation-delay: 0.22s;
+
+/* the active chapter takes lilac, as in the running head */
+.site-mobile-entry.is-active {
+    color: var(--color-lilac-deep);
+}
+
+.site-mobile-entry svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: none;
+    color: var(--color-sage);
+    transition:
+        color 0.2s var(--ease),
+        transform 0.2s var(--ease);
+}
+
+.site-mobile-entry:hover svg,
+.site-mobile-entry:focus-visible svg {
+    color: var(--color-lilac);
+    transform: translateX(3px);
+}
+
+/* ── sheet footer: theme toggle, then the two tickets ── */
+
+.site-mobile-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: clamp(1.3rem, 5vw, 1.75rem);
+    border-top: 1px solid var(--color-border);
+}
+
+.site-mobile-foot-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* the sheet's toggle gets a full 44px target (the strip's stays 2.4rem) */
+.site-mobile-foot .theme-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.site-mobile-foot-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.site-mobile-foot-actions .btn {
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+/* One quick authored moment: label, index rows, then the footer rise in.
+   --i is set inline per row; reduced motion drops the animation entirely
+   (the global 0.01ms rule would keep the delays — this removes them). */
+.site-mobile.is-open .site-mobile-anim {
+    animation: site-menu-item-in 0.38s var(--ease) both;
+    animation-delay: calc(60ms + var(--i, 0) * 45ms);
 }
 
 @keyframes site-menu-item-in {
     from {
         opacity: 0;
-        transform: translateY(4px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -673,472 +833,51 @@ li {
     }
 }
 
-.site-mobile-link {
-    position: relative;
-    padding: 0.85rem 0.9rem;
-    font-size: 1.02rem;
-    font-weight: 600;
-    color: var(--color-ink);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition:
-        background 0.2s var(--ease),
-        color 0.2s var(--ease),
-        padding-left 0.2s var(--ease);
+@media (prefers-reduced-motion: reduce) {
+    .site-mobile.is-open .site-mobile-anim {
+        animation: none;
+    }
 }
 
-.site-mobile-link:hover,
-.site-mobile-link:focus-visible {
-    background: var(--color-surface-tint);
-    color: var(--color-green-deep);
-    padding-left: 1.1rem;
-}
-
-.site-mobile-link svg {
-    width: 1.1rem;
-    height: 1.1rem;
-    color: var(--color-tangerine-deep);
-}
-
-.site-mobile .btn {
-    margin-top: 0.4rem;
-    width: 100%;
-    justify-content: center;
-    border-radius: 999px;
+/* Scroll lock while the sheet is open — released with the same class.
+   The lock belongs on <body>, never on <html>: <html> is the sticky
+   strip's scrollport, so changing its overflow mid-scroll promotes the
+   strip out of view — navTop goes negative, the sheet renders off-screen
+   behind a locked page, and the close button is unreachable. body's
+   overflow propagates to the viewport whenever the root's is visible, so
+   this locks the page while the strip stays sticky and the sheet lands
+   flush (wheel/touch are swallowed in SiteNav so Lenis can't re-scroll). */
+body.is-nav-lock {
+    overflow: hidden;
 }
 
 @media (min-width: 900px) {
-    .site-links {
-        display: flex;
-    }
-
-    .site-nav-cta {
-        display: inline-flex;
-    }
-
     .site-menu-btn {
         display: none;
     }
-}
 
-/* ────────────────────────────── hero ────────────────────────────── */
-
-/*
- * Signal Bloom — two soft luminous orbs drift on independent Lissajous
- * paths across the tangerine field. The orbs are larger than the viewport,
- * blurred heavily, and move slowly (25 s / 38 s) so the pattern never
- * repeats identically. The dot grid and grain sit on top as texture.
- *
- * prefers-reduced-motion: all animation disabled, static gradient fallback.
- */
-
-.hero {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    /* deep tangerine base — the orbs paint light on top */
-    background:
-        radial-gradient(120% 100% at 50% 0%, var(--color-tangerine-field) 0%, var(--color-tangerine-deep) 100%);
-    color: var(--color-ink-on-tangerine);
-}
-
-/* dot grid — the ledger/signal field texture, sits above the orbs */
-.hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background-image: radial-gradient(color-mix(in oklab, var(--color-ink-on-tangerine) 16%, transparent) 1px, transparent 1.5px);
-    background-size: 26px 26px;
-    opacity: 0.5;
-    pointer-events: none;
-    animation: dot-breathe 8s ease-in-out infinite;
-}
-
-/* film grain — topmost texture layer */
-.hero::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 140px 140px;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    pointer-events: none;
-}
-
-/* ── Signal Bloom orbs ─────────────────────────────────────────── */
-
-.hero-bloom {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-/* warm orb — the primary light source */
-.hero-bloom::before {
-    content: '';
-    position: absolute;
-    width: 60vw;
-    height: 60vw;
-    top: -10vw;
-    left: -8vw;
-    border-radius: 50%;
-    background: radial-gradient(circle, #f68b4a 0%, var(--color-tangerine-field) 40%, transparent 70%);
-    filter: blur(60px);
-    opacity: 0.8;
-    will-change: transform;
-    animation: bloom-drift-1 25s ease-in-out infinite;
-}
-
-/* deep orb — the secondary shadow source */
-.hero-bloom::after {
-    content: '';
-    position: absolute;
-    width: 50vw;
-    height: 50vw;
-    bottom: -15vw;
-    right: -10vw;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--color-tangerine-field) 0%, var(--color-tangerine-deep) 45%, transparent 70%);
-    filter: blur(70px);
-    opacity: 0.7;
-    will-change: transform;
-    animation: bloom-drift-2 38s ease-in-out infinite;
-}
-
-/* ── Bloom keyframes ───────────────────────────────────────────── */
-
-@keyframes bloom-drift-1 {
-    0%   { transform: translate(0, 0) }
-    20%  { transform: translate(12vw, 10vh) }
-    40%  { transform: translate(-4vw, 18vh) }
-    60%  { transform: translate(8vw, -4vh) }
-    80%  { transform: translate(-6vw, 6vh) }
-    100% { transform: translate(0, 0) }
-}
-
-@keyframes bloom-drift-2 {
-    0%   { transform: translate(0, 0) }
-    25%  { transform: translate(-10vw, -8vh) }
-    50%  { transform: translate(6vw, 12vh) }
-    75%  { transform: translate(-8vw, -4vh) }
-    100% { transform: translate(0, 0) }
-}
-
-@keyframes dot-breathe {
-    0%, 100% { opacity: 0.45 }
-    50%      { opacity: 0.55 }
-}
-
-/* respect reduced-motion preference */
-@media (prefers-reduced-motion: reduce) {
-    .hero-bloom::before,
-    .hero-bloom::after {
-        animation: none;
-    }
-    .hero::before {
-        animation: none;
-    }
-}
-
-.hero-inner {
-    display: grid;
-    gap: 3rem;
-    align-items: center;
-    padding-block: clamp(5.5rem, 12vh, 8rem) clamp(3.5rem, 8vh, 5.5rem);
-}
-
-.hero-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    margin-bottom: 1.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-ink-on-tangerine-muted);
-}
-
-.hero-status-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--color-saffron);
-    box-shadow:
-        0 0 0 2px rgb(251 245 234 / 0.9),
-        0 0 0 5px color-mix(in oklab, var(--color-saffron) 32%, transparent);
-}
-
-.hero-name {
-    display: flex;
-    flex-direction: column;
-    font-family: var(--font-display);
-    color: var(--color-ink-on-tangerine);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.4rem;
-}
-
-.hero-first,
-.hero-last {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(2.75rem, 6vw, 4.35rem);
-    font-weight: 700;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-}
-
-.hero-headline {
-    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
-    font-weight: 500;
-    line-height: 1.45;
-    color: var(--color-ink-on-tangerine);
-    max-width: 40ch;
-    margin-bottom: 2rem;
-}
-
-.hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-/* polaroid portrait — white instant-print card with a Leica-style brand dot */
-.hero-photo {
-    position: relative;
-    isolation: isolate;
-    justify-self: center;
-    width: min(64vw, 19rem);
-    margin: 0 0 1.5rem;
-}
-
-/* saffron halo behind the print — a second warm light source off the field */
-.hero-photo::before {
-    content: '';
-    position: absolute;
-    inset: -1.6rem;
-    z-index: -1;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--color-saffron) 42%, transparent), transparent 72%);
-    filter: blur(2px);
-    pointer-events: none;
-}
-
-.hero-polaroid {
-    position: relative;
-    background: var(--color-surface);
-    padding: 0.7rem 0.7rem 1.05rem;
-    border: 1px solid color-mix(in oklab, var(--color-ink) 16%, transparent);
-    border-radius: 8px;
-    box-shadow: 0 34px 60px -30px rgb(0 0 0 / 0.55);
-    transform: rotate(-1.5deg);
-    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
-}
-
-.hero-photo:hover .hero-polaroid {
-    transform: rotate(0deg) translateY(-4px);
-    box-shadow: 0 38px 64px -28px rgb(0 0 0 / 0.6);
-}
-
-.hero-polaroid-photo {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    border-radius: 4px;
-    overflow: hidden;
-    background: var(--color-surface-tint);
-}
-
-.hero-polaroid-photo::after {
-    /* faint Leica-style watermark rule across the bottom of the print */
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2.4rem;
-    background: linear-gradient(to top, rgb(20 15 8 / 0.42), transparent);
-    pointer-events: none;
-}
-
-.hero-photo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.hero-polaroid-foot {
-    margin-top: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    text-align: center;
-}
-
-.hero-polaroid-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--color-ink-muted);
-}
-
-.hero-polaroid-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: #d9231f;
-    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-surface) 40%, transparent);
-}
-
-.hero-polaroid-name {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-ink);
-}
-
-.hero-polaroid-role {
-    font-size: 0.85rem;
-    color: var(--color-ink-muted);
-}
-
-.hero-scroll {
-    position: absolute;
-    left: 50%;
-    bottom: 1.3rem;
-    transform: translateX(-50%);
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-ink-on-tangerine-muted);
-}
-
-.hero-scroll svg {
-    width: 1rem;
-    height: 1rem;
-    animation: hero-scroll-bob 2.2s var(--ease) infinite;
-}
-
-@keyframes hero-scroll-bob {
-    0%,
-    100% {
-        transform: translateY(0);
-        opacity: 0.7;
-    }
-    50% {
-        transform: translateY(4px);
-        opacity: 1;
-    }
-}
-
-@media (min-width: 900px) {
-    .hero-inner {
-        grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
-        gap: 4rem;
+    .site-nav-group--end .theme-toggle {
+        display: inline-flex;
     }
 
-    .hero-photo {
-        width: min(26vw, 21rem);
+    /* the sheet is mobile-only — a resize past the breakpoint hides it
+       (JS closes it too, so the scroll lock never outlives the menu) */
+    .site-mobile,
+    .site-mobile.is-open {
+        display: none;
     }
 }
 
 /* ──────────────────────────── sections ──────────────────────────── */
 
-.section {
-    padding-block: clamp(4.5rem, 9vw, 7rem);
-    scroll-margin-top: 4rem;
-}
-
-.section-white {
-    background: var(--color-surface);
-}
-
-.section-tint {
-    background: var(--color-surface-tint);
-}
-
-.section-head {
-    margin-bottom: clamp(2.75rem, 5.5vw, 4rem);
-    position: relative;
-}
-
-/* the signal tick — a green square with a saffron corner */
+/* the folio floret — a four-point engraved star */
 .section-tick {
     display: inline-block;
-    width: 0.85rem;
-    height: 0.85rem;
-    border-radius: 2px;
+    width: 0.95rem;
+    height: 0.95rem;
     background: var(--color-green);
-    box-shadow: 0.3rem 0.3rem 0 -0.15rem var(--color-saffron);
+    clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
     margin-bottom: 1.15rem;
-}
-
-.section-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.85rem, 3.6vw, 2.7rem);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.015em;
-    color: var(--color-ink);
-}
-
-.section-intro {
-    margin-top: 1rem;
-    max-width: 46rem;
-    font-size: 1.05rem;
-    color: var(--color-ink-body);
-}
-
-/* ────────────────────────────── about ───────────────────────────── */
-
-.about-grid {
-    display: grid;
-    gap: 3.5rem;
-}
-
-.about-body {
-    max-width: 44rem;
-    font-size: 1.05rem;
-}
-
-.about-body p + p {
-    margin-top: 1.1rem;
-}
-
-.about-body strong {
-    color: var(--color-ink);
-    font-weight: 600;
-}
-
-.about-body a {
-    color: var(--color-tangerine-deep);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, var(--color-tangerine) 45%, transparent);
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-    transition: text-decoration-color 0.2s var(--ease);
-}
-
-.about-body a:hover {
-    text-decoration-color: var(--color-tangerine);
 }
 
 /* stats as a ruled ledger, not hero-metric cards */
@@ -1172,272 +911,15 @@ li {
     line-height: 1.4;
 }
 
-@media (min-width: 1024px) {
-    .about-grid {
-        grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-        align-items: start;
-    }
-}
-
-/* ──────────────────────────── experience ────────────────────────── */
-
-.exp-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.exp-row {
-    position: relative;
-    display: grid;
-    gap: 0.4rem 2.5rem;
-    padding: 2rem 0.15rem 2.25rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.exp-row::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-tangerine);
-    transform: scaleX(var(--line, 1));
-    transform-origin: left;
-}
-
-.exp-row:first-child {
-    border-top: 1px solid var(--color-border);
-}
-
-.exp-period {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--color-tangerine-deep);
-    font-variant-numeric: tabular-nums;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.exp-role {
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 2.4vw, 1.55rem);
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--color-ink);
-}
-
-.exp-org {
-    margin-top: 0.35rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--color-ink-body);
-}
-
-.exp-summary {
-    margin-top: 0.85rem;
-    color: var(--color-ink-body);
-    max-width: 48rem;
-}
-
-.exp-points {
-    margin-top: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-    max-width: 48rem;
-}
-
-.exp-points li {
-    position: relative;
-    padding-left: 1.3rem;
-    color: var(--color-ink-body);
-}
-
-.exp-points li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.66em;
-    width: 0.45rem;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--color-tangerine);
-}
-
-.exp-points strong {
-    color: var(--color-ink);
-    font-weight: 600;
-}
-
-@media (min-width: 720px) {
-    .exp-row {
-        grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
-    }
-
-    .exp-period {
-        padding-top: 0.35rem;
-    }
-}
-
-/* ─────────────────────────── tech stack ────────────────────────── */
-
-.stack-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.stack-row {
-    position: relative;
-    display: grid;
-    gap: 0.85rem 2.5rem;
-    padding: 1.25rem 0.15rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.stack-row:first-child {
-    border-top: 1px solid var(--color-border);
-}
-
-.stack-row::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-saffron);
-    transform: scaleX(var(--line, 1));
-    transform-origin: left;
-}
-
-.stack-label {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-ink-muted);
-    padding-top: 0.15rem;
-}
-
-.stack-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-@media (min-width: 720px) {
-    .stack-row {
-        grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
-        align-items: baseline;
-    }
-}
-
 /* ──────────────────────────── projects ──────────────────────────── */
-
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1.25rem;
-}
-
-.project-plate {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding: 1.7rem 1.7rem 1.55rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    transition:
-        transform 0.25s var(--ease),
-        box-shadow 0.25s var(--ease),
-        border-color 0.25s var(--ease);
-}
-
-.project-screenshot {
-    margin: -1.7rem -1.7rem 0;
-    overflow: hidden;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.project-screenshot img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    transition: transform 0.4s var(--ease);
-}
-
-.project-plate:hover .project-screenshot img {
-    transform: scale(1.03);
-}
-
-/* impeccable-disable-next-line side-tab -- DESIGN.md requires the 3px green→saffron line across every project plate */
-.project-plate::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-green) 0 55%, var(--color-saffron) 55% 100%);
-    transform: scaleX(var(--line, 1));
-    transform-origin: left;
-}
-
-.project-plate:hover {
-    transform: translateY(-3px);
-    border-color: var(--color-border-strong);
-    box-shadow: var(--shadow-md);
-}
-
-.project-plate:hover::after {
-    --line: 1;
-}
-
-.project-title {
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--color-ink);
-    line-height: 1.3;
-}
-
-.project-title a {
-    transition: color 0.2s var(--ease);
-}
-
-.project-title a:hover {
-    color: var(--color-green-deep);
-}
-
-.project-desc {
-    color: var(--color-ink-body);
-    flex-grow: 1;
-}
-
-.project-tech {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-}
 
 .tag-chip {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-sm);
-    background: var(--color-code-bg);
+    border-radius: 2px;
+    background: var(--color-surface-tint);
     border: 1px solid var(--color-border);
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -1449,658 +931,319 @@ li {
     flex-shrink: 0;
 }
 
-.project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.1rem;
-    margin-top: 0.15rem;
-}
+/* ───────────────────────────── footer ───────────────────────────── */
 
-.project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-tangerine-deep);
-    transition: color 0.2s var(--ease);
-}
-
-.project-link svg {
-    width: 0.95em;
-    height: 0.95em;
-    transition: transform 0.2s var(--ease);
-}
-
-.project-link:hover {
-    color: var(--color-green-deep);
-}
-
-.project-link:hover svg {
-    transform: translate(2px, -2px);
-}
-
-@media (min-width: 768px) {
-    .project-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-/* ────────────────────────── blog preview ────────────────────────── */
-
-.post-rows {
-    display: flex;
-    flex-direction: column;
-    max-width: 56rem;
-}
-
-.post-row {
-    position: relative;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.post-row::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-green);
-    transform: scaleX(var(--line, 1));
-    transform-origin: left;
-}
-
-.post-row:first-child {
-    border-top: 1px solid var(--color-border);
-}
-
-.post-row-link {
-    display: block;
-    padding: 1.5rem 0.5rem 1.6rem;
-    transition:
-        background-color 0.2s var(--ease),
-        padding 0.2s var(--ease);
-    border-radius: var(--radius-sm);
-}
-
-.post-row-link:hover {
-    background: var(--color-surface);
-    padding-inline: 1rem;
-}
-
-.post-row-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem 0.9rem;
-    margin-bottom: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    color: var(--color-tangerine-deep);
-    font-variant-numeric: tabular-nums;
-}
-
-.post-row-title {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--color-ink);
-    line-height: 1.3;
-    transition: color 0.2s var(--ease);
-}
-
-.post-row-link:hover .post-row-title {
-    color: var(--color-green-deep);
-}
-
-.post-row-excerpt {
-    margin-top: 0.4rem;
-    color: var(--color-ink-body);
-    max-width: 44rem;
-}
-
-.section-more {
-    margin-top: 2.25rem;
-}
-
-/* ────────────────────────── pub / cert rows ─────────────────────── */
-
-.record-list {
-    display: flex;
-    flex-direction: column;
-    max-width: 56rem;
-}
-
-.record-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem 1.5rem;
-    padding: 1.4rem 0.5rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.record-brand {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-sm);
+/* The colophon: cream ground, double hairline at the head, engraved type. */
+.site-footer {
     background: var(--color-surface-tint);
-    border: 1px solid var(--color-border);
-    display: grid;
-    place-items: center;
-    align-self: start;
-    color: var(--color-ink-muted);
-}
-
-.record-brand svg {
-    width: 1.15rem;
-    height: 1.15rem;
-}
-
-.record-row::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--color-saffron);
-    transform: scaleX(var(--line, 1));
-    transform-origin: left;
-}
-
-.record-row:first-child {
-    border-top: 1px solid var(--color-border);
-}
-
-.record-title {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-ink);
-    line-height: 1.4;
-}
-
-.record-title a {
-    transition: color 0.2s var(--ease);
-}
-
-.record-title a:hover {
-    color: var(--color-green-deep);
-}
-
-.record-sub {
-    font-size: 0.92rem;
     color: var(--color-ink-body);
-}
-
-.record-sub .dot {
-    margin-inline: 0.35rem;
-}
-
-.record-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.4rem 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-    color: var(--color-ink-muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.record-meta .dot {
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: var(--color-border-strong);
-}
-
-.record-meta .doi {
-    color: var(--color-tangerine-deep);
-}
-
-.record-verify {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-tangerine-deep);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-.record-verify:hover {
-    color: var(--color-green-deep);
-}
-
-.record-verify svg {
-    width: 0.9em;
-    height: 0.9em;
-}
-
-@media (min-width: 640px) {
-    .record-row {
-        grid-template-columns: auto minmax(0, 1fr) auto;
-        align-items: start;
-    }
-
-    .record-brand {
-        align-self: center;
-    }
-
-    .record-meta {
-        justify-self: end;
-        text-align: right;
-    }
-}
-
-/* ────────────────────────── carousel ────────────────────────── */
-
-.carousel-wrap {
+    border-top: 1px solid var(--color-border);
     position: relative;
 }
 
-.carousel-track {
-    display: flex;
-    gap: clamp(1rem, 2.5vw, 1.5rem);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 0.5rem;
-}
-
-.carousel-track::-webkit-scrollbar {
-    display: none;
-}
-
-.carousel-card {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
+/* Round-2 amendment 2026-09-24: the colophon becomes a full-screen
+   closing plate — vertically centered, display-scale name, floret rule. */
+.site-footer--screen {
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.25s var(--ease);
 }
 
-.carousel-card:hover {
-    box-shadow: var(--shadow-sm);
+.site-footer--screen > .site-shell {
+    flex: 1;
+    display: flex;
 }
 
-.carousel-img {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    background: var(--color-surface-tint);
-}
-
-.carousel-img img {
-    display: block;
+.site-footer--screen .colophon {
+    flex: 1;
+    align-content: center;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s var(--ease);
+    padding-block: clamp(4.5rem, 12vh, 8rem) 2rem;
 }
 
-.carousel-card:hover .carousel-img img {
-    transform: scale(1.04);
+.site-footer--screen .colophon-name {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
 }
 
-.carousel-caption {
-    padding: 1rem 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.carousel-caption-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--color-ink);
-}
-
-.carousel-caption-sub {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    color: var(--color-ink-muted);
-    line-height: 1.5;
-}
-
-.carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.carousel-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    border: none;
-    background: var(--color-border);
-    cursor: pointer;
-    transition: background 0.25s var(--ease);
-    padding: 0;
-}
-
-.carousel-dot.active {
-    background: var(--color-signal-green);
-}
-
-/* ───────────────────────────── contact ──────────────────────────── */
-
-.contact {
-    background: var(--color-tangerine-field);
-    color: var(--color-ink-on-tangerine);
-    padding-block: clamp(4.5rem, 9vw, 7rem);
-    scroll-margin-top: 4rem;
-}
-
-/* ink (#2e1608) focus ring — the global green ring only reaches ~1.9:1 on this field */
-.contact :focus-visible {
-    outline-color: var(--color-ink-on-tangerine);
-}
-
-.contact-inner {
-    display: grid;
-    gap: 3rem;
-}
-
-.contact-head .section-tick {
-    background: var(--color-ink-on-tangerine);
-    box-shadow: 0.3rem 0.3rem 0 -0.15rem color-mix(in oklab, var(--color-ink-on-tangerine) 55%, transparent);
-}
-
-.contact-head .section-title {
-    color: var(--color-ink-on-tangerine);
-}
-
-/* email hero block — top spacing is intentional (disclosed fix) */
-.contact-hero {
-    margin-top: 1.25rem;
-}
-
-.contact-email {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-size: clamp(1.35rem, 3.4vw, 2rem);
-    font-weight: 700;
-    line-height: 1.25;
-    overflow-wrap: anywhere;
-    color: var(--color-ink-on-tangerine);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, var(--color-ink-on-tangerine) 50%, transparent);
-    text-underline-offset: 4px;
-    text-decoration-thickness: 2px;
-    transition: color 0.2s var(--ease), text-decoration-color 0.2s var(--ease);
-}
-
-.contact-email:hover {
-    text-decoration-color: var(--color-ink-on-tangerine);
-}
-
-.contact-lede {
-    margin-top: 0.75rem;
-    max-width: 40rem;
-    font-size: 1rem;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 92%, transparent);
-}
-
-/* channel readout — instrument-panel mono separates it from the lede body voice */
-.contact-telegram {
-    margin-top: 0.45rem;
-    font-family: var(--font-mono);
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 92%, transparent);
-}
-
-/* the handle underlines like the email hero (50% → full ink on hover) */
-.contact-telegram-handle {
-    position: relative;
-    /* stacking context: keeps the marker stroke under the text, not under the band */
-    z-index: 0;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, var(--color-ink-on-tangerine) 50%, transparent);
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1.5px;
-    transition: text-decoration-color 0.2s var(--ease);
-}
-
-.contact-telegram-handle:hover {
-    text-decoration-color: var(--color-ink-on-tangerine);
-}
-
-/* saffron highlighter stroke — chisel-square ends, a hair off-axis like a
-   hand-drawn mark. Content is never hidden: the stroke is decoration only.
-   Static (visible) by default: touch and prefers-reduced-motion get this.
-   Hover-capable, motion-OK devices re-gate it to a left→right wipe below. */
-.contact-telegram-handle::before {
+.site-footer::before {
     content: '';
     position: absolute;
-    z-index: -1;
-    inset: 0.1em -0.28em 0.05em;
-    background: var(--color-saffron);
-    transform: rotate(-0.5deg);
-    clip-path: inset(0 0 0 0);
+    top: 4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-border);
     pointer-events: none;
 }
 
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .contact-telegram-handle::before {
-        clip-path: inset(0 100% 0 0);
-        transition: clip-path 0.36s var(--ease);
-    }
-
-    .contact-telegram-handle:hover::before,
-    .contact-telegram-handle:focus-visible::before {
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-.contact-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.contact-side-title {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    /* h3 element: neutralize heading defaults to match the former <p> look */
-    font-weight: 400;
-    line-height: 1.7;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: color-mix(in oklab, var(--color-ink-on-tangerine) 95%, transparent);
-    margin-bottom: 0.7rem;
-}
-
-.contact-social-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.contact-social-list a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.95rem 0.15rem;
-    border-bottom: 1px solid color-mix(in oklab, var(--color-ink-on-tangerine) 30%, transparent);
-    font-weight: 600;
-    color: var(--color-ink-on-tangerine);
-    transition:
-        color 0.2s var(--ease),
-        padding 0.2s var(--ease);
-}
-
-.contact-social-list a:first-child {
-    border-top: 1px solid color-mix(in oklab, var(--color-ink-on-tangerine) 30%, transparent);
-}
-
-.contact-social-list a:hover {
-    padding-inline: 0.25rem;
-}
-
-.contact-social-list .social-icon {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.contact-social-list .social-icon svg {
-    width: 1.05rem;
-    height: 1.05rem;
-}
-
-.contact-social-list .social-arrow {
-    opacity: 0.7;
-    width: 0.95rem;
-    height: 0.95rem;
-    flex-shrink: 0;
-}
-
-@media (min-width: 860px) {
-    .contact-inner {
-        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
-        gap: 3.5rem;
-        align-items: start;
-    }
-}
-
-/* ───────────────────────────── footer ───────────────────────────── */
-
-.site-footer {
-    background: #1f1910;
-    color: #d9cfba;
-}
-
-.site-footer-inner {
+.colophon {
     display: grid;
     gap: 2.5rem;
     padding-block: clamp(2.75rem, 6vw, 4.25rem) 2rem;
 }
 
-.footer-name {
+.colophon-name {
     font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: #f7f0e0;
+    font-style: italic;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
     line-height: 1.1;
 }
 
-.footer-role {
-    margin-top: 0.35rem;
-    font-size: 0.95rem;
+.colophon-role {
+    margin-top: 0.45rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-saffron);
+    letter-spacing: 0.04em;
+    color: var(--color-green);
 }
 
-.footer-note {
+.colophon-note {
     margin-top: 0.7rem;
-    max-width: 30rem;
-    font-size: 0.9rem;
-    color: #b7ab92;
+    max-width: min(30rem, 72ch);
+    font-size: 0.95rem;
+    color: var(--color-ink-muted);
 }
 
 .footer-quote {
     margin-top: 1.6rem;
-    max-width: 30rem;
+    max-width: min(30rem, 72ch);
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--color-sage);
 }
 
 .footer-quote-text {
-    font-size: 0.98rem;
+    font-size: 1rem;
+    font-style: italic;
     line-height: 1.5;
-    color: #d9cfba;
+    color: var(--color-ink-body);
 }
 
 .footer-quote-by {
     display: block;
     margin-top: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-saffron);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
 }
 
-.footer-cols {
+.colophon-cols {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
 }
 
-.footer-col-title {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #8d826c;
-    margin-bottom: 0.9rem;
+/* floret rule closing the imprint column */
+.colophon-floret {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.8rem;
+    color: var(--color-sage);
 }
 
-.footer-cols ul {
+.colophon-floret .floret {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.colophon-floret-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+}
+
+.footer-col-title {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.colophon-cols ul {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.footer-cols a {
-    font-weight: 500;
-    color: #e6ddc9;
+.colophon-cols a {
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    color: var(--color-ink-body);
     transition: color 0.2s var(--ease);
 }
 
-.footer-cols a:hover {
-    color: var(--color-saffron);
+.colophon-cols a:hover {
+    color: var(--color-lilac-deep);
 }
 
-.footer-bottom {
-    grid-column: 1 / -1;
+.colophon-rule {
+    height: 1px;
+    background: var(--color-border-strong);
+}
+
+.colophon-bottom {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgb(217 207 186 / 0.18);
-    font-size: 0.85rem;
-    color: #a99d84;
+}
+
+.colophon-set {
+    margin: 0;
+    max-width: min(36rem, 72ch);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
 }
 
 .footer-bottom-links {
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 0 1.25rem;
+    font-size: inherit;
+    letter-spacing: inherit;
+    color: inherit;
 }
 
 .footer-bottom-links a {
+    font-family: var(--font-sans);
     font-weight: 600;
-    color: #d9cfba;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--color-ink-body);
 }
 
 .footer-bottom-links a:hover {
-    color: var(--color-saffron);
+    color: var(--color-lilac-deep);
 }
 
 @media (min-width: 720px) {
-    .site-footer-inner {
+    .colophon {
         grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+        grid-template-areas:
+            'imprint cols'
+            'rule rule'
+            'bottom bottom';
+        column-gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    .colophon-imprint {
+        grid-area: imprint;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .colophon-floret {
+        margin-top: auto;
+        padding-top: 1.8rem;
+    }
+
+    .colophon-cols {
+        grid-area: cols;
+    }
+
+    .colophon-rule {
+        grid-area: rule;
+    }
+
+    .colophon-bottom {
+        grid-area: bottom;
+    }
+}
+
+/* Botanical spore field: fixed under the site frame, content stacks above */
+.spore-field {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.site-frame {
+    position: relative;
+    z-index: 1;
+}
+
+/* Route sweep (Leafing overdrive): a hairline drawn under the running
+   head after every soft navigation, then faded. Rests invisible; motion.ts
+   adds .is-sweeping on astro:after-swap only, so first paint stays still
+   and reduced-motion never sweeps. Top is measured from the live nav. */
+.route-sweep {
+    position: fixed;
+    top: calc(var(--site-nav-h, 4rem) + 3px);
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--color-border-strong) 8%,
+        var(--color-lilac) 50%,
+        var(--color-border-strong) 92%,
+        transparent
+    );
+}
+
+.route-sweep.is-sweeping {
+    animation: route-sweep 0.72s var(--ease) 0.16s both;
+}
+
+@keyframes route-sweep {
+    0% {
+        opacity: 1;
+        transform: scaleX(0);
+    }
+    46% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    72% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scaleX(1);
+    }
+}
+
+/* View transitions (Leafing): shared-element morphs run — instant under
+   prefers-reduced-motion instead of animated. */
+@media (prefers-reduced-motion: reduce) {
+    .route-sweep {
+        display: none;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation-duration: 1ms !important;
+        animation-delay: 0s !important;
     }
 }
 
@@ -2121,15 +1264,8 @@ li {
 
 .page-lede {
     margin-top: 0.85rem;
-    max-width: 42rem;
+    max-width: min(42rem, 72ch);
     color: var(--color-ink-body);
-}
-
-.reading-column {
-    width: 100%;
-    max-width: 680px;
-    margin-inline: auto;
-    padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 
 .content-page {
@@ -2160,94 +1296,6 @@ li {
 
 .post-back:hover svg {
     transform: translateX(-3px);
-}
-
-.post-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 3.8vw, 2.6rem);
-    font-weight: 700;
-    line-height: 1.18;
-    letter-spacing: -0.015em;
-    color: var(--color-ink);
-    text-wrap: balance;
-}
-
-.post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 1rem;
-    margin-bottom: 1.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--color-tangerine-deep);
-    font-variant-numeric: tabular-nums;
-}
-
-.post-meta .dot {
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: var(--color-border-strong);
-}
-
-.post-nav {
-    margin-top: 3rem;
-    display: grid;
-    gap: 0.75rem;
-    padding-bottom: clamp(3rem, 6vw, 4.5rem);
-}
-
-.post-nav-link {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    padding: 1.2rem 1.35rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    transition:
-        border-color 0.2s var(--ease),
-        box-shadow 0.2s var(--ease),
-        transform 0.2s var(--ease);
-}
-
-.post-nav-link:hover {
-    border-color: var(--color-green);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-}
-
-.post-nav-label {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-tangerine-deep);
-}
-
-.post-nav-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    color: var(--color-ink);
-    line-height: 1.4;
-}
-
-.post-tags {
-    margin-top: 2.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-}
-
-.post-nav-link-empty {
-    visibility: hidden;
-}
-
-@media (min-width: 560px) {
-    .post-nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
 }
 
 /* ───────────────────────────── prose ────────────────────────────── */
@@ -2438,79 +1486,6 @@ li {
     color: var(--color-error);
 }
 
-/* Code block chrome (script-enhanced) */
-.code-block {
-    margin: 1.6em 0;
-}
-
-.code-block .code-block-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.5rem 0.9rem;
-    background: var(--color-code-bg);
-    border: 1px solid var(--color-border);
-    border-bottom: 0;
-    border-radius: var(--radius) var(--radius) 0 0;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-ink-muted);
-}
-
-.code-block .code-block-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-width: 0;
-}
-
-.code-block .lang {
-    color: var(--color-tangerine-deep);
-    font-weight: 600;
-}
-
-.code-block .file {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.code-copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: 0.3rem;
-    background: var(--color-surface);
-    font: inherit;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--color-ink-body);
-    cursor: pointer;
-    transition:
-        border-color 0.2s var(--ease),
-        color 0.2s var(--ease);
-}
-
-.code-copy:hover {
-    border-color: var(--color-green);
-    color: var(--color-green-deep);
-}
-
-.code-copy[data-copied='1'] {
-    border-color: var(--color-success);
-    color: var(--color-green-deep);
-}
-
-.code-block .astro-code,
-.prose .code-block .astro-code {
-    margin: 0;
-    border-radius: 0 0 var(--radius) var(--radius);
-    border-top: 0;
-}
-
 /* ───────────────────────── reduced motion ───────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2524,9 +1499,5 @@ li {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-    }
-
-    .hero-scroll svg {
-        animation: none;
     }
 }

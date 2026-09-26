@@ -1,92 +1,404 @@
 ---
-import About from '../components/About.astro';
-import BlogPreview from '../components/BlogPreview.astro';
-import Carousel from '../components/Carousel.astro';
-import Certifications from '../components/Certifications.astro';
-import ContactPanel from '../components/ContactPanel.astro';
-import ExperienceTimeline from '../components/ExperienceTimeline.astro';
-import Hero from '../components/Hero.astro';
-import Projects from '../components/Projects.astro';
-import Publications from '../components/Publications.astro';
-import TechStack from '../components/TechStack.astro';
+import { getCollection } from 'astro:content';
+import ChapterRail from '../components/ChapterRail.astro';
+import MarqueeBand from '../components/MarqueeBand.astro';
+import PlateFigure from '../components/PlateFigure.astro';
+import ScreenshotMarquee from '../components/ScreenshotMarquee.astro';
+import Icon from '../components/Icon.astro';
 import siteConfig from '../data/site-config';
+import { aboutMarkdown } from '../data/about';
+import { certificationsByDate } from '../data/certifications';
+import { HERO_PLATE_IMAGE, PLATE_IMAGES } from '../data/folio-plates';
+import { educationTimeline, workTimeline } from '../data/experience';
+import { stats } from '../data/stats';
+import { FOLIO_WORK_IDS, PLATE_LABELS, PROJECT_SHOTS, plateNumberOf } from '../data/works';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { marked } from 'marked';
 
 const { title, description } = siteConfig;
+
+const chapters = [
+    { num: '001', label: 'Intro', href: '#top' },
+    { num: '002', label: 'About', href: '#about' },
+    { num: '003', label: 'Folio', href: '#folio' },
+    { num: '004', label: 'Experience', href: '#experience' },
+    { num: '005', label: 'Contact', href: '#contact' }
+];
+
+const marqueeItems = [
+    { text: 'Six plates on one baseline' },
+    { text: 'Selene', italic: true },
+    { text: 'FlowPoint-Next', italic: true },
+    { text: 'Flora', italic: true },
+    { text: 'EcoOffice', italic: true },
+    { text: 'EcoBin-Sorter', italic: true },
+    { text: 'HydroleVI', italic: true }
+];
+
+const contactMarquee = [
+    { text: 'Correspondence open' },
+    { text: 'IoT · DevOps · Full-stack' },
+    { text: 'Bandung, Indonesia' },
+    { text: 'IPB University' }
+];
+
+// Six folio plates, newest first
+const allProjects = await getCollection('projects');
+const folioWorks = FOLIO_WORK_IDS.map((id) => allProjects.find((p) => p.id === id)).filter(
+    (p): p is NonNullable<typeof p> => Boolean(p)
+);
+
+const shotItems = folioWorks.map((work) => {
+    const shot = PROJECT_SHOTS[work.id as keyof typeof PROJECT_SHOTS];
+    return {
+        number: plateNumberOf(work.id),
+        name: work.data.title,
+        src: shot?.src,
+        width: shot?.width,
+        height: shot?.height
+    };
+});
+
+const primaryEmail = 'contact@dankehidayat.my.id';
+const resumeHref = '/Resume_Danke_Hidayat.pdf';
+const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('rss'));
+const iconFor = (href: string) =>
+    href.includes('github')
+        ? 'github'
+        : href.includes('linkedin')
+          ? 'linkedin'
+          : href.includes('t.me')
+            ? 'telegram'
+            : 'bluesky';
+
+const aboutHtml = marked.parse(aboutMarkdown) as string;
+
+const education = educationTimeline[0];
 ---
 
 <BaseLayout title={title} description={description}>
-    <Hero />
-    <About />
-    <ExperienceTimeline />
-    <TechStack />
-    <Projects />
-    <BlogPreview />
-    <Carousel />
-    <Publications />
-    <Certifications />
-    <ContactPanel />
+    <ChapterRail chapters={chapters} />
+
+    <!-- ═══ 001 · INTRO ═══ -->
+    <section class="folio-hero" id="top" data-chapter="top" data-hero>
+        <div class="site-shell folio-hero-inner">
+            <div class="folio-hero-copy">
+                <div class="title-plate" data-title-plate>
+                    <h1 class="title-plate-name" aria-label="Danke Hidayat">
+                        {
+                            ['DANKE', 'HIDAYAT'].map((line) => (
+                                <span class="title-line" aria-hidden="true">
+                                    {[...line].map((ch) => (
+                                        <span class="title-letter" data-title-letter>
+                                            {ch}
+                                        </span>
+                                    ))}
+                                </span>
+                            ))
+                        }
+                    </h1>
+                    <p class="title-plate-foot" aria-hidden="true">
+                        <svg class="floret" viewBox="0 0 24 24">
+                            <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none">
+                                <path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"></path>
+                            </g>
+                            <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+                        </svg>
+                    </p>
+                </div>
+
+                <p class="folio-hero-role" data-hero-item>{siteConfig.subtitle}</p>
+
+                <p class="folio-positioning" data-hero-item>
+                    I bridge <strong>hardware and software</strong> into systems that work in the
+                    real world — sensors, firmware, edge-to-cloud data, containers, and the
+                    deployments that keep them running.
+                </p>
+
+                <div class="folio-hero-actions" data-hero-item>
+                    <a href="/folio" class="btn btn-primary">View the folio</a>
+                    <a href={`mailto:${primaryEmail}`} class="btn btn-secondary">Write me</a>
+                    <a href={resumeHref} class="btn btn-resume" download>
+                        Resume
+                        <Icon name="arrow-down" aria-hidden="true" />
+                    </a>
+                </div>
+            </div>
+
+            <figure class="folio-hero-plate" data-hero-plate>
+                <PlateFigure
+                    number="001"
+                    name="Lilium martagon"
+                    label="Flora Batava · 1881"
+                    id="lilium-martagon"
+                    variant="featured"
+                    image={HERO_PLATE_IMAGE}
+                />
+            </figure>
+        </div>
+
+        <nav class="site-shell stage-strip" aria-label="Jump to a chapter" data-hero-item>
+            {
+                chapters.map((chapter) => (
+                    <a
+                        class="stage-item"
+                        href={chapter.href}
+                        {...(chapter.num === '001' ? { 'data-current': '' } : {})}
+                    >
+                        <span class="stage-num">{chapter.num}</span>
+                        <span class="stage-name">{chapter.label}</span>
+                    </a>
+                ))
+            }
+        </nav>
+    </section>
+
+    <MarqueeBand items={marqueeItems} />
+
+    <!-- ═══ 002 · ABOUT — full-viewport chapter (amendment 2026-09-24) ═══ -->
+    <section class="folio-chapter folio-chapter--viewport" id="about" data-chapter="about">
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head" data-head>
+                <h2 class="chapter-title">Where the work <em>grows from.</em></h2>
+                <p class="chapter-intro">
+                    Computer Engineering at IPB University. Now building software and
+                    infrastructure at PT. Labdha Teknika Nusantara.
+                </p>
+            </header>
+
+            <div class="story-grid">
+                <div class="story-body" data-reveal set:html={aboutHtml} />
+                <aside class="story-aside" data-drift="18">
+                    <div class="story-card" data-reveal>
+                        <p class="story-card-label">Ledger</p>
+                        <div class="stats-ledger">
+                            {
+                                stats.map((stat) => (
+                                    <div class="stat">
+                                        <span class="stat-value">{stat.value}</span>
+                                        <span class="stat-label">{stat.label}</span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    {education && (
+                        <div class="story-note" data-reveal>
+                            <p class="story-note-degree">{education.title}</p>
+                            <p class="story-note-org">{education.org}</p>
+                            <p class="story-note-meta">{education.summary}</p>
+                        </div>
+                    )}
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 003 · FOLIO — full-scroll set-piece (amendment 2026-09-24) ═══ -->
+    <section class="folio-chapter folio-chapter--works" id="folio" data-chapter="folio">
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head" data-head>
+                <h2 class="chapter-title">Six works, <em>one baseline.</em></h2>
+                <p class="chapter-intro">
+                    Dashboards, sensors, sorting bins — printed at the same size, each
+                    with its own page.
+                </p>
+            </header>
+
+            <div class="plate-grid plate-grid--strip" data-plate-group>
+                {
+                    folioWorks.map((work) => (
+                        <PlateFigure
+                            number={plateNumberOf(work.id)}
+                            name={work.data.title}
+                            label={PLATE_LABELS[work.id as keyof typeof PLATE_LABELS]}
+                            id={work.id}
+                            href={`/folio/${work.id}/`}
+                            variant="cell"
+                            image={PLATE_IMAGES[work.id]}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+
+        <ScreenshotMarquee shots={shotItems} />
+
+        <div class="site-shell folio-chapter-inner">
+            <div class="works-foot" data-reveal>
+                <p class="works-foot-note">Plates 01–06 · equal scale</p>
+                <a href="/folio" class="folio-text-link">
+                    Open the full folio
+                    <Icon name="arrow-right" aria-hidden="true" />
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 004 · EXPERIENCE ═══ -->
+    <section class="folio-chapter folio-chapter--record" id="experience" data-chapter="experience">
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head chapter-head--sticky" data-head>
+                <h2 class="chapter-title">Grown in <em>the open.</em></h2>
+                <p class="chapter-intro">
+                    Roles, most recent first. Open one for the full record.
+                </p>
+            </header>
+
+            <ol class="growth" data-growth>
+                {
+                    workTimeline.map((item, index) => (
+                        <li
+                            class:list={[
+                                'growth-node',
+                                index === 0 && 'is-current',
+                                index > 0 && 'is-past'
+                            ]}
+                            data-growth-node
+                        >
+                            <span class="growth-bud" aria-hidden="true" data-growth-bud />
+                            <div class="growth-meta">
+                                <span class="growth-period">{item.period}</span>
+                                {index === 0 && (
+                                    <span class="growth-bloom">Now blooming</span>
+                                )}
+                            </div>
+                            <div class="growth-body">
+                                <h3 class="growth-role">{item.title}</h3>
+                                <p class="growth-org">
+                                    {item.org}
+                                    <span class="growth-org-loc"> · {item.location}</span>
+                                </p>
+                                {index === 0 ? (
+                                    <div class="growth-expanded">
+                                        {item.summary && (
+                                            <p class="growth-summary">{item.summary}</p>
+                                        )}
+                                        {item.points && item.points.length > 0 && (
+                                            <ul class="growth-points">
+                                                {item.points.map((point) => (
+                                                    <li>{point}</li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <details class="growth-details">
+                                        <summary class="growth-details-summary">
+                                            <span>Open record</span>
+                                            <span class="growth-details-count">
+                                                {item.points?.length ?? 0} points
+                                            </span>
+                                        </summary>
+                                        <div class="growth-details-body">
+                                            {item.summary && (
+                                                <p class="growth-summary">{item.summary}</p>
+                                            )}
+                                            {item.points && item.points.length > 0 && (
+                                                <ul class="growth-points">
+                                                    {item.points.map((point) => (
+                                                        <li>{point}</li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </div>
+                                    </details>
+                                )}
+                            </div>
+                        </li>
+                    ))
+                }
+            </ol>
+
+            <div class="record-group" data-reveal>
+                <div class="record-group-head">
+                    <h3 class="record-group-title">Sealed credentials</h3>
+                    <span class="record-group-note">{certificationsByDate.length} pressed</span>
+                </div>
+                <ul class="seals" data-plate-group>
+                    {
+                        certificationsByDate.map((cert) => (
+                            <li class="seal" data-plate>
+                                <div class="seal-face">
+                                    <span class="seal-issuer">{cert.issuer}</span>
+                                    <span class="seal-title">{cert.title}</span>
+                                    <span class="seal-issued">{cert.issued}</span>
+                                </div>
+                                <div class="seal-foot">
+                                    {cert.url && (
+                                        <a
+                                            class="seal-verify"
+                                            href={cert.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Verify
+                                            <Icon name="external" aria-hidden="true" />
+                                        </a>
+                                    )}
+                                </div>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <MarqueeBand items={contactMarquee} />
+
+    <!-- ═══ 005 · CONTACT — quiet letterpress chapter (round 4: the lilac
+         field is retired; the chapter sits on plate cream like the rest,
+         and Telegram joins Elsewhere) ═══ -->
+    <section class="folio-chapter folio-chapter--viewport" id="contact" data-chapter="contact" data-contact>
+        <div class="site-shell folio-chapter-inner">
+            <header class="chapter-head" data-head>
+                <h2 class="chapter-title">Write to the <em>studio.</em></h2>
+                <p class="chapter-intro">
+                    Open to opportunities. I usually reply within a few days.
+                </p>
+            </header>
+
+            <div class="contact-grid">
+                <div data-reveal>
+                    <a class="contact-email" href={`mailto:${primaryEmail}`}>
+                        {primaryEmail}
+                    </a>
+                    <div class="contact-actions">
+                        <a
+                            href={`mailto:${primaryEmail}?subject=Hello%20from%20your%20site`}
+                            class="btn btn-primary"
+                        >
+                            Write me
+                        </a>
+                        <a href={resumeHref} class="btn btn-resume" download>Resume</a>
+                    </div>
+                </div>
+
+                <aside data-reveal>
+                    <h3 class="contact-side-title">Elsewhere</h3>
+                    <ul class="contact-list">
+                        {
+                            socials.map((link) => (
+                                <li>
+                                    <a href={link.href} target="_blank" rel="noopener noreferrer">
+                                        <span class="social-icon">
+                                            <Icon name={iconFor(link.href)} aria-hidden="true" />
+                                            {link.text}
+                                        </span>
+                                        <Icon name="arrow-right" class="social-arrow" aria-hidden="true" />
+                                        <span class="sr-only">(opens in new tab)</span>
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </section>
 </BaseLayout>
 
 <script>
     import '../scripts/motion.ts';
-</script>
-
-<script>
-    document.addEventListener('astro:page-load', () => {
-        const track = document.querySelector('[data-carousel-track]');
-        const dots = document.querySelectorAll('[data-carousel-dot]');
-        if (!track || !dots.length) return;
-
-        const cards = track.querySelectorAll('[data-carousel-card]');
-        let current = 0;
-        let timer: ReturnType<typeof setInterval>;
-        let autoAdvancing = false;
-
-        function goTo(index: number) {
-            autoAdvancing = true;
-            const card = cards[index] as HTMLElement | undefined;
-            if (card) {
-                const trackEl = track as HTMLElement;
-                const cardLeft = card.offsetLeft;
-                const cardWidth = card.offsetWidth;
-                const target = cardLeft - (trackEl.clientWidth - cardWidth) / 2;
-                trackEl.scrollTo({ left: target, behavior: 'smooth' });
-            }
-            dots.forEach((d, i) => d.classList.toggle('active', i === index));
-            current = index;
-            setTimeout(() => { autoAdvancing = false; }, 600);
-        }
-
-        function next() {
-            goTo((current + 1) % cards.length);
-        }
-
-        dots.forEach((dot) => {
-            dot.addEventListener('click', () => {
-                const idx = Number((dot as HTMLElement).dataset.carouselDot);
-                goTo(idx);
-                resetTimer();
-            });
-        });
-
-        function resetTimer() {
-            clearInterval(timer);
-            timer = setInterval(next, 5000);
-        }
-
-        resetTimer();
-
-        track.addEventListener('scroll', () => {
-            if (autoAdvancing) return;
-            const scrollLeft = (track as HTMLElement).scrollLeft;
-            const trackWidth = (track as HTMLElement).scrollWidth;
-            const cardWidth = trackWidth / cards.length;
-            const nearest = Math.round(scrollLeft / cardWidth);
-            if (nearest !== current && nearest >= 0 && nearest < cards.length) {
-                dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
-                current = nearest;
-            }
-        }, { passive: true });
-    });
 </script>

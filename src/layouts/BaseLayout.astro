@@ -1,11 +1,4 @@
 ---
-/**
- * THESIS: Warm Signal — a warm, saturated editorial-technical portfolio; warm paper field, leaf-green/tangerine/saffron tricolor, Bricolage display lockup.
- * OWN-WORLD: #FBF5EA paper, #1E6B4A green, #E05D1E tangerine, #E5A81C saffron; ledger rows and signal ticks, no costume.
- * STORY: Meet a precise engineer, scan the shipped systems, reach him by email.
- * FIRST VIEWPORT: Green signal field, Bricolage name lockup, polaroid portrait in a paper frame with a Leica-style watermark, two actions.
- * FORM: Warm Signal · user-pinned (no costume, colorful/warm) · light-only, no dark mode.
- */
 import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -24,24 +17,59 @@ const { ...head } = Astro.props;
     </head>
     <body class="min-h-dvh">
         <!--
-          THESIS: A reading life, catalogued. Shelf files manga, anime, light novels and books
-          as cards in a drawer; the drawer opens to what is on the desk now. Refuses the uniform cover grid.
-          OWN-WORLD: Warm Signal, fixed. #FBF5EA paper drawer, #1E6B4A/#E05D1E/#E5A81C stamps,
-          Bricolage titles, Source Sans body, JetBrains Mono shelfmarks, hairline ledger rules, monogram tiles.
-          STORY: Open the drawer, see what he is reading, browse by stamped category, pull a card for the note and links.
-          FIRST VIEWPORT: Shelf title and lead; three horizontal on-the-desk cards span below;
-          then drawer counts and label chips; catalog rows beneath.
-          FORM: Catalog card drawer — candidate 5 of 7 grounded structures, seed key 1a18a741;
-          world user-pinned; Setup extends the same ledger language.
+          THESIS: A portfolio as a botanical folio — every work a numbered specimen plate grown
+          from seed to husk; refuses the dark SaaS card grid and the résumé-timeline default.
+          OWN-WORLD: plate-cream #F6F1E6 field, hairline sepia rules, leaf-green ink, lilac bloom
+          accent (user pin retuning the folio's scarlet), engraved serif display with italic plate
+          names, small-caps stage labels, arched plate frames.
+          STORY: Visitor reads the name as the title plate, follows works as life stages, believes
+          an engineer who grows systems in the open, reaches him by email.
+          FIRST VIEWPORT: split-letter DANKE HIDAYAT title plate at full display scale over a
+          botanical spore field, positioning line, featured work as an arched plate right,
+          primary CTA, functional stage strip at fold.
+          FORM: user-pinned whole-site rebuild — saglitz.com motion intensity (pinned scrub,
+          velocity marquees, botanical particles) inside the pinned Botanical Folio world;
+          functional nav vocabulary site-wide (About/Folio/Experience/Contact), folio flavor
+          kept decorative only (plate numbers, captions, marquees); plates chapter 003 kept as
+          designed; toolbox cut (stack lives per-plate on /folio); experience/credentials/
+          contact/footer reinvented; no seed roll — user pin overrides the deal · prior seed key
+          68ad9b11 stands for the world; light-first with working dark toggle (owner decision).
+          Owner amendments 2026-09-24: works imagery = botanical plates kept as folio framing +
+          an infinite screenshot-slot marquee (marked pending — never fabricated); navbar
+          redesigned to a full-width hairline running head; theme toggle icon-only; nav brand
+          reads "Danke".
+          Round-2 amendments 2026-09-24: nav order About · Works ▾ · Danke (center) ·
+          Florilegium · Atelier with Works dropdown (Contact left the desktop nav —
+          reachable at #contact); home Works chapter = full-scroll set-piece with
+          full-bleed screenshot band; About + Contact = full-viewport chapters (Contact
+          gets a GSAP bloom + email baseline wipe); footer = full-screen animated
+          colophon; /folio gains an editorial contents table; Florilegium (was /shelf)
+          + Atelier (was /setup) redesigned at landing quality (folio hero, stats/specs
+          ledgers, arched desk covers, double-rule specimen cards) — all content from
+          real data, no fabrication. Compact-nav retraction: the pre-compact nav
+          footprint stands.
+          Round-5 (2026-09-26): Works renamed Folio everywhere (nav, footer, route
+          /folio with /works redirects; hero reads "The folio."); Leafing overdrive —
+          shared-element view transitions pair plates (plate-<id>) and covers
+          (cover-<id>) across home/folio/florilegium soft navigations, with a hairline
+          route sweep on every swap.
           FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
         -->
         <a class="skip-link" href="#main">Skip to content</a>
-        <div class="flex min-h-dvh flex-col">
+        <canvas class="spore-field" data-spores aria-hidden="true"></canvas>
+        {/* Route sweep (Leafing): a hairline that draws across under the
+            running head after every soft navigation, then fades. Only
+            animated on astro:after-swap — first paint stays still. */}
+        <div class="route-sweep" aria-hidden="true"></div>
+        <div class="flex min-h-dvh flex-col site-frame">
             <SiteNav />
             <main id="main" class="grow">
                 <slot />
             </main>
             <SiteFooter />
         </div>
+        <script>
+            import '../scripts/motion.ts';
+        </script>
     </body>
 </html>

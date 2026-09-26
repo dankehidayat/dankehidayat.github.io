@@ -1,0 +1,77 @@
+---
+/**
+ * Theme toggle — light ↔ dark for the folio, icon-only (owner amendment
+ * 2026-09-24: the old label-bearing form is rejected; this is a bare
+ * sun/moon square with an aria-label). The pre-paint resolver lives
+ * inline in BaseHead.astro; this button only flips data-theme,
+ * persists the choice, and syncs the theme-color meta.
+ */
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+    <svg
+        class="theme-toggle-icon theme-toggle-icon-sun"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+    >
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2.5v2.5M12 19v2.5M2.5 12h2.5M19 12h2.5M5.2 5.2l1.8 1.8M17 17l1.8 1.8M18.8 5.2L17 7M7 17l-1.8 1.8"></path>
+    </svg>
+    <svg
+        class="theme-toggle-icon theme-toggle-icon-moon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
+    </svg>
+</button>
+
+<script>
+    const STORAGE_KEY = 'folio-theme';
+
+    function currentTheme(): 'light' | 'dark' {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function syncLabels(next: 'light' | 'dark') {
+        const label = next === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
+        document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+            btn.setAttribute('aria-label', label);
+        });
+    }
+
+    function applyTheme(next: 'light' | 'dark', persist: boolean) {
+        document.documentElement.setAttribute('data-theme', next);
+        if (persist) {
+            try {
+                localStorage.setItem(STORAGE_KEY, next);
+            } catch {
+                /* private mode — session-only theme still applies */
+            }
+        }
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', next === 'dark' ? '#17150F' : '#F6F1E6');
+        syncLabels(next);
+    }
+
+    function bind() {
+        syncLabels(currentTheme());
+        document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+            btn.onclick = () => {
+                applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true);
+            };
+        });
+    }
+
+    bind();
+    document.addEventListener('astro:page-load', bind);
+</script>

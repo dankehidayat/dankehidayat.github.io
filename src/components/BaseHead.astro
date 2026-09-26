@@ -1,11 +1,13 @@
 ---
-import bricolageWoff2 from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
-import sourceSansWoff2 from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
+import bodoniWoff2 from '@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-wght-normal.woff2?url';
+import bodoniItalicWoff2 from '@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-wght-italic.woff2?url';
+import newsreaderWoff2 from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
 import { getImage } from 'astro:assets';
 import siteConfig from '../data/site-config';
 import type { ImageInput } from '../types';
 
 import '../styles/global.css';
+import '../styles/folio.css';
 
 export type Props = {
     title?: string;
@@ -15,7 +17,8 @@ export type Props = {
 };
 
 const { description = '', pageType = 'website' } = Astro.props;
-const title = [Astro.props.title, siteConfig.title].filter(Boolean).join(' · ');
+const pageTitle = Astro.props.title;
+const title = !pageTitle || pageTitle === siteConfig.title ? siteConfig.title : `${pageTitle} · ${siteConfig.title}`;
 const image = Astro.props.image ?? siteConfig.image;
 let resolvedImage: { src: string; alt?: string } | undefined;
 if (image?.src) {
@@ -49,17 +52,41 @@ function formatCanonicalURL(url: string | URL) {
 <title>{title}</title>
 <meta name="generator" content={Astro.generator} />
 
-<link rel="preload" as="font" type="font/woff2" href={bricolageWoff2} crossorigin="anonymous" />
-<link rel="preload" as="font" type="font/woff2" href={sourceSansWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={bodoniWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={bodoniItalicWoff2} crossorigin="anonymous" />
+<link rel="preload" as="font" type="font/woff2" href={newsreaderWoff2} crossorigin="anonymous" />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="alternate" type="application/rss+xml" href="/rss.xml" title={`${siteConfig.title} RSS`} />
 
 <link rel="canonical" href={formatCanonicalURL(canonicalURL)} />
 <meta name="description" content={description} />
-<meta name="theme-color" content="#1E6B4A" />
-<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#F6F1E6" />
+<meta name="color-scheme" content="light dark" />
+
+<!--
+  Theme resolve, pre-paint: stored choice first, else the system preference.
+  Sets data-theme on <html> before body renders (no flash) and keeps the
+  browser chrome in step. folio-theme is written by ThemeToggle.astro.
+-->
+<script is:inline>
+    (function () {
+        try {
+            var stored = localStorage.getItem('folio-theme');
+            var theme =
+                stored === 'light' || stored === 'dark'
+                    ? stored
+                    : window.matchMedia('(prefers-color-scheme: dark)').matches
+                      ? 'dark'
+                      : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', theme === 'dark' ? '#17150F' : '#F6F1E6');
+        } catch (e) {
+            /* private mode etc. — CSS media fallback covers it */
+        }
+    })();
+</script>
 
 <meta property="og:type" content={pageType} />
 <meta property="og:url" content={formatCanonicalURL(canonicalURL)} />

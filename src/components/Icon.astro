@@ -1,13 +1,13 @@
 ---
 /**
- * Icon set — sourced from @hugeicons/core-free-icons (stroke library).
- * Each icon is the vendor's official data, rendered at currentColor.
+ * Icon set — @hugeicons/core-free-icons strokes plus two authored marks
+ * (the outbound arrow, the telegram plane) drawn to the same 1.5 / round
+ * grammar. Every icon renders at currentColor.
  */
 import Cancel01Icon from '@hugeicons/core-free-icons/Cancel01Icon';
 import ArrowDown01Icon from '@hugeicons/core-free-icons/ArrowDown01Icon';
 import ArrowRight01Icon from '@hugeicons/core-free-icons/ArrowRight01Icon';
 import ArrowLeft01Icon from '@hugeicons/core-free-icons/ArrowLeft01Icon';
-import ExternalLinkIcon from '@hugeicons/core-free-icons/ExternalLinkIcon';
 import HeartIcon from '@hugeicons/core-free-icons/HeartIcon';
 import GithubIcon from '@hugeicons/core-free-icons/GithubIcon';
 import BlueskyIcon from '@hugeicons/core-free-icons/BlueskyIcon';
@@ -22,6 +22,7 @@ type IconName =
     | 'external'
     | 'heart-filled'
     | 'github'
+    | 'telegram'
     | 'bluesky'
     | 'linkedin';
 
@@ -29,14 +30,31 @@ type Props = { name: IconName; class?: string; label?: string };
 
 const { name, class: className, label } = Astro.props;
 
+/**
+ * Outbound mark — a bare diagonal arrow (shaft + head), drawn to the set's
+ * 1.5 stroke / round-cap grammar. Replaces the vendor open-in-new-tab box
+ * (owner: "I don't like the 'open' icon").
+ */
+const ExternalArrowIcon = [
+    ['path', { d: 'M7.5 16.5 16.5 7.5', stroke: 'currentColor', strokeLinecap: 'round', strokeWidth: '1.5', key: '0' }],
+    ['path', { d: 'M9.8 7.5h6.7v6.7', stroke: 'currentColor', strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: '1.5', key: '1' }]
+] as const;
+
+/** Telegram — the paper plane, same stroke grammar as the brand marks. */
+const TelegramIcon = [
+    ['path', { d: 'M22 2 11 13', stroke: 'currentColor', strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: '1.5', key: '0' }],
+    ['path', { d: 'M22 2 15 22l-4-9-9-4 20-7Z', stroke: 'currentColor', strokeLinecap: 'round', strokeLinejoin: 'round', strokeWidth: '1.5', key: '1' }]
+] as const;
+
 const icons: Record<IconName, string> = {
     close: renderIconSvg(Cancel01Icon),
     'arrow-down': renderIconSvg(ArrowDown01Icon),
     'arrow-right': renderIconSvg(ArrowRight01Icon),
     'arrow-left': renderIconSvg(ArrowLeft01Icon),
-    external: renderIconSvg(ExternalLinkIcon),
+    external: renderIconSvg(ExternalArrowIcon),
     'heart-filled': renderIconSvg(HeartIcon),
     github: renderIconSvg(GithubIcon),
+    telegram: renderIconSvg(TelegramIcon),
     bluesky: renderIconSvg(BlueskyIcon),
     linkedin: renderIconSvg(Linkedin01Icon)
 };

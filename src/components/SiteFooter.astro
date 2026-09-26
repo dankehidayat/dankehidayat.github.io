@@ -9,34 +9,46 @@ const anchor = (hash: string) => (isHome ? hash : `/${hash}`);
 
 const navLinks = [
     { text: 'About', href: anchor('#about') },
+    { text: 'Folio', href: '/folio' },
     { text: 'Experience', href: anchor('#experience') },
-    { text: 'Stack', href: anchor('#stack') },
-    { text: 'Projects', href: anchor('#projects') },
-    { text: 'Notes', href: '/notes' },
-    { text: 'Shelf', href: '/shelf' },
-    { text: 'Setup', href: '/setup' }
+    { text: 'Contact', href: anchor('#contact') },
+    { text: 'Florilegium', href: '/florilegium' },
+    { text: 'Atelier', href: '/atelier' }
 ];
 
 const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('rss'));
 ---
 
-<footer class="site-footer">
+<footer class="site-footer site-footer--screen">
     <div class="site-shell">
-        <div class="site-footer-inner">
-            <div>
-                <p class="footer-name">Danke Hidayat</p>
-                <p class="footer-role">Software developer &amp; DevOps engineer</p>
-                <p class="footer-note">
-                    I build software and write about the work sometimes.
+        <div class="colophon">
+            <div class="colophon-imprint">
+                <p class="colophon-name" data-reveal="mask">Danke Hidayat</p>
+                <p class="colophon-role" data-reveal>Software developer &amp; DevOps engineer</p>
+                <p class="colophon-note" data-reveal>
+                    Bandung, Indonesia — IoT systems, web apps, and the containers that keep
+                    them running.
                 </p>
-                <blockquote class="footer-quote">
+                <blockquote class="footer-quote" data-reveal="rule">
                     <p class="footer-quote-text">“I was born to be the star.”</p>
                     <span class="footer-quote-by">Saijou Claudine · Revue Starlight</span>
                 </blockquote>
+
+                <div class="colophon-floret" aria-hidden="true" data-reveal="rule">
+                    <span class="colophon-floret-line"></span>
+                    <svg class="floret" viewBox="0 0 24 24">
+                        <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none">
+                            <path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"></path>
+                        </g>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+                    </svg>
+                    <span class="colophon-floret-line"></span>
+                </div>
             </div>
-            <div class="footer-cols">
+
+            <div class="colophon-cols" data-reveal>
                 <div>
-                    <p class="footer-col-title">Sections</p>
+                    <p class="footer-col-title">Folio</p>
                     <ul>
                         {navLinks.map((link) => (
                             <li><a href={link.href}>{link.text}</a></li>
@@ -44,20 +56,24 @@ const socials = (siteConfig.socialLinks ?? []).filter((l) => !l.href.includes('r
                     </ul>
                 </div>
                 <div>
-                    <p class="footer-col-title">Elsewhere</p>
+                    <p class="footer-col-title">Channels</p>
                     <ul>
                         {socials.map((link) => (
                             <li><a href={link.href} target="_blank" rel="noopener noreferrer">{link.text}</a></li>
                         ))}
-                        <li><a href="/rss.xml">RSS</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© {year} Danke Hidayat. Built with Astro.</p>
+
+            <div class="colophon-rule" aria-hidden="true" data-reveal="rule"></div>
+
+            <div class="colophon-bottom" data-reveal>
+                <p class="colophon-set">
+                    © {year} Danke Hidayat · Set in Bodoni Moda &amp; Newsreader · Printed in
+                    Bandung, on plate cream.
+                </p>
                 <p class="footer-bottom-links">
-                    <a href="/rss.xml">RSS</a>
-                    <a href="/Resume_Danke_Hidayat.pdf">Resume</a>
+                    <a href="/Resume_Danke_Hidayat.pdf" download>Resume</a>
                 </p>
             </div>
         </div>
