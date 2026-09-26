@@ -10,7 +10,7 @@ web
 
 **Primary:** Hiring managers, recruiters, and technical collaborators evaluating Danke Hidayat for junior software, DevOps, IoT, embedded, or full-stack work. They need a clear, trustworthy picture of skills, shipped projects, work history, and how to reach him.
 
-**Secondary:** Readers who discover the blog (RSS, social, or via the portfolio). Writing supports credibility; personal-interest posts live on the blog, not in the professional bio.
+**Secondary:** Readers who discover the site through GitHub or social links (Bluesky, LinkedIn). They land on projects, experience, and proof of work.
 
 ## Product Purpose
 
@@ -20,10 +20,9 @@ The site makes it possible to:
 
 - Present who Danke is, what he builds, and where he works — on a single page, scannable in one pass
 - Show real project work (IoT, embedded, monitoring systems, DevOps) and career history
-- Share technical writing on the blog
 - Offer a low-friction path to contact (email, socials, resume PDF)
 
-**Success (next year):** both inbound opportunities from the right people *and* a living, credible technical presence — portfolio first; writing second.
+**Success (next year):** both inbound opportunities from the right people *and* a living, credible technical presence — portfolio first.
 
 ## Positioning
 
@@ -33,26 +32,26 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 
 ## Operating Context
 
-- **Static personal site** built with Astro 5, content collections for blog, projects, and shelf
-- **Routes:** `/` (single-page: Hero, About, Experience, Projects, Notes, Certifications, Contact), `/notes`, `/notes/[slug]`, `/shelf` + `/shelf/[slug]` (the reading shelf), `/setup` (desk + software ledger), `/rss.xml`, sitemap, `/404`; old routes (`/projects`, `/experience`, `/about`, `/contact`, `/tags`, `/id/*`) redirect to their single-page anchors; retired `/fun` → `/shelf`, `/stats` → `/`
-- **Shelf:** `/shelf` is a catalog drawer of Danke's manga, anime, light novels, fiction, and non-fiction — an "On the desk" panel for in-progress reading, category filter chips with live counts and an empty state, a cover grid with favorite hearts and monogram fallbacks, and hairline-ruled catalog rows with per-category shelfmarks (`MNG·01`, `ANM·02`, ...). Each entry has its own page (`/shelf/[slug]`) with cover, record meta, note, links, optional rating, and an optional field-notes review body plus previous/next card navigation. Entries are a content collection (`src/content/shelf/*.mdx`); covers live in `public/shelf/covers/`; sorting and shelfmarks come from `src/lib/shelf.ts`
-- **Setup:** `/setup` is the desk-and-tools ledger — a reserved photo slot for the desk (empty state until a photo exists), a hardware ledger (MacBook Pro M1, Weikav Alice Record keyboard, switch stash, mice, mousepad, audio, watch, charger), a tools ledger (Brave, VS Code, opencode, iTerm2), and a "Previously" archive with the old Arch + Hyprland dotfiles/bootstrap repo links plus dated archive media (the 2020 desk photo and 2019–2022 desktop-ricing screenshots opened in an in-page gallery dialog with source-repo links). Data lives in `src/data/setup.ts`
+- **Static personal site** built with Astro 5, content collections for projects and shelf
+- **Routes:** `/` (single-page: Hero, About, Experience, Projects, Certifications, Contact), `/folio` + `/folio/[slug]` (the plate folio, renamed 2026-09 from `/works`), `/florilegium` + `/florilegium/[slug]` (the reading florilegium, renamed 2026-09 from `/shelf`), `/atelier` (hardware/tools atelier, renamed 2026-09 from `/setup`), sitemap, `/404`; old routes (`/projects`, `/experience`, `/about`, `/contact`, `/id/*`) redirect to their single-page anchors; `/works` (+ the six plate slugs) redirect to `/folio`; retired `/fun` → `/florilegium`, `/stats` → `/`; no redirects exist for `/shelf` or `/setup` — those routes are fully retired
+- **Blog/notes removed (2026-09):** the `/notes` index and post pages, the blog content collection, the home notes preview, nav/footer notes links, and the `/rss.xml` feed were removed as a product decision; the florilegium's field-notes reviews are unrelated and remain
+- **Florilegium:** `/florilegium` (formerly "Shelf") is a catalog drawer of Danke's manga, anime, light novels, fiction, and non-fiction — a "Freshly cut" panel for in-progress reading, category filter chips with live counts and an empty state, a cover grid with favorite hearts and monogram fallbacks, and a staggered cover wall. Each entry has its own page (`/florilegium/[slug]`) with cover, record meta, note, links, optional rating, and an optional field-notes review body plus previous/next card navigation. Entries are a content collection (`src/content/shelf/*.mdx`); covers live in `public/florilegium/covers/`; sorting and cover lookup come from `src/lib/shelf.ts`
+- **Atelier:** `/atelier` (formerly "Setup") is the hardware-and-tools ledger — a hardware ledger (MacBook Pro M1, Weikav Alice Record keyboard, switch stash, mice, mousepad, audio, watch, charger), a tools ledger (Brave, VS Code, opencode, iTerm2), and a "Previously" archive with the old Arch + Hyprland dotfiles/bootstrap repo links plus dated archive media (the 2020 desk photo and 2019–2022 desktop-ricing screenshots opened in an in-page gallery dialog with source-repo links). Data lives in `src/data/setup.ts`
 - **Language:** English only (Indonesian routes removed in the 2026 redesign)
-- **Theme:** light-only — no dark mode, no theme toggle
-- **Identity sources:** `src/data/site-config.ts`, `src/data/experience.ts`, `src/data/about.ts`, `src/data/certifications.ts`, `src/data/projects.ts`, `src/data/stats.ts`, `src/data/publications.ts`, `src/data/setup.ts`, Markdown/MDX in `src/content/` (blog, projects, shelf), resume at `public/Resume_Danke_Hidayat.pdf`
+- **Theme:** light-first with a working dark theme toggle (owner decision 2026-09, supersedes the 2026-07 light-only commitment)
+- **Identity sources:** `src/data/site-config.ts`, `src/data/experience.ts`, `src/data/about.ts`, `src/data/certifications.ts`, `src/data/projects.ts`, `src/data/stats.ts`, `src/data/publications.ts`, `src/data/setup.ts`, Markdown/MDX in `src/content/` (projects, shelf), resume at `public/Resume_Danke_Hidayat.pdf`
 - **Public URL:** https://dankehidayat.my.id
-- **Social / external:** GitHub, Bluesky, LinkedIn, RSS (as linked on the site)
+- **Social / external:** GitHub, Bluesky, LinkedIn (as linked on the site)
 - **Authoring model:** Markdown/MDX content + data files; no app login or multi-user roles
 
 ## Capabilities and Constraints
 
 **Capabilities (confirmed in the product today):**
 
-- Single-page home: hero with arch portrait and two actions; About with stats bar; work experience timeline; tech stack ledger; six project cards; three latest craft posts; certifications list; contact panel with email, socials, and resume
-- Blog: index, post layout (680px reading column, KaTeX math, code blocks with copy buttons, prev/next navigation), RSS feed
-- Shelf (`/shelf`): 35 catalogued entries across six categories; client-side category filters that re-bind on view-transition navigation (`astro:page-load`), cover grid with monogram fallbacks, catalog rows, and per-entry pages ready for owner-written reviews and ratings
-- Setup (`/setup`): desk section with a reserved photo slot, dotfiles links, and the tools ledger; built to accept a desk photo later without redesign
-- SEO: canonical URLs, Open Graph, sitemap; light-only `theme-color` and `color-scheme`
+- Single-page home: hero with arch portrait and two actions; About with stats bar; work experience timeline; tech stack ledger; six project cards; certifications list; contact panel with email, socials, and resume
+- Florilegium (`/florilegium`): 35 catalogued entries across six categories; client-side category filters that re-bind on view-transition navigation (`astro:page-load`), cover grid with monogram fallbacks, catalog rows, and per-entry pages ready for owner-written reviews and ratings
+- Atelier (`/atelier`): hardware and tools ledgers, dotfiles links, and the ricing archive; built to accept a desk photo later without redesign
+- SEO: canonical URLs, Open Graph, sitemap; `theme-color` (`#F6F1E6` light / `#17150F` dark, synced by the pre-paint theme script) and `light dark` `color-scheme`
 - Motion on the home page only: GSAP + ScrollTrigger entrance/reveals, Lenis smooth scroll, timeline rail draw; static under `prefers-reduced-motion`
 
 **Constraints:**
@@ -65,10 +64,10 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 **Confirmed after redesign brief (2026-07):**
 
 - **Language:** English only; no i18n, no `/id/` routes
-- **Theme:** light-only; no dark mode, no theme toggle
-- **Visual world:** Warm Signal — warm paper `#FBF5EA`, leaf-green `#1E6B4A` / tangerine `#E05D1E` / saffron `#E5A81C` signal tricolor, Bricolage Grotesque display (no cursive), ledger rows and signal ticks, arch portrait, light-only
-- **Personality:** professional, measured tone on the main page; personal interests (yuri, BanG Dream!, Japanese) live in blog posts, not the bio
-- **Motion:** GSAP + ScrollTrigger + Lenis smooth scroll, home page only; blog pages static
+- **Theme:** light-first with a working dark toggle (2026-09; supersedes light-only)
+- **Visual world:** superseded 2026-09 by the Botanical Folio redesign on `feat/redesign` (plate-cream ground, hairline sepia rules, engraved serif, lilac bloom accent retuning the folio scarlet per owner pin); durable tokens land in DESIGN.md when the redesign finishes. Prior world was Warm Signal — warm paper `#FBF5EA`, green/tangerine/saffron tricolor, Bricolage Grotesque display, ledger rows and signal ticks
+- **Personality:** professional, measured tone on the main page; personal interests (yuri, BanG Dream!, Japanese) stay out of the professional bio
+- **Motion:** GSAP + ScrollTrigger + Lenis smooth scroll, home page only
 
 **Still open:**
 
@@ -79,10 +78,10 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 
 - **Name:** Danke Hidayat
 - **Role framing:** Junior Software Developer & DevOps Engineer (site subtitle / positioning)
+- **Education:** IPB University (Institut Pertanian Bogor) — an agricultural (*pertanian*) institution; owner-confirmed background (2026-09)
 - **Employer (current):** PT. Labdha Teknika Nusantara
 - **Domain / email:** dankehidayat.my.id · contact@dankehidayat.my.id
 - **Voice:** First-person, clear, technical, measured; specifics over generalizations; no hype words ("passionate", "excited", "thrilled") in professional copy
-- **Personality lives on the blog:** personal-interest writing remains legitimate site content, but the home bio stays professional
 
 ## Evidence on Hand
 
@@ -93,21 +92,20 @@ Real assets and content that future work must use or honestly omit — not fabri
 | Avatar & hero imagery | `src/assets/images/avatar.jpeg`, `hero.jpeg` |
 | Resume PDF | `public/Resume_Danke_Hidayat.pdf` |
 | Projects | selene, flowpoint-next, flora, eco-office, ecobin-sorter, hydrolevi (`src/content/projects/` + `src/data/projects.ts` for tech/links) |
-| Blog posts | Six posts (tech opinion, performance, anime review, Japanese input guide, calibration, Colab automation) in `src/content/blog/` |
 | Experience / education | `src/data/experience.ts` |
 | Certifications | Eleven credentials with verify links (`src/data/certifications.ts`) |
 | Site copy & nav | `src/data/site-config.ts` |
-| Social links | GitHub, Bluesky, LinkedIn, RSS as published |
+| Social links | GitHub, Bluesky, LinkedIn as published |
 
 **Absences:** No third-party testimonials, client case-study metrics, press quotes, or paid product claims on hand. No publications data or confirmed stat numbers yet — `src/data/stats.ts` and `src/data/publications.ts` hold marked placeholders until the owner supplies real values from the CV. Do not invent them.
 
 ## Product Principles
 
-1. **Professional first, personality in the writing** — Help evaluators decide quickly on the single page; let personal interests live in blog posts.
-2. **Show real work, not claims** — Projects, experience, resume, and writing are the proof; unsubstantiated polish is not.
+1. **Professional first** — Help evaluators decide quickly on the single page; keep personal interests out of the professional copy.
+2. **Show real work, not claims** — Projects, experience, and resume are the proof; unsubstantiated polish is not.
 3. **Clarity over spectacle** — Stability and simplicity in systems mirror how the site should communicate: scannable, honest, decision-friendly.
 4. **Measured voice** — Direct, first-person, technical; specifics over generalizations.
-5. **Preserve published truth** — Existing pages, projects, posts, and links stay in scope unless the owner deliberately changes them.
+5. **Preserve published truth** — Existing pages, projects, and links stay in scope unless the owner deliberately changes them.
 
 ## Accessibility & Inclusion
 

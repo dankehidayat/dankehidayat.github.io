@@ -12,7 +12,7 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 - **Typography.** **Bricolage Grotesque** for display and the hero name lockup, **Source Sans 3** for body copy, **JetBrains Mono** for metadata, dates, code, and technical labels. No cursive anywhere.
 - **Structure.** Ledger rows with 1px hairlines and 2px signal lines; an arch portrait in a paper frame with a green signal-arch backing and a saffron keystone.
 - **Motion.** GSAP + ScrollTrigger with Lenis smooth scrolling on the home page only: a hero entrance, scroll-triggered reveals, row hairline draws, and section-head reveals. Everything respects `prefers-reduced-motion`. Blog pages are static.
-- **Content-first.** A one-page home with eight sections (Hero, About, Experience, Tech Stack, Projects, Notes, Certifications, Contact), a Notes blog, a **Shelf** — a catalog-drawer of manga, anime, light novels, fiction, and non-fiction with category filters, shelfmarks, and one page per entry — and a **Setup** ledger of the desk, tools, and dotfiles. Professional, measured tone throughout.
+- **Content-first.** A one-page home with sections (Hero, About, Experience, Tech Stack, Projects, Certifications, Contact), a **Florilegium** — a catalog-drawer of manga, anime, light novels, fiction, and non-fiction with category filters and one page per entry — and an **Atelier** ledger of hardware, tools, and dotfiles. Professional, measured tone throughout.
 
 ## Stack
 
@@ -26,7 +26,7 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 
 ```text
 ├── public/
-│   ├── shelf/covers/            # cover images for the Shelf
+│   ├── florilegium/covers/       # cover images for the Florilegium
 │   ├── favicon.svg
 │   └── Resume_Danke_Hidayat.pdf
 ├── scripts/                    # dev tools: fetch-covers.mjs, generate-brand-icons.mjs, ...
@@ -48,11 +48,11 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 │   │   ├── index.astro          # the single-page home
 │   │   ├── notes/index.astro    # notes index
 │   │   ├── notes/[id].astro     # post layout (680px reading column, KaTeX, code copy)
-│   │   ├── shelf/index.astro    # the shelf drawer: filters + cover grid + catalog rows
-│   │   ├── shelf/[slug].astro   # one catalog card per entry
-│   │   ├── setup.astro          # the desk + software ledger
+│   │   ├── florilegium/index.astro # the florilegium: filters + cover grid + catalog rows
+│   │   ├── florilegium/[slug].astro # one catalog card per entry
+│   │   ├── atelier.astro         # the hardware + tools ledger
 │   │   └── rss.xml.js
-│   ├── lib/shelf.ts             # shelf sorting + shelfmarks (MNG·01, ANM·02, ...)
+│   ├── lib/shelf.ts             # shelf sorting + cover lookup
 │   ├── scripts/                 # motion.ts (home), code-blocks.ts (copy buttons)
 │   ├── styles/global.css        # design tokens + component styles
 │   ├── content.config.ts        # collection schemas
@@ -107,10 +107,10 @@ Add a `.md` file to `src/content/projects/`. The tech stack and links shown on t
 - `src/data/certifications.ts` — certification list with verify links
 - `src/data/stats.ts` — the stats bar (years, projects, publications, certifications)
 - `src/data/publications.ts` — publications list (rendered only when non-empty)
-- `src/data/setup.ts` — Setup page: the hardware and tools ledgers and the archived Hyprland dotfile repos
+- `src/data/setup.ts` — Atelier page: the hardware and tools ledgers and the archived Hyprland dotfile repos
 - `src/data/brand-icons.ts` — brand logo paths for the tech stack
 
-### Shelf entries
+### Florilegium entries
 
 Add an `.mdx` file to `src/content/shelf/` with frontmatter:
 
@@ -130,11 +130,11 @@ links:
 ---
 ```
 
-Anything written below the frontmatter renders as the entry's field notes (a full review). Cover art lives in `public/shelf/covers/` as `{slug}.jpg` and is fetched/added with `scripts/fetch-covers.mjs`; entries without a cover render a monogram tile. Shelfmarks (`MNG·01`, `ANM·02`, ...) are assigned per category by `src/lib/shelf.ts`.
+Anything written below the frontmatter renders as the entry's field notes (a full review). Cover art lives in `public/florilegium/covers/` as `{slug}.jpg` and is fetched/added with `scripts/fetch-covers.mjs`; entries without a cover render a monogram tile.
 
 ## Configuration
 
-`astro.config.mjs` holds the site URL, MDX/KaTeX integration, the custom `warm-signal` Shiki theme, and redirects for the old portfolio routes (e.g. `/projects` → `/#projects`, `/id/...` → `/`, plus the retired `/fun` → `/shelf` and `/stats` → `/`).
+`astro.config.mjs` holds the site URL, MDX/KaTeX integration, the custom `warm-signal` Shiki theme, and redirects for the old portfolio routes (e.g. `/projects` → `/#projects`, `/id/...` → `/`, plus the retired `/fun` → `/florilegium` and `/stats` → `/`).
 
 ## Deployment
 

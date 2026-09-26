@@ -1,342 +1,256 @@
 ---
-name: Danke Hidayat — Warm Signal
-description: Warm, saturated editorial-technical portfolio; paper field, green/tangerine/saffron signal tricolor, Bricolage display lockup, ledger rows.
+name: Danke Hidayat — Botanical Folio
+description: Plate-cream herbarium portfolio; hairline sepia rules, leaf-green ink, lilac bloom heat, Bodoni Moda display, arched specimen plates.
 colors:
-  green: "#1e6b4a"
-  green-deep: "#155236"
-  green-bright: "#2f9e65"
-  tangerine: "#e05d1e"
-  tangerine-deep: "#b8430e"
-  tangerine-field: "#e4651f"
-  saffron: "#e5a81c"
-  paper: "#fbf5ea"
-  surface: "#ffffff"
-  surface-tint: "#f3ead7"
-  border: "#e4d9c2"
-  border-strong: "#c9bca0"
-  ink: "#251f16"
-  ink-body: "#453b2e"
-  ink-muted: "#7a6c59"
-  code-bg: "#f1e7d0"
-  ink-on-green: "#fbf5ea"
-  ink-on-green-muted: "#cfe3d5"
-  ink-on-tangerine: "#2e1608"
-  footer-dark: "#1f1910"
-  success: "#2f9e65"
-  warning: "#b38614"
-  error: "#c2402e"
+  bg: "#f6f1e6"
+  surface: "#fbf8ef"
+  surface-tint: "#efe8d8"
+  border: "#d9cdb5"
+  border-strong: "#c2b294"
+  ink: "#2c2a24"
+  ink-body: "#4a4a4a"
+  ink-muted: "#6b6456"
+  green: "#2e5e3d"
+  green-deep: "#23492f"
+  green-bright: "#4e8260"
+  sage: "#7fa37a"
+  lilac: "#7b5c9e"
+  lilac-deep: "#64497f"
+  lilac-bright: "#a98bc6"
+  lilac-field: "#efe7f5"
+  ink-on-lilac: "#fbf7ee"
+  ink-on-green: "#f6f1e6"
+  code-bg: "#efe8d8"
+  success: "#4e8260"
+  warning: "#a4791c"
+  error: "#a33c2b"
 typography:
   display:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(2.6rem, 5.6vw, 4.1rem)"
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: "-0.02em"
+    fontFamily: "'Bodoni Moda Variable', 'Bodoni Moda', 'Didot', Georgia, serif"
+    fontSize: "clamp(3.1rem, 8.5vw, 6.4rem)"
+    fontWeight: 700
+    lineHeight: 0.98
+    letterSpacing: "0.005em"
   headline:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(1.85rem, 3.6vw, 2.7rem)"
-    fontWeight: 700
+    fontFamily: "'Bodoni Moda Variable', 'Bodoni Moda', 'Didot', Georgia, serif"
+    fontSize: "clamp(2rem, 4.6vw, 3.3rem)"
+    fontWeight: 600
     lineHeight: 1.08
-    letterSpacing: "-0.015em"
-  title:
-    fontFamily: "'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif"
-    fontSize: "clamp(1.3rem, 2.4vw, 1.55rem)"
-    fontWeight: 700
-    lineHeight: 1.25
     letterSpacing: "-0.01em"
+  title:
+    fontFamily: "'Bodoni Moda Variable', 'Bodoni Moda', 'Didot', Georgia, serif"
+    fontSize: "clamp(1.4rem, 2.4vw, 1.75rem)"
+    fontWeight: 600
+    lineHeight: 1.16
   body:
-    fontFamily: "'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif"
+    fontFamily: "'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.7
+    lineHeight: 1.6
   label:
-    fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
+    fontFamily: "'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif"
     fontSize: "0.78rem"
+    fontWeight: 600
+    lineHeight: 1.2
+    letterSpacing: "0.14em"
+  mono:
+    fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
+    fontSize: "0.72rem"
     fontWeight: 500
     lineHeight: 1.5
-    letterSpacing: "0.08em"
-  scale:
-    mono-2xs: "0.6rem"
-    mono-1: "0.62rem"
-    mono-2: "0.66rem"
-    mono-3: "0.68rem"
-    mono-4: "0.7rem"
-    mono-5: "0.72rem"
-    mono-6: "0.74rem"
-    mono-7: "0.75rem"
-    mono-8: "0.8rem"
-    mono-9: "0.88rem"
-    card-title: "0.92rem"
-    body-sm: "0.95rem"
-    group-header: "1.15rem"
-    subheading: "1.2rem"
 rounded:
-  sm: "6px"
-  md: "10px"
-  mdx: "12px"
-  lg: "14px"
-  xl: "18px"
-  pill: "999px"
+  sm: "3px"
+  md: "4px"
+  lg: "6px"
 spacing:
-  xs: "0.4rem"
   sm: "0.5rem"
-  md: "0.75rem"
-  lg: "1rem"
-  xl: "1.5rem"
-  2xl: "2.5rem"
+  md: "1rem"
+  lg: "1.5rem"
+  xl: "2.5rem"
+  shell: "72rem"
 components:
   button-primary:
-    backgroundColor: "{colors.green}"
-    textColor: "#ffffff"
+    backgroundColor: "{colors.lilac}"
+    textColor: "{colors.ink-on-lilac}"
     typography:
       fontFamily: "'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif"
-      fontSize: "0.95rem"
+      fontSize: "0.82rem"
       fontWeight: 600
       lineHeight: 1.2
+      letterSpacing: "0.14em"
     rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
+    padding: "0.78rem 1.5rem"
   button-primary-hover:
-    backgroundColor: "{colors.green-deep}"
+    backgroundColor: "{colors.lilac-deep}"
+    textColor: "{colors.ink-on-lilac}"
+    typography:
+      fontFamily: "'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif"
+      fontSize: "0.82rem"
+      fontWeight: 600
+      lineHeight: 1.2
+      letterSpacing: "0.14em"
+    rounded: "{rounded.sm}"
+    padding: "0.78rem 1.5rem"
   button-secondary:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "transparent"
     textColor: "{colors.ink}"
+    typography:
+      fontFamily: "'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif"
+      fontSize: "0.82rem"
+      fontWeight: 600
+      lineHeight: 1.2
+      letterSpacing: "0.14em"
     rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-inverse:
-    backgroundColor: "{colors.ink-on-green}"
-    textColor: "{colors.green-deep}"
-    rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-inverse-ghost:
-    textColor: "{colors.ink-on-green}"
-    rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-dark:
-    backgroundColor: "{colors.ink-on-tangerine}"
-    textColor: "#f7ead6"
-    rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-dark-ghost:
-    textColor: "{colors.ink-on-tangerine}"
-    rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-tangerine:
-    backgroundColor: "{colors.tangerine}"
-    textColor: "{colors.ink-on-tangerine}"
-    rounded: "{rounded.sm}"
-    padding: "0.72rem 1.4rem"
-  button-tangerine-hover:
-    backgroundColor: "{colors.tangerine-deep}"
+    padding: "0.78rem 1.5rem"
   tag-chip:
-    backgroundColor: "{colors.code-bg}"
+    backgroundColor: "{colors.surface-tint}"
     textColor: "{colors.ink-body}"
     typography:
       fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
       fontSize: "0.72rem"
-      lineHeight: 1.5
-    rounded: "{rounded.sm}"
-    padding: "0.2rem 0.6rem"
-  project-plate:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink-body}"
-    rounded: "{rounded.md}"
-    padding: "1.7rem 1.7rem 1.55rem"
-  post-nav-link:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "1.2rem 1.35rem"
-  stack-row:
-    typography:
-      fontFamily: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace"
-      fontSize: "0.78rem"
       fontWeight: 500
-      letterSpacing: "0.1em"
-    padding: "1.25rem 0.15rem"
+      lineHeight: 1.5
+    rounded: "2px"
+    padding: "0.2rem 0.6rem"
 ---
 
-# Design System: Danke Hidayat — Warm Signal
+# Design System: Danke Hidayat — Botanical Folio
 
 ## Overview
 
-**Creative North Star: "The Warm Signal"**
+**Creative North Star: "The Botanical Folio"**
 
-A warm, saturated editorial-technical portfolio. The page is warm paper, and across it runs a signal system of leaf-green, tangerine, and saffron — green leading fields and actions, tangerine marking dates, links, and the contact band, saffron flashing in ticks and footer accents. Structure is drawn like a ledger: rows separated by hairlines, each topped with a 2px colored signal line that traces in as it enters view. Type is Bricolage Grotesque for display and headings, Source Sans 3 for reading, and JetBrains Mono as the instrument panel of dates, periods, and code. A Bricolage Grotesque lockup sets the name.
+A portfolio set as a herbarium: plate-cream paper (`#f6f1e6`), hairline sepia rules (`#d9cdb5`), leaf-green ink (`#2e5e3d`), and lilac bloom (`#7b5c9e`) as the only heat — the owner pin that retunes the folio scarlet. Every work is a numbered specimen plate at fixed scale, arched like a pressed flower under glass. Display type is Bodoni Moda (Didone engraving); reading is Newsreader; labels are Source Sans 3 small-caps; data is JetBrains Mono.
 
-The story is three beats: meet a precise engineer on a tangerine signal field, scan the shipped systems in ledger rows, reach him by email on a full-bleed tangerine band. Density is editorial, not crowded — sections breathe with generous vertical rhythm (`clamp(4.5rem, 9vw, 7rem)`), and separation comes from 1px hairlines and 2px signal lines rather than heavy blocks. Light-only by decision; the palette is tuned for daylight professional reading. No costume, no dark mode.
+Density is editorial and airy: chapters breathe with `clamp(4rem, 9vw, 7rem)` vertical rhythm, separation comes from 1px hairlines and double rules rather than cards or shadows. Light-first with a real dark token set (night herbarium); the theme toggle is icon-only. Motion is one authored moment per region under GSAP + Lenis, gated on `prefers-reduced-motion`, then stillness. On multi-chapter pages (≥3 chapters) Lenis eases to the nearest chapter top after a short pause — never mid-scroll, never on single-section record pages; the snap offset matches the anchor-scroll offset so clicks and snaps agree. Navigation is **Leafing**: shared-element View Transitions pair each plate's framed picture (`plate-<id>`) across home → folio index → record → adjacent record, and each florilegium cover (`cover-<id>`) across fan/wall card → record → prev/next thumb; a hairline route sweep draws under the running head after every soft swap. Morphs and sweep are instant/absent under `prefers-reduced-motion`.
 
-Motion is one authored moment per region, then stillness: a Bricolage name lockup that clips in, a polaroid portrait that settles into its paper frame, signal ticks that pop, and row hairlines that draw across with scroll. Under `prefers-reduced-motion` everything renders static. The interface recedes; the systems lead.
+The world refuses the dark SaaS card grid, the résumé-timeline default, gradient text, hard offset shadows, and system display faces. Folio flavor (plate numbers, captions, marquees, stage labels) stays decorative; navigation vocabulary stays functional.
 
 **Key Characteristics:**
-- Warm paper field (`#FBF5EA`) with a green/tangerine/saffron signal tricolor; a Bricolage Grotesque name lockup (no cursive)
-- Ledger structure: 1px hairline row borders with 2px colored signal lines that draw in on scroll
-- Section rhythm: About(tint) → Experience(white) → Tech Stack(tint) → Projects(tint) → Notes(white) → Certifications(tint) → Contact(tangerine) → footer(dark)
-- Bricolage Grotesque for display/headlines, Source Sans 3 for body, JetBrains Mono for data/labels/code
-- Light-only, high-contrast, no dark mode, no theme toggle
+- Plate-cream ground with sepia hairline rules; registration-ring depth, not drop shadows
+- Arched double-rule specimen plates with botanical imagery and italic species names
+- Lilac as the single heat — buttons, active states, contact bloom; green leads ink and focus
+- Bodoni Moda display / Newsreader body / Source Sans 3 labels / JetBrains Mono data
+- Saglitz-intensity GSAP motion (scrub, staggers, velocity marquees), reduced-motion gated
 
 ## Colors
 
-A warm, saturated three-signal system on a warm paper field — green leads, tangerine acts, saffron marks.
+A cream herbarium palette: green ink leads, lilac blooms as the only heat, sepia hairlines structure the page.
 
 ### Primary
-- **Leaf Green** (`#1e6b4a`): the lead signal — primary buttons, active nav underlines, focus rings, the section tick. Text on green is paper (`#fbf5ea`).
-- **Deep Green** (`#155236`): hover for green fills and the stat figures on the tinted About section.
-- **Bright Green** (`#2f9e65`): the "live" signal — availability dot and its 3px halo.
+- **Leaf Green** (`#2e5e3d`): Primary ink for chapter titles’ emphasis, focus rings, active nav, links that need weight. Deep (`#23492f`) for hover; bright (`#4e8260`) for success and lighter accents.
+- **Lilac Bloom** (`#7b5c9e`): The only heat — primary buttons, plate hover, contact field, selection wash. Deep (`#64497f`) hover; bright (`#a98bc6`) dark-mode accent; field (`#efe7f5`) soft washes.
 
 ### Secondary
-- **Tangerine** (`#e05d1e`): the acting signal — period text, link underlines, the experience-row top line, inline-code text on its field, the nav contact CTA, and the mobile menu active state. As a field it renders ≈`#E4651F`.
-- **Deep Tangerine** (`#b8430e`): the accessible tangerine text for periods, links, post meta, and verify links — tangerine at body size only passes contrast in this deep form.
-- **Tangerine Field** (`#e4651f`): the full-bleed contact band; ink on tangerine (`#2e1608`) is its text color. The hero is the same family — a radial gradient from ≈`#f68b4a` through Tangerine Field to Deep Tangerine, over a faint dot grid and film grain, with a saffron halo behind the polaroid.
-
-### Tertiary
-- **Saffron** (`#e5a81c`): the marker signal — the offset corner of every signal tick, the nav logo-mark corner, the footer role line and link hovers, the second half of the project-plate top line, the tech-stack signal line, the hero keystone, and the footer quote attribution.
+- **Sage** (`#7fa37a`): Quiet botanical secondary — florets, secondary-button marks, stage labels, spore field. Never a CTA fill.
 
 ### Neutral
-- **Warm Paper** (`#fbf5ea`): the page field; also the base of the frosted nav.
-- **White** (`#ffffff`): surfaces raised above the field — project plates, post-nav links, the hero portrait frame.
-- **Warm Tint** (`#f3ead7`): alternating section backgrounds (About, Tech Stack, Projects, Certifications).
-- **Hairline** (`#e4d9c2`): 1px borders and row dividers.
-- **Hairline Strong** (`#c9bca0`): secondary interactive strokes — secondary button and menu-button borders.
-- **Ink** (`#251f16`): headings and primary text; also the 2px top rule of the stats ledger.
-- **Ink Body** (`#453b2e`): body copy.
-- **Ink Muted** (`#7a6c59`): secondary text and record meta.
-- **Code Field** (`#f1e7d0`): code blocks, inline-code and chip backgrounds; also the Shiki `warm-signal` editor background.
-- **Footer Dark** (`#1f1910`): the dark footer band; text `#d9cfba` with saffron hovers.
+- **Plate Cream** (`#f6f1e6`): Page ground.
+- **Raised Cream** (`#fbf8ef`): Surface / plate slots / nav sheet.
+- **Tinted Cream** (`#efe8d8`): Colophon, chips, code — tonal layering instead of shadow.
+- **Sepia Rule** (`#d9cdb5`): Hairline borders and dividers; strong (`#c2b294`) for emphasis rules.
+- **Graphite Ink** (`#2c2a24`): Headings and primary text; body (`#4a4a4a`); muted (`#6b6456`).
 
 ### Functional
-- **Signal Green** (`#2f9e65`): success — code copy "copied" state, diff-add lines.
-- **Brass** (`#b38614`): warning — also the code theme constant color.
-- **Signal Red** (`#c2402e`): error — KaTeX errors, diff-remove lines.
+- Success `#4e8260`, warning `#a4791c`, error `#a33c2b`.
 
 ### Named Rules
-**The Signal Tricolor Rule.** Each signal has one job: green leads fields and actions, tangerine acts on links, dates, the contact band, and the nav CTA, saffron marks ticks and footer accents. Swap the roles and the system reads as noise.
-**The Paper Field Rule.** The page is warm paper by default; dark appears only in the footer band (`#1f1910`). Nothing else on the page is a dark surface.
+**The One Heat Rule.** Lilac is the folio’s only heat. It marks the primary action, the active state, and the contact peak — never a large structural fill outside the contact chapter, never a second accent beside it.
+**The Hairline Rule.** Structure is drawn with 1px sepia rules and double hairlines. Heavy blocks, cards-with-shadows, and gradient fields do not build hierarchy here.
 
 ## Typography
 
-**Display Font:** Bricolage Grotesque Variable (fallback `'Bricolage Grotesque', system-ui`)
-**Body Font:** Source Sans 3 Variable (fallback `system-ui`)
-**Label/Mono Font:** JetBrains Mono Variable (fallback `ui-monospace, Menlo`)
+**Display Font:** Bodoni Moda (with Didot, Georgia fallback)
+**Body Font:** Newsreader (with Georgia, Times fallback)
+**Label Font:** Source Sans 3 (small-caps labels, buttons)
+**Mono Font:** JetBrains Mono (plate numbers, periods, tags)
 
-**Character:** A warm, confident editorial-technical pairing. Bricolage Grotesque carries the personality in headlines and the name lockup; Source Sans 3 reads clean and measured in body copy; JetBrains Mono is the instrument panel — dates, periods, indices, and code, never costume. No cursive; the name is a Bricolage Grotesque lockup.
+**Character:** Didone engraving for display, literary serif for reading, letterspaced small-caps for labels — a specimen plate’s voice, not a dashboard’s.
+
+### Motion Typography
+- **SplitText reveals**: chapter heads split to letters/words/lines under GSAP SplitText and reveal on scroll (owner directive: gsap.com = source of truth). Splits are reverted before any re-init so soft navs never leave stale spans.
 
 ### Hierarchy
-- **Name lockup** (Bricolage Grotesque, Variable): `Danke` and `Hidayat` both at weight 700, `clamp(2.75rem, 6vw, 4.35rem)`, line-height 1.02, letter-spacing -0.02em, sentence case — one family, one weight, one size across the two lines, so the name reads as a single mark.
-- **Headline** (Bricolage Grotesque, 700, `clamp(1.85rem, 3.6vw, 2.7rem)`, line-height 1.08, letter-spacing `-0.015em`): section titles, page titles, post titles. Preceded by the signal tick. The hero headline (weight 500, `clamp(1.2rem, 2.2vw, 1.45rem)`) states the pitch below the name lockup.
-- **Title** (Bricolage Grotesque, 700, `clamp(1.3rem, 2.4vw, 1.55rem)` down to `1.2rem`, line-height 1.25–1.4): experience roles, project titles (1.35rem), post-row titles (1.4rem), record titles (1.2rem).
-- **Body** (Source Sans 3, 400, `1rem`, line-height 1.7): paragraphs; prose and section intros run `1.05rem`. Columns capped at 40–48rem; measure stays ~65–75ch.
-- **Label** (JetBrains Mono, 500, `0.72–0.82rem`, line-height 1.5, uppercase, letter-spacing `0.08–0.14em`): dates, periods, indices, captions, status lines — the instrument panel.
+- **Display** (700, `clamp(3.1rem, 8.5vw, 6.4rem)`, 0.98): Split-letter title plate name only.
+- **Headline** (600, `clamp(2rem, 4.6vw, 3.3rem)`, 1.08): Chapter titles; italic green `<em>` on the key phrase.
+- **Title** (600, `clamp(1.4rem, 2.4vw, 1.75rem)`, 1.16): Plate names (italic for species), section heads, card titles.
+- **Body** (400, 1rem, 1.6): Chapter intros, prose; measure held ≤ ~72ch.
+- **Label** (600, 0.78rem, tracking 0.14em, uppercase): Buttons, stage labels, small-caps nav (Newsreader small-caps 0.95rem in the running head).
+- **Mono** (500, 0.72rem): Plate numbers, tag chips, ledger data.
 
 ### Named Rules
-**The No-Cursive Rule.** Cursive is banned across the site — the hero name is a Bricolage Grotesque lockup, and no script font appears anywhere.
-**The Instrument-Panel Rule.** JetBrains Mono is reserved for data, labels, and code. Using it for decorative or display text is costume — off-world.
-**The No-Kicker Rule.** Nothing sits above a heading as an eyebrow or label; a section is marked by the signal tick, never a word.
+**The Italic Species Rule.** Botanical and project names set in italic Bodoni; roman for structure, italic for the specimen.
+**The Small-Caps Label Rule.** Uppercase labels carry tracking ≥ 0.14em in Source Sans 3 or JetBrains Mono — never the display face at label size.
 
 ## Layout
 
-A single 72rem (`1152px`) shell centers all content with fluid gutters (`clamp(1.25rem, 4vw, 2.5rem)`). Every section owns its full-bleed background — white or warm tint alternating — while content stays shell-constrained. Vertical rhythm is generous: sections pad `clamp(4.5rem, 9vw, 7rem)` top and bottom; the hero pads `clamp(4.5rem, 11vh, 7.5rem)` top and `clamp(3.5rem, 8vh, 5.5rem)` bottom.
+Single centered shell at `72rem` (`--shell`) with `clamp(1.25rem, 4vw, 2.5rem)` side padding. Chapters are full-width bands separated by top hairlines; inner grids use `clamp` gaps (2.25–4rem). Pages: `/` (the folio home), `/folio/` (index + `[slug]` records, renamed 2026-09 from `/works`), `/florilegium/` (index + `[slug]` record sheets), `/atelier/`, `404`. The folio index groups plates into categories from `WORK_CATEGORIES` (Web Apps, Internet of Things) — each category a section with an italic `<em>` heading, note, and mono plate count; contents rows mirror the same grouping. Home is a vertical folio: hero → marquee → About → Folio set-piece → Experience → Credentials → Contact → colophon. Responsive: plate grids collapse 3→2→1; desktop nav collapses to the mobile sheet below its breakpoint; sticky chapter head only on the record chapter. Spacing rhythm is clamp-driven, not a fixed scale — gutters 0.5–2.5rem, section padding 4–8.5rem.
 
-The structure is a ledger, not a card grid: rows separated by 1px hairlines, each topped with a 2px colored signal line that draws across as it enters view. Sections run **About(tint) → Experience(white) → Tech Stack(tint) → Projects(tint) → Notes(white) → Certifications(tint) → Contact(tangerine) → footer(dark)** down the page. A Tech Stack ledger (six groups: Languages / Frameworks & Libraries / Data & Backend / DevOps & Infrastructure / Embedded & IoT / Design & Tools) sits between Experience and Projects on a warm-tint band, with saffron signal lines and tag-chip rows.
-
-Grids: hero is `1.35fr / 0.65fr` at ≥900px (stacking with the portrait centered below on mobile); About is `1.25fr / 0.75fr` at ≥1024px; project plates 1 → 2 columns at ≥768px; contact `1.3fr / 0.7fr` at ≥860px; footer `1.2fr / 0.8fr` at ≥720px; experience rows `11rem / 1fr` at ≥720px; tech stack rows `11rem / 1fr` at ≥720px; record rows stack on mobile and become `auto 1fr auto` (issuer brand tile / body / meta) at ≥640px; post nav 2 columns at ≥560px. Blog posts read in a 680px column. The sticky nav sits at 4.25rem with `scroll-padding-top: 5.5rem` so anchored sections clear it.
-
-Blog and content pages get `padding-bottom: clamp(3.5rem, 7vw, 5rem)` so the dark footer never crowds the text, and post navigation adds its own `padding-bottom: clamp(3rem, 6vw, 4.5rem)` so prev/next cards clear the footer.
+### Chapter Rail
+- Fixed left rail on home, folio, florilegium, and atelier: numbered chapter links (folio: 001–00N) whose active state is resolved from geometry on scroll. The progress fill and labels are **luminance-aware**: sampled against the painted background each frame, the fill flips between lilac and on-heat cream (`data-rail-fill="lilac" | "on-heat"`) so the rail never blends into a heat band; labels flip with it.
 
 ## Elevation & Depth
 
-Tonal-first: depth comes from warm tint layering and white surfaces against paper, plus sparse ambient shadows. Shadows are warm-toned (`rgb(37 31 22 / …)`), always soft and diffuse, and appear only at rest for raised plates or as a hover/scroll response:
+Flat by default. Depth is tonal (raised/tinted cream on plate cream) plus registration-ring double hairlines (`0 0 0 3px bg, 0 0 0 4px border`). Shadows stay whisper-quiet and only under interactive lift.
 
 ### Shadow Vocabulary
-- **Resting Plate** (`0 1px 2px rgb(37 31 22 / 0.06)`): project plates and secondary buttons at rest — barely perceptible grounding.
-- **Hover Lift** (`0 16px 36px -20px rgb(37 31 22 / 0.22)`): plate, card, and post-nav hover.
-- **Float** (`0 30px 60px -30px rgb(37 31 22 / 0.28)`): large raised moments.
-- **Portrait Cast** (`0 34px 60px -30px rgb(0 0 0 / 0.55)`): the hero polaroid — the one genuinely floating element.
-- **Nav Scrolled** (`0 10px 30px -26px rgb(37 31 22 / 0.3)`): appears under the nav once scrolled (the hairline is permanent).
-- **Button Glow** (`0 10px 22px -14px <signal> 80%`): colored halo under primary, inverse, tangerine, and dark buttons, deepening on hover.
+- **Lift-sm** (`0 1px 2px rgb(44 42 36 / 0.05)`): Barely-there card rest.
+- **Lift-md** (`0 6px 12px -8px rgb(44 42 36 / 0.4)`): Button hover under lilac.
+- **Registration ring** (`0 0 0 3px var(--color-bg), 0 0 0 4px var(--color-border)`): Secondary button / focused plate double hairline.
 
-**The Flat-At-Rest Rule.** Surfaces are flat at rest; shadows appear only as a hover or scroll response. Hard offset shadows are never used in this world.
+### Named Rules
+**The Registration-Ring Rule.** Emphasis frames are concentric hairlines separated by a cream gap — never a hard offset shadow, never a glow blur as the primary depth cue.
 
 ## Shapes
 
-A warm, ledger-like form language. Radii step 6px (sm) / 10px (md) / 14px (lg). Buttons, chips, and menu buttons use 6px; project plates and post-nav cards use 10px; the hero polaroid uses 8px with a 4px photo inset. The only true circle is the status/availability dot (0.5rem) and the polaroid's Leica-style red brand dot.
-
-The signature geometry is the **signal tick**: a 0.85rem green square with a saffron offset corner (`box-shadow: 0.3rem 0.3rem 0 -0.15rem #E5A81C`) that precedes every section title, echoed as the favicon in the nav and inverted to dark ink on the tangerine contact band.
-
-Structure is drawn with 1px hairlines (`--color-border`) as row bottoms, each topped with a 2px colored signal line — tangerine for experience rows, green for post rows, saffron for certification/publication records and tech-stack rows — and a 3px `green → saffron` line across the top of every project plate.
-
-The hero portrait is a POLAROID: white paper card with `border-radius: 8px`, padding `0.7rem 0.7rem 1.05rem`, rotated -1.5deg, with a photo inset (4:5, `border-radius: 4px`) and a Leica-style watermark line under the photo: a red dot (`#d9231f`, 0.5rem) beside "DANKE" in JetBrains Mono 0.62rem with 0.3em tracking, then the name in mono uppercase (0.78rem, 0.14em tracking) and the role line. Hover straightens the rotation and lifts the card.
+Nearly square: radius scale is 3px / 4px / 6px (`--radius-sm` / `--radius` / `--radius-lg`). Buttons are chamfered tickets (clip-path corners), not pills. Plates use an arched silhouette (`border-radius: 50% 50% 2px 2px / 32% 32% 2px 2px`) on a 3:4 slot. Borders are 1px sepia; the nav and key sections close with a second hairline 4px below the first. Chips are 2px radius; no full-round pills anywhere.
 
 ## Components
 
 ### Buttons
-- **Shape:** 6px radius, `0.72rem 1.4rem` padding, inline-flex with a 0.5rem icon gap, weight 600 at 0.95rem, line-height 1.2.
-- **Primary:** Leaf Green fill (`#1e6b4a`), white text, green glow; hover Deep Green (`#155236`) with a `-1px` rise.
-- **Tangerine (nav CTA):** tangerine fill (`#e05d1e`), ink-on-tangerine text (`#2e1608`), 6px radius, 1rem arrow icon; hover Deep Tangerine (`#b8430e`) with a `-1px` rise. The contact CTA on the paper nav (desktop and mobile menu) — the green primary CTA is gone from the nav.
-- **Inverse (on tangerine hero):** ink-on-tangerine fill (`#2e1608`), `#f7ead6` text; hover `#1d0e04`. Ghost inverse is transparent with a 45% ink stroke.
-- **Dark (on tangerine contact):** ink-on-tangerine fill (`#2e1608`), `#f7ead6` text; hover `#1d0e04`. Ghost dark is transparent with a 55% ink stroke.
-- **Secondary:** white fill, ink text, Hairline Strong stroke; hover shifts the stroke to green and the text to Deep Green.
-- **Focus:** 2px Leaf Green outline, 3px offset, 0.25rem radius (global `:focus-visible`).
+- **Shape:** Chamfered ticket (7px corner cut via clip-path); effective radius 0.
+- **Primary:** Lilac fill, cream text (`#fbf7ee`), Source Sans 3 600 / 0.82rem / 0.14em uppercase, padding `0.78rem 1.5rem`, drawn floret mask before the label.
+- **Hover / Focus:** Deep lilac (`#64497f`) + `translateY(-1px)`; focus uses the global green outline.
+- **Secondary:** Transparent, ink text, 1px strong-sepia border + registration-ring double hairline; sage floret mark; hover border → lilac.
+
+### Chips
+- **Style:** Tinted cream fill, 1px sepia border, 2px radius, mono 0.72rem, padding `0.2rem 0.6rem`.
+- **State:** Static tags (tech stack); no selected-state fill.
+
+### Cards / Containers
+- **Corner Style:** 3–6px or arched plate frame.
+- **Background:** Raised cream or tinted cream on plate cream.
+- **Shadow Strategy:** Registration rings and tonal lift (see Elevation).
+- **Border:** 1px `border` / `border-strong`; plate frames are double-rule (outer + inset hairline).
+- **Internal Padding:** clamp ~1.1–2.4rem depending on plate size.
+
+### Inputs / Fields
+- **Style:** Hairline stroke, raised-cream fill, 3px radius (forms on florilegium/atelier filters).
+- **Focus:** 2px green outline, 3px offset (global `:focus-visible`).
 
 ### Navigation
-- A floating frosted pill: the whole bar is a single 999px-radius capsule, sticky at `top: 0.75rem`, `max-width: 66rem`, `rgb(251 245 234 / 0.82)` fill with `blur(16px) saturate(1.3)`, a `1px` Hairline Strong border at ~70%, and a soft shadow. The page shows through as warm paper tint, so the pill reads as frosted, not solid. On the tangerine hero it floats over the orange field with clear air below it.
-- Logo: the wordmark "Danke Hidayat" in Bricolage 700 1.15rem. No icon or square mark beside it — the name alone is the mark.
-- Links: 8 items — About, Experience, Stack, Projects, Notes, Shelf, Setup, Contact — Source Sans 3 0.95rem weight 500, ink-body, each a full-height pill (`border-radius: 999px`) with an 8% green wash on hover. The active section is a soft green pill-tab (green 14% field, Deep Green text, weight 600, radius 999px) instead of an underline — the selected state is a filled tab, not a line.
-- Contact CTA: a tangerine button (`.btn-tangerine`, bg `#e05d1e`, text `#2e1608`, `border-radius: 999px` to match the pill, tighter `0.5rem 1.15rem` padding so it sits level with the links). Its hover stays seated inside the pill: it darkens to Deep Tangerine but keeps `transform: none` — no lift, no shadow bloom — so it reads as part of the capsule rather than a floating button. The mobile menu CTA is the same tangerine pill.
-- ≤899px: a line-morph toggle (2.5rem square, Hairline Strong stroke) whose three bars animate into an X when open (bars 2px, gap 5px; open: rotate ±45° with the middle bar fading) — no raw glyph. The open button flips to a tangerine fill with ink-on-tangerine icon. It opens an accessible `aria-expanded` floating card panel anchored to the pill (left/right 0, `max-width: 24rem`, centered): white surface, Hairline Strong border, 14px radius, soft shadow, link rows at 1.05rem weight-600 with 6px-radius hover tiles, Shelf linking to `/shelf`.
+- Running-head strip: sticky, plate-cream, bottom hairline + second hairline 4px below. Brand “Danke” centered (Bodoni italic + sage floret); links Newsreader small-caps 0.95rem — About · Folio · Florilegium · Atelier, nothing deeper; active link takes lilac. Folio is a plain link to /folio/ (renamed 2026-09 from Works; no dropdown panel); below breakpoint, left/right groups collapse into the icon menu disclosure sheet (two-rule glyph → X, 44×44 target). Theme toggle is icon-only.
 
-### Cards (project plates)
-- **Corner:** 10px. **Background:** white. **Border:** 1px hairline.
-- **Shadow:** resting plate → hover lift (with a `-3px` rise and Hairline Strong border).
-- **Padding:** `1.7rem 1.7rem 1.55rem`.
-- **Accent:** a 3px `green → saffron` line across the top that draws in on hover; title links tint green on hover.
+### Signature: Specimen Plate
+- Arched 3:4 frame, double rule, engraving-hatch slot (sage floret) until image lands, italic species/project name, small-caps label, mono plate number, floret baseline. Hover warms the frame to lilac and eases the image forward (`transform 0.55s var(--ease)`).
 
-### Chips (tech tags)
-- Mono 0.72rem, code-field background (`#f1e7d0`), 1px hairline, 6px radius, ink-body text.
-
-### Ledger Rows (experience, post, certification, publication)
-- Each row is a hairline-bottomed ledger entry with a 2px signal line across the top that draws in on scroll — tangerine for experience, green for posts, saffron for records. Periods and dates are JetBrains Mono at Deep Tangerine; current roles read "Present".
-
-### Tech Stack ledger
-- Six ledger rows (Languages / Frameworks & Libraries / Data & Backend / DevOps & Infrastructure / Embedded & IoT / Design & Tools) on the warm-tint band: a mono uppercase label column (0.78rem, letter-spacing 0.1em, ink-muted) beside a tag-chip row. Each row is hairline-bordered with a 2px saffron signal line that draws in on scroll (`--line`).
-
-### Shelf catalog card
-- Every entry is a card in a drawer: a 2:3 cover (or a Deep-Tangerine-gradient monogram tile when the jacket is missing) above an index-card region ruled by content-bound 1px Hairlines — one under the shelfmark/category-stamp head row, one under the creator line; no rule ever floats free of its row. The head row carries the shelfmark (JetBrains Mono 0.62rem, ink-muted, e.g. `MNG·01`) beside a category stamp; title Bricolage 700 0.95rem, creator Source Sans 0.82rem, optional score in Deep Green mono.
-- Stamps are mono pills (0.58–0.6rem, 0.08em tracking, uppercase, 1px Hairline Strong border, paper fill); the "On the desk" stamp is Saffron with ink text. A favorite is a Tangerine heart roundel, an all-time favorite an ink roundel; a reading copy carries a saffron corner flag on its cover.
-- The "On the desk" panel is a warm-tint field (`--color-surface-tint`, 2px Hairline Strong bottom border) of horizontal media rows — the only place entries lie down.
-- Filter chips are mono pills with counts; the active chip is a Leaf Green fill with ink-on-green text. The count line is `aria-live`. Cards settle in a staggered translateY entrance (28ms steps, capped at 480ms) on load and replayed on every filter change; reduced motion disables it.
-
-### Setup ledger (hardware and tools)
-- One typographic ledger per group — no photos yet. Rows are a `2.4rem / minmax(8rem, 14rem) / 1fr / 2rem` grid: mono index (01–15 running across both ledgers), Bricolage 600 name, Source Sans role, optional external-link icon — hairline bottom border, warm-tint hover with the index turning Deep Green. Rows slide in from the index column (translateX, 24ms stagger): the shelf settles vertically, the ledger reads left to right.
-- The desk photo slot ships as an honest empty state — dashed Hairline Strong border, tint field, "Photo pending" — and a photo drops into the same slot later without redesign.
-- A "Previously" section is a hairline-top archive: secondary buttons to the retired dotfile repos (Archrice 2019, BSPWM, Openbox, Hyprland + bootstrap), then dated archive media — the 2020 desk photo as a full-width bordered figure with a mono caption, and a 2-column grid of 2019–2022 desktop-ricing screenshots (16:9 crops, mono label; single column on mobile). Thumbnails open an in-page gallery dialog (native `<dialog>`: contained image, mono label + n/total caption row with a source-dotfiles link when the shot has one, prev/next buttons, arrow keys, Esc or backdrop click to close) — never a navigation to the raw file.
-
-### Section Heading (signature)
-- The signal tick (0.85rem green square + saffron corner), then a Bricolage headline with a one-line intro (max 46rem, 1.05rem). No kicker, ever.
-
-### Contact panel
-- Full-bleed tangerine band; the section tick and title invert to dark ink. The email is the hero — Bricolage `clamp(1.35rem, 3.4vw, 2rem)` 700 with a 2px ink underline that solidifies on hover. Socials are a hairline-ruled ledger column with 0.95rem (~15px) arrow icons; dark buttons carry the actions.
-
-### Hero portrait
-- 4:5 photo in a white polaroid card (`border-radius: 8px`, padding `0.7rem 0.7rem 1.05rem`, 1px ink border, soft cast shadow), rotated -1.5deg with a 4px-radius photo inset. A Leica-style watermark line sits under the photo: red dot (`#d9231f` 0.5rem) + "DANKE" in JetBrains Mono (0.62rem, 0.3em tracking), then the name in mono uppercase (0.78rem, 0.14em tracking) and the role line. Hover straightens the rotation and lifts the card `translateY(-4px)`.
-
-### Footer
-- Dark band (`#1f1910`), text `#d9cfba`. Name is Bricolage 700 (`1.6rem`) — no script; role line "Software developer & DevOps engineer" in saffron.
-- A quote block closes the identity column — "I was born to be the star." with a mono saffron attribution, "Saijou Claudine · Revue Starlight". The sections column now includes Stack.
+### Signature: Marquee
+- Infinite hairline band, 52s linear loop, floret separators, small-caps items; pauses under reduced motion. Screenshot slots mark `SCREENSHOT · PENDING` in hatch — never fabricated imagery.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep the tricolor roles fixed: green leads, tangerine acts, saffron marks.
-- **Do** draw structure with 1px hairlines and 2px signal lines — the ledger is the world's skeleton.
-- **Do** use Bricolage Grotesque for display, headings, and the hero name lockup; Source Sans 3 for body; JetBrains Mono for data/labels/code.
-- **Do** keep the hero name lockup in Bricolage only — no cursive anywhere.
-- **Do** degrade a missing jacket or asset into a world tile (tangerine monogram) or a labeled empty state — never a broken image, never a fabricated placeholder.
-- **Do** alternate white and warm-tint sections, keep the hero and the contact band in the tangerine family (hero graded and grained so the two never read flat-identical), and give blog content pages enough bottom padding (`clamp(3.5rem, 7vw, 5rem)`; post nav `clamp(3rem, 6vw, 4.5rem)`) to clear the dark footer.
+- **Do** build hierarchy with sepia hairlines, double rules, and registration rings on plate cream.
+- **Do** keep lilac as the single heat: primary CTA, active state, contact peak.
+- **Do** set specimen names in italic Bodoni and labels in tracked small-caps.
+- **Do** keep plates at fixed scale on the shared baseline when adding works.
+- **Do** gate every GSAP moment behind `prefers-reduced-motion` and clear inline styles after settle.
+- **Do** use the real dark token set via `data-theme` — never CSS inversion filters.
 
 ### Don't:
-- **Don't** ship a dark mode or a theme toggle — the world is light-only by decision.
-- **Don't** use JetBrains Mono as costume; it is the instrument panel only.
-- **Don't** put a kicker or eyebrow above a heading — the signal tick marks sections.
-- **Don't** use cursive anywhere — the name is a Bricolage lockup.
-- **Don't** use hard offset shadows, gradient text, or neon; shadows stay warm, soft, and diffuse.
-- **Don't** use pill radius on buttons (6px is the button radius) or let muted text fall below 4.5:1 on its surface.
+- **Don't** add kickers or eyebrows above headings; let the heading speak.
+- **Don't** use Unicode glyphs or emoji as icons — draw the floret (SVG/mask).
+- **Don't** introduce hard offset shadows, gradient text, or a second accent beside lilac.
+- **Don't** round into pills; keep the chamfered ticket and the 3–6px radius scale.
+- **Don't** fabricate screenshots or metrics — pending slots and evidence-gated stats only.
+- **Don't** put folio decorative vocabulary (plate numbers as chrome) into navigation labels.
