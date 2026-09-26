@@ -23,6 +23,16 @@ const projects = defineCollection({
             description: z.string().optional(),
             publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
+            /**
+             * The record's particulars — the measured, specific facts that do
+             * not belong in the story: one short sentence each, no marketing,
+             * no stack (the stack lives in the chips on the record head, see
+             * src/data/projects.ts). Rendered as the annotation slip beside
+             * the prose, never as a bullet wall inside it. The markdown body
+             * is the story and nothing else — no link line, no `## Stack`,
+             * no `## Highlights` (the links render once, from `links`).
+             */
+            facts: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
         })
 });
