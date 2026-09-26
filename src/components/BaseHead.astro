@@ -71,20 +71,51 @@ function formatCanonicalURL(url: string | URL) {
 -->
 <script is:inline>
     (function () {
-        try {
-            var stored = localStorage.getItem('folio-theme');
-            var theme =
-                stored === 'light' || stored === 'dark'
-                    ? stored
-                    : window.matchMedia('(prefers-color-scheme: dark)').matches
-                      ? 'dark'
-                      : 'light';
+        /* Resolve the theme: an explicit stored choice wins, else the system
+           preference. Kept idempotent so it can be re-run after a swap. */
+        function resolveTheme() {
+            try {
+                var stored = localStorage.getItem('folio-theme');
+                if (stored === 'light' || stored === 'dark') return stored;
+            } catch (e) {
+                /* private mode etc. */
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             var meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute('content', theme === 'dark' ? '#17150F' : '#F6F1E6');
-        } catch (e) {
-            /* private mode etc. — CSS media fallback covers it */
         }
+
+        try {
+            applyTheme(resolveTheme());
+        } catch (e) {
+            /* CSS media fallback covers it */
+        }
+
+        /* ClientRouter swaps the incoming document's <html> attributes onto the
+           live element, and the static markup has no data-theme — so a soft
+           navigation stripped it and the page fell back to light. Re-apply on
+           the incoming document before the swap, and on the live one after, so
+           the theme survives every client-side navigation without a flash. */
+        document.addEventListener('astro:before-swap', function (e) {
+            try {
+                if (e.newDocument) {
+                    e.newDocument.documentElement.setAttribute('data-theme', resolveTheme());
+                }
+            } catch (err) {
+                /* no-op */
+            }
+        });
+        document.addEventListener('astro:after-swap', function () {
+            try {
+                applyTheme(resolveTheme());
+            } catch (err) {
+                /* no-op */
+            }
+        });
     })();
 </script>
 
