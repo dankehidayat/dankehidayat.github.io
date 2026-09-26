@@ -1,63 +1,79 @@
 # dankehidayat.my.id — Personal Portfolio
 
-The personal website of **Danke Hidayat**, a junior software developer and DevOps engineer in Bandung, Indonesia. A single-page portfolio with a technical blog, a reading shelf, and a setup ledger — built with [Astro](https://astro.build) and deployed statically to GitHub Pages.
+The personal website of **Danke Hidayat**, a junior software developer and DevOps engineer in Bandung, Indonesia. A single-page portfolio presented as a botanical herbarium, with a plate folio of shipped work, a reading florilegium, and a hardware atelier — built with [Astro](https://astro.build) and deployed statically to GitHub Pages.
 
 Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 
 ## Design world
 
-**Warm Signal** — a warm, saturated editorial-technical system, light-only, built for a CV-driven portfolio:
+**Botanical Folio** — a plate-cream herbarium system, light-first with a real dark theme, built for a CV-driven portfolio:
 
-- **Palette.** Warm paper `#FBF5EA` field with a leaf-green / tangerine / saffron signal tricolor — green acts on primary buttons and links, tangerine leads the hero field (a radial gradient over film grain) and the contact band, saffron marks ticks, the hero status dot, and footer accents. No dark mode.
-- **Typography.** **Bricolage Grotesque** for display and the hero name lockup, **Source Sans 3** for body copy, **JetBrains Mono** for metadata, dates, code, and technical labels. No cursive anywhere.
-- **Structure.** Ledger rows with 1px hairlines and 2px signal lines; an arch portrait in a paper frame with a green signal-arch backing and a saffron keystone.
-- **Motion.** GSAP + ScrollTrigger with Lenis smooth scrolling on the home page only: a hero entrance, scroll-triggered reveals, row hairline draws, and section-head reveals. Everything respects `prefers-reduced-motion`. Blog pages are static.
-- **Content-first.** A one-page home with sections (Hero, About, Experience, Tech Stack, Projects, Certifications, Contact), a **Florilegium** — a catalog-drawer of manga, anime, light novels, fiction, and non-fiction with category filters and one page per entry — and an **Atelier** ledger of hardware, tools, and dotfiles. Professional, measured tone throughout.
+- **Palette.** Plate-cream paper `#f6f1e6` field with leaf-green ink (`#2e5e3d`) leading headings, focus rings, and links, and **lilac bloom** (`#7b5c9e`) as the single heat — primary buttons, active nav, the contact peak. Sepia hairlines (`#d9cdb5`) draw all structure. A full night-herbarium dark set ships through `data-theme`; the toggle is icon-only and its choice survives every client-side navigation.
+- **Typography.** **Bodoni Moda** (Didone engraving) for display and the hero name lockup, **Newsreader** for reading, **Source Sans 3** for tracked small-caps labels, **JetBrains Mono** for plate numbers and ledger data. The display face loads weight-only; the optical-size axis is pinned off on purpose.
+- **Structure.** Numbered specimen plates at fixed scale in a double-rule arch, like a pressed flower under glass; hairline ledger rows and double rules instead of cards; a fixed chapter rail down the left edge with a luminance-aware progress fill.
+- **Motion.** GSAP + ScrollTrigger + Lenis on the home folio: a hero entrance, scroll-triggered reveals, SplitText chapter heads, a timeline rail draw, and a pointer-driven 3D tilt with a tracking glare on each freshly-cut plate. Everything respects `prefers-reduced-motion`; the bundle is deferred off the critical path so none of it competes with LCP. Other pages are static.
+- **Content-first.** A one-page home (Hero, About, Experience, Folio set-piece, Credentials, Contact), a **Folio** of six numbered project plates, a **Florilegium** catalog of 35 manga, anime, light novels, fiction, and non-fiction entries with category filters and a page per entry, and an **Atelier** ledger of hardware, tools, and dotfiles. Professional, measured tone throughout.
+
+The full system — tokens, type scale, components, named rules, and the verification contract — lives in [DESIGN.md](DESIGN.md).
 
 ## Stack
 
-- [Astro](https://astro.build) 5 — static output, content collections, view transitions
-- [MDX](https://mdxjs.com) + [KaTeX](https://katex.org) — math in blog posts
-- [Shiki](https://shiki.style) with a custom `warm-signal` theme — syntax highlighting
-- [GSAP](https://gsap.com) + [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) + [Lenis](https://lenis.darkroom.engineering) — motion, home page only
-- [@astrojs/rss](https://docs.astro.build/en/guides/rss/) / [sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/) — feeds and SEO
+- [Astro](https://astro.build) 5 — static output, content collections, view transitions (`ClientRouter`)
+- [Tailwind CSS](https://tailwindcss.com) v4 via `@tailwindcss/vite` — utility layer alongside the hand-written design tokens
+- [MDX](https://mdxjs.com) — content collections for projects and florilegium entries
+- [GSAP](https://gsap.com) + [ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) + [SplitText](https://gsap.com/docs/v3/Plugins/SplitText/) + [Lenis](https://lenis.darkroom.engineering) — motion, home page only, dynamically imported
+- [@hugeicons/core-free-icons](https://hugeicons.com) — the functional icon set, rendered at `currentColor` via `src/components/Icon.astro`
+- [sharp](https://sharp.pixelplumbing.com) + `astro:assets` — responsive image ladders sized to each slot
+- [Shiki](https://shiki.style) with transformers — syntax highlighting for MDX code fences
+- [@fontsource-variable](https://fontsource.org) — self-hosted Bodoni Moda, Newsreader, Source Sans 3, JetBrains Mono
+- [Playwright](https://playwright.dev) — the seven-spec regression suite that gates every visual change
+- [@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/) — SEO
+
+## Routes
+
+| Route | Surface |
+| :--- | :--- |
+| `/` | The folio home — hero, about, experience, folio set-piece, credentials, contact |
+| `/folio/` | Plate index, grouped by category |
+| `/folio/[slug]/` | One specimen plate per project |
+| `/florilegium/` | The catalog drawer — category filters with live counts, cover grid, staggered wall |
+| `/florilegium/[slug]/` | One record sheet per entry, with optional field-notes review |
+| `/atelier/` | Hardware and tools ledgers, dotfiles links, and the ricing archive |
+| `/404` | Not found |
+
+Retired surfaces redirect rather than 404: the old portfolio anchors (`/projects`, `/about`, `/experience`, `/contact`) and their `/en/*` variants point at home anchors, `/works` and its six plate slugs point at `/folio`, and `/fun` and `/stats` point at `/florilegium` and `/`.
 
 ## Project structure
 
 ```text
 ├── public/
-│   ├── florilegium/covers/       # cover images for the Florilegium
+│   ├── CNAME                     # dankehidayat.my.id
 │   ├── favicon.svg
 │   └── Resume_Danke_Hidayat.pdf
-├── scripts/                    # dev tools: fetch-covers.mjs, generate-brand-icons.mjs, ...
+├── scripts/                      # dev tools: fetch-covers.mjs, generate-brand-icons.mjs, + manifests
+├── tests/                        # Playwright regression suite (see Verification below)
 ├── src/
-│   ├── assets/images/           # avatar, hero, social image
-│   ├── components/              # Hero, About, ExperienceTimeline, Projects,
-│   │                            # ProjectCard, BlogPreview, PostCard,
-│   │                            # Certifications, Publications, ContactPanel,
-│   │                            # SectionHeading, SiteNav, SiteFooter, Icon, ...
+│   ├── assets/images/            # avatar, hero, folio engravings, project shots,
+│   │                             # florilegium covers, atelier archive media
+│   ├── components/               # BaseHead, SiteNav, SiteFooter, ThemeToggle, Icon,
+│   │                             # ChapterRail, PlateFigure, MarqueeBand, ScreenshotMarquee
 │   ├── content/
-│   │   ├── blog/                # MDX posts (title, excerpt, date, tags, math)
-│   │   ├── projects/            # project entries (title, description, date, seo)
-│   │   └── shelf/               # MDX entries (title, creator, category, rating, links)
-│   ├── data/                    # site-config, experience, about, certifications,
-│   │                            # projects (tech + links), publications, stats,
-│   │                            # setup (tools ledger + dotfiles), brand-icons
+│   │   ├── projects/             # project entries (.md)
+│   │   └── shelf/                # florilegium entries (.mdx)
+│   ├── data/                     # site-config, experience, about, certifications,
+│   │                             # projects, works (plates + categories), stats,
+│   │                             # publications, setup (atelier), extra-lilies
 │   ├── layouts/BaseLayout.astro
-│   ├── pages/
-│   │   ├── index.astro          # the single-page home
-│   │   ├── notes/index.astro    # notes index
-│   │   ├── notes/[id].astro     # post layout (680px reading column, KaTeX, code copy)
-│   │   ├── florilegium/index.astro # the florilegium: filters + cover grid + catalog rows
-│   │   ├── florilegium/[slug].astro # one catalog card per entry
-│   │   ├── atelier.astro         # the hardware + tools ledger
-│   │   └── rss.xml.js
-│   ├── lib/shelf.ts             # shelf sorting + cover lookup
-│   ├── scripts/                 # motion.ts (home), code-blocks.ts (copy buttons)
-│   ├── styles/global.css        # design tokens + component styles
-│   ├── content.config.ts        # collection schemas
+│   ├── lib/                      # shelf.ts, huge-icons.ts, responsive-image.ts
+│   ├── pages/                    # index, folio/, florilegium/, atelier, 404
+│   ├── scripts/                  # motion.ts (GSAP), defer-motion.ts (loader)
+│   ├── styles/                   # global.css (tokens + base), folio.css (components)
+│   ├── content.config.ts         # collection schemas
 │   └── types.ts
-├── astro.config.mjs             # redirects, Shiki warm-signal theme, MDX/KaTeX
+├── astro.config.mjs              # site URL, MDX/Shiki, redirects, sitemap, tailwind
+├── playwright.config.ts
+├── DESIGN.md                     # the design system
+├── PRODUCT.md                    # durable product context
 └── package.json
 ```
 
@@ -65,80 +81,102 @@ Live at [dankehidayat.my.id](https://dankehidayat.my.id).
 
 All commands run from the project root:
 
-| Command             | Action                                        |
-| :------------------ | :-------------------------------------------- |
-| `pnpm install`      | Install dependencies                          |
-| `pnpm dev`          | Start the dev server at `localhost:4321`      |
-| `pnpm build`        | Build the production site to `./dist/`        |
-| `pnpm preview`      | Preview the production build locally          |
-| `pnpm astro ...`    | Run Astro CLI commands                        |
+| Command          | Action                                             |
+| :--------------- | :------------------------------------------------- |
+| `pnpm install`   | Install dependencies                               |
+| `pnpm dev`       | Start the dev server at `localhost:4321`           |
+| `pnpm build`     | Build the production site to `./dist/`             |
+| `pnpm preview`   | Preview the production build locally               |
+| `pnpm test`      | Run the Playwright regression suite                |
+| `pnpm test:ui` | Run the suite in Playwright's interactive UI |
+| `pnpm test:report` | Open the last HTML report |
+| `pnpm astro ...` | Run Astro CLI commands |
+
+`pnpm test` builds the site first (Playwright's `webServer` runs `astro preview`), then runs three projects: `desktop-chrome` at 1440×900, `mobile-chrome` on a Pixel 7, and a `reduced-motion` project that emulates `prefers-reduced-motion: reduce`.
 
 ## Writing content
 
-### Blog posts
+### Projects
 
-Add an `.mdx` file to `src/content/blog/` with frontmatter:
+Add a `.md` file to `src/content/projects/`:
 
 ```yaml
 ---
-title: 'A post title'
-excerpt: 'One or two sentences that appear on the index.'
-publishDate: 2025-10-17
-tags: ['calibration', 'python']
+title: 'Selene'
+description: 'One or two sentences for the plate and the meta description.'
+publishDate: 'Jul 01 2026'
+isFeatured: true
 seo:
-  title: 'A post title'
-  description: 'An SEO description.'
+    title: 'Selene — real-time energy monitoring'
+    description: 'An ESP32 telemetry dashboard over MQTT and TimescaleDB.'
+    pageType: 'article'
 ---
 ```
 
-- Posts support `$math$` / `$$math$$` via KaTeX.
-- Code blocks get a language label and a copy button automatically.
-- Posts appear in reverse chronological order on `/notes` and in the RSS feed.
-
-### Projects
-
-Add a `.md` file to `src/content/projects/`. The tech stack and links shown on the project cards live in `src/data/projects.ts`, keyed by project id.
-
-### Site-wide content
-
-- `src/data/site-config.ts` — name, subtitle, description, social links
-- `src/data/experience.ts` — work timeline, education, additional activities
-- `src/data/about.ts` — the About section body (Markdown)
-- `src/data/certifications.ts` — certification list with verify links
-- `src/data/stats.ts` — the stats bar (years, projects, publications, certifications)
-- `src/data/publications.ts` — publications list (rendered only when non-empty)
-- `src/data/setup.ts` — Atelier page: the hardware and tools ledgers and the archived Hyprland dotfile repos
-- `src/data/brand-icons.ts` — brand logo paths for the tech stack
+The body is the plate's long-form note; the first line renders as a link row. The tech stack, repo, and live links shown on the card live in `src/data/projects.ts`, keyed by project id, and the plate's category, number, and imagery come from `src/data/works.ts` (`WORK_CATEGORIES` and `isFolioWork` / `plateNumberOf`).
 
 ### Florilegium entries
 
-Add an `.mdx` file to `src/content/shelf/` with frontmatter:
+Add an `.mdx` file to `src/content/shelf/`:
 
 ```yaml
 ---
-title: 'A book title'
-english: 'An optional English title'
-creator: 'Author name'
-category: 'fiction'        # manga | anime | light-novel | fiction | non-fiction | romance
-status: 'done'             # reading | done
-rating: 8.5                # optional, 0–10
-description: 'One paragraph that appears on the entry page.'
-badge: 'favorite'          # optional: favorite | all-time
+title: 'Lycoris Recoil'
+english: 'Optional English title'
+creator: 'A-1 Pictures'
+category: 'anime'        # manga | anime | light-novel | fiction | non-fiction | romance
+status: 'done'           # reading | done
+rating: 8.5              # optional, 0–10
+description: 'One paragraph for the card and the record sheet.'
+note: 'A short line shown under the description.'
+badge: 'favorite'        # optional: favorite | all-time
+cover: 'optional-file-slug'   # only when the jacket differs from the entry id
 links:
-  - label: 'Publisher'
-    href: 'https://example.com'
+    - label: 'Official site'
+      href: 'https://lycoris-recoil.com'
 ---
 ```
 
-Anything written below the frontmatter renders as the entry's field notes (a full review). Cover art lives in `public/florilegium/covers/` as `{slug}.jpg` and is fetched/added with `scripts/fetch-covers.mjs`; entries without a cover render a monogram tile.
+Anything written below the frontmatter renders as the entry's **field notes** — a full review. Cover art lives in `src/assets/images/covers/`; `scripts/fetch-covers.mjs` fetches jackets against the manifests in `scripts/`, and entries without a cover render a monogram tile. Sorting and cover lookup come from `src/lib/shelf.ts`.
+
+### Site-wide content
+
+- `src/data/site-config.ts` — name, subtitle, description, avatar/hero, social links
+- `src/data/experience.ts` — work timeline, education, additional activities
+- `src/data/about.ts` — the About section body
+- `src/data/certifications.ts` — certification list with verify links
+- `src/data/stats.ts` — the stats bar (years, projects, publications, certifications)
+- `src/data/publications.ts` — publications list (rendered only when non-empty)
+- `src/data/works.ts` — plate definitions, categories, and plate numbering
+- `src/data/projects.ts` — tech stacks and links per project
+- `src/data/setup.ts` — the Atelier page: hardware and tools ledgers, archived dotfile repos
+- `src/data/extra-lilies.ts` — the additional botanical plates
+
+`stats.ts` and `publications.ts` are **evidence-gated**: they render only when the owner supplies real values. Do not invent numbers.
+
+## Verification
+
+`DESIGN.md` ends with the verification contract — the machine-checked half of the design system. A red spec is a design regression, not a flaky test.
+
+| Spec | Holds |
+| :--- | :--- |
+| `smoke` | Every route serves 200 with one `h1`; complete head, canonical, and social cards; no broken internal links or dead in-page anchors |
+| `accessibility` | Heading order and landmarks; accessible names on every control; no positive `tabindex`; valid `lang`; `alt` on every image; visible focus |
+| `theme` | OS preference resolves when nothing is stored; an explicit choice applies on load and survives two soft navigations; the toggle syncs `theme-color` |
+| `reduced-motion` | The media query is genuinely in force; no transform survives on any motion target; all copy stays visible and unpainted |
+| `responsive` | No horizontal overflow at any breakpoint; the mobile menu opens, is keyboard reachable, closes on Escape, and releases the scroll lock; 24×24 minimum targets |
+| `images` | Every `<img>` declares `srcset`, `sizes`, and intrinsic dimensions; every URL resolves; nothing upscales past its master; the home page stays under 3 MB |
+| `contract` | The world seed leads the body exactly once; the weight-only font pin holds; no generated-image artifact reaches the build |
 
 ## Configuration
 
-`astro.config.mjs` holds the site URL, MDX/KaTeX integration, the custom `warm-signal` Shiki theme, and redirects for the old portfolio routes (e.g. `/projects` → `/#projects`, `/id/...` → `/`, plus the retired `/fun` → `/florilegium` and `/stats` → `/`).
+`astro.config.mjs` holds the site URL, the Tailwind Vite plugin, MDX with Shiki transformers, the sitemap, and the redirect table for every retired route. Two things there are deliberate leftovers rather than active features: the Shiki theme object is still internally named `warm-signal` from the previous design world, and the KaTeX math plugins remain wired for MDX even though no entry uses math. `@astrojs/rss` is still in `package.json` but nothing imports it since the feed was retired.
+
+The display face must stay on the **weight-only** variable build. Shipping an `opsz` build alongside it regressed the display type once; `tests/contract.spec.ts` fails the build if it returns.
 
 ## Deployment
 
-Published to **GitHub Pages** by a GitHub Actions workflow (`.github/workflows/deploy.yml`) using the `withastro/action` workflow, with the `CNAME` file pointing at `dankehidayat.my.id`. The site is a fully static build and needs no server functions.
+Published to **GitHub Pages** by `.github/workflows/deploy.yml` using the `withastro/action` workflow, with pnpm `10.25.0` and a `CNAME` file pointing at `dankehidayat.my.id`. The site is a fully static build and needs no server functions.
 
 ## License
 

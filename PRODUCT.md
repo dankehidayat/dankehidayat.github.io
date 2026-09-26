@@ -33,7 +33,7 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 ## Operating Context
 
 - **Static personal site** built with Astro 5, content collections for projects and shelf
-- **Routes:** `/` (single-page: Hero, About, Experience, Projects, Certifications, Contact), `/folio` + `/folio/[slug]` (the plate folio, renamed 2026-09 from `/works`), `/florilegium` + `/florilegium/[slug]` (the reading florilegium, renamed 2026-09 from `/shelf`), `/atelier` (hardware/tools atelier, renamed 2026-09 from `/setup`), sitemap, `/404`; old routes (`/projects`, `/experience`, `/about`, `/contact`, `/id/*`) redirect to their single-page anchors; `/works` (+ the six plate slugs) redirect to `/folio`; retired `/fun` → `/florilegium`, `/stats` → `/`; no redirects exist for `/shelf` or `/setup` — those routes are fully retired
+- **Routes:** `/` (single-page: Hero, About, Experience, Projects, Certifications, Contact), `/folio` + `/folio/[slug]` (the plate folio, renamed 2026-09 from `/works`), `/florilegium` + `/florilegium/[slug]` (the reading florilegium, renamed 2026-09 from `/shelf`), `/atelier` (hardware/tools atelier, renamed 2026-09 from `/setup`), sitemap, `/404`; old routes (`/projects`, `/experience`, `/about`, `/contact`, plus their `/en/*` variants, and exact-path `/id`) redirect to their single-page anchors; `/works` (+ the six plate slugs) redirect to `/folio`; retired `/fun` → `/florilegium`, `/stats` → `/`; no redirects exist for `/shelf` or `/setup` — those routes are fully retired
 - **Blog/notes removed (2026-09):** the `/notes` index and post pages, the blog content collection, the home notes preview, nav/footer notes links, and the `/rss.xml` feed were removed as a product decision; the florilegium's field-notes reviews are unrelated and remain
 - **Florilegium:** `/florilegium` (formerly "Shelf") is a catalog drawer of Danke's manga, anime, light novels, fiction, and non-fiction — a "Freshly cut" panel for in-progress reading, category filter chips with live counts and an empty state, a cover grid with favorite hearts and monogram fallbacks, and a staggered cover wall. Each entry has its own page (`/florilegium/[slug]`) with cover, record meta, note, links, optional rating, and an optional field-notes review body plus previous/next card navigation. Entries are a content collection (`src/content/shelf/*.mdx`); covers live in `public/florilegium/covers/`; sorting and cover lookup come from `src/lib/shelf.ts`
 - **Atelier:** `/atelier` (formerly "Setup") is the hardware-and-tools ledger — a hardware ledger (MacBook Pro M1, Weikav Alice Record keyboard, switch stash, mice, mousepad, audio, watch, charger), a tools ledger (Brave, VS Code, opencode, iTerm2), and a "Previously" archive with the old Arch + Hyprland dotfiles/bootstrap repo links plus dated archive media (the 2020 desk photo and 2019–2022 desktop-ricing screenshots opened in an in-page gallery dialog with source-repo links). Data lives in `src/data/setup.ts`
@@ -51,8 +51,10 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 - Single-page home: hero with arch portrait and two actions; About with stats bar; work experience timeline; tech stack ledger; six project cards; certifications list; contact panel with email, socials, and resume
 - Florilegium (`/florilegium`): 35 catalogued entries across six categories; client-side category filters that re-bind on view-transition navigation (`astro:page-load`), cover grid with monogram fallbacks, catalog rows, and per-entry pages ready for owner-written reviews and ratings
 - Atelier (`/atelier`): hardware and tools ledgers, dotfiles links, and the ricing archive; built to accept a desk photo later without redesign
-- SEO: canonical URLs, Open Graph, sitemap; `theme-color` (`#F6F1E6` light / `#17150F` dark, synced by the pre-paint theme script) and `light dark` `color-scheme`
-- Motion on the home page only: GSAP + ScrollTrigger entrance/reveals, Lenis smooth scroll, timeline rail draw; static under `prefers-reduced-motion`
+- SEO: canonical URLs, Open Graph, sitemap; `theme-color` (`#F6F1E6` light / `#17150F` dark, synced by the pre-paint theme script and re-applied across soft navigations) and `light dark` `color-scheme`
+- Motion is choreographed on the home page only (GSAP + ScrollTrigger entrance/reveals, SplitText chapter heads, Lenis smooth scroll, timeline rail draw); the freshly-cut 3D plate tilt with tracking glare is site-wide across all six pages; the chapter rail is on home, folio, florilegium, and atelier. All of it is static under `prefers-reduced-motion`, and the motion bundle is deferred off the critical path
+- A seven-spec Playwright suite (`tests/`) is the regression gate: smoke, accessibility, theme, reduced-motion, responsive, images, and a project contract spec; `DESIGN.md` records these as durable design invariants
+- Responsive image delivery: every plate, cover, screenshot, and gallery frame goes through `src/lib/responsive-image.ts`, which caps a width ladder at the source's own width (never upscales) and always ships intrinsic dimensions
 
 **Constraints:**
 
@@ -65,7 +67,7 @@ Not a generic "full-stack portfolio": the durable claim is hands-on connected-de
 
 - **Language:** English only; no i18n, no `/id/` routes
 - **Theme:** light-first with a working dark toggle (2026-09; supersedes light-only)
-- **Visual world:** superseded 2026-09 by the Botanical Folio redesign on `feat/redesign` (plate-cream ground, hairline sepia rules, engraved serif, lilac bloom accent retuning the folio scarlet per owner pin); durable tokens land in DESIGN.md when the redesign finishes. Prior world was Warm Signal — warm paper `#FBF5EA`, green/tangerine/saffron tricolor, Bricolage Grotesque display, ledger rows and signal ticks
+- **Visual world:** the Botanical Folio, shipped 2026-09 (plate-cream ground, hairline sepia rules, engraved serif, lilac bloom accent retuning the folio scarlet per owner pin); the durable tokens and the verification contract are recorded in `DESIGN.md`. Prior world was Warm Signal — warm paper `#FBF5EA`, green/tangerine/saffron tricolor, Bricolage Grotesque display, ledger rows and signal ticks; its `tangerine`/`saffron` variable names survive in `global.css` as dead aliases remapped onto lilac and sage
 - **Personality:** professional, measured tone on the main page; personal interests (yuri, BanG Dream!, Japanese) stay out of the professional bio
 - **Motion:** GSAP + ScrollTrigger + Lenis smooth scroll, home page only
 
@@ -91,7 +93,7 @@ Real assets and content that future work must use or honestly omit — not fabri
 |------|-----------------|
 | Avatar & hero imagery | `src/assets/images/avatar.jpeg`, `hero.jpeg` |
 | Resume PDF | `public/Resume_Danke_Hidayat.pdf` |
-| Projects | selene, flowpoint-next, flora, eco-office, ecobin-sorter, hydrolevi (`src/content/projects/` + `src/data/projects.ts` for tech/links) |
+| Projects | selene, flowpoint-next, flora, eco-office, ecobin-sorter, hydrolevi (`src/content/projects/` + `src/data/projects.ts` for tech/links). `src/content/projects/neon.md` also exists but is deliberately excluded from the folio's curated six (`FOLIO_WORK_IDS` in `src/data/works.ts`) |
 | Experience / education | `src/data/experience.ts` |
 | Certifications | Eleven credentials with verify links (`src/data/certifications.ts`) |
 | Site copy & nav | `src/data/site-config.ts` |
@@ -109,4 +111,4 @@ Real assets and content that future work must use or honestly omit — not fabri
 
 ## Accessibility & Inclusion
 
-Light-only, high-contrast warm palette (body text and muted text both exceed 4.5:1 on their surfaces; primary button text passes on its fill). Full keyboard focus treatment, visible focus rings, semantic landmarks, `prefers-reduced-motion` support, and meaningful alt text for real photos.
+Light-first with a full dark ("night herbarium") token set applied through `data-theme`; body text and muted text both exceed 4.5:1 on their surfaces in both themes, and primary button text passes on its fill. An explicit theme choice persists across client-side navigations. Full keyboard focus treatment, visible focus rings, semantic landmarks, `prefers-reduced-motion` support, and meaningful alt text for real photos. Tap targets meet 24×24 CSS px (44×44 for the mobile menu disclosure).
